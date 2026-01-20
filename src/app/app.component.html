@@ -1,0 +1,740 @@
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 backdrop-blur-md border-b border-blue-800/50 shadow-lg transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer" (click)="scrollToSection('home')">
+        <img src="assets/logo.png" 
+             (error)="$any($event.target).src='assets/logo-placeholder.svg'"
+             alt="Aries Ventures" 
+             class="h-10 w-10 object-contain">
+        <span class="text-xl font-bold text-white hidden sm:block">Aries Ventures</span>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-1">
+        <button *ngFor="let item of navItems" 
+                (click)="scrollToSection(item.id)"
+                [class.bg-blue-600]="activeSection === item.id"
+                [class.text-white]="activeSection === item.id"
+                [class.text-blue-200]="activeSection !== item.id"
+                class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-blue-800 hover:text-white">
+          {{ item.label }}
+        </button>
+      </div>
+
+      <!-- Right Side Actions -->
+      <div class="flex items-center gap-3">
+        <button (click)="goToLogin()"
+                class="hidden sm:block text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-all">
+          Login
+        </button>
+        
+        <button (click)="goToRegister()"
+                class="hidden sm:block bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/50">
+          Sign Up
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button (click)="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-blue-200 hover:bg-blue-800 hover:text-white">
+          <span *ngIf="!mobileMenuOpen">☰</span>
+          <span *ngIf="mobileMenuOpen">✕</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="mobileMenuOpen" class="md:hidden border-t border-blue-800/50 bg-slate-900/95 backdrop-blur-md">
+    <div class="px-4 py-3 space-y-1">
+      <button *ngFor="let item of navItems"
+              (click)="scrollToSection(item.id)"
+              [class.bg-blue-600]="activeSection === item.id"
+              [class.text-white]="activeSection === item.id"
+              [class.text-blue-200]="activeSection !== item.id"
+              class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium hover:bg-blue-800 hover:text-white transition-colors">
+        {{ item.label }}
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Main Content -->
+<main class="pt-16">
+  
+  <!-- Hero Section -->
+  <section id="home" class="scroll-section min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay" 
+         style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMf8lH5a1yGOVNfV2LWHFmOghvR4QlqTQudZgMsSvqXk5Nq_nWJ93_ads7--BM3UXyNRA-ZY9lK0ffkbG0mA9DUSoDWKsrc1twWLLM9CuLQ3bJnoV08OUbfXSiOhPMN3XxIPPQwbt4NTAqE7eSJ2MzoVWKqQ4NtwNgZCmgZGl-zt2Q_yddk9vn1Ks4NaThTN0x47gZmo0g0xJjH3HX7K17CUJ0cdHwY7m3i4CtNi54CBJPjYYOmxKUOAerd-EPe4pqrttvt2yAG_o');">
+    </div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 mb-6">
+        <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+        <span class="text-white text-xs font-bold uppercase tracking-widest">Now Booking for Q4</span>
+      </div>
+      
+      <h1 class="text-white text-5xl md:text-6xl font-black leading-tight mb-6">
+        Professional Websites<br>for Small Businesses
+      </h1>
+      
+      <p class="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+        High-performance websites tailored to your budget. Flexible payment plans designed to scale with your business growth. Get online in under a week.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button (click)="scrollToSection('services')"
+                class="bg-blue-600 text-white px-8 py-4 rounded-full text-base font-bold shadow-lg hover:scale-105 transition-transform">
+          View Packages
+        </button>
+        <button (click)="scrollToSection('contact')"
+                class="bg-white/10 text-white px-8 py-4 rounded-full text-base font-bold backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all">
+          Book a Call
+        </button>
+      </div>
+      
+      <!-- Trust Bar -->
+      <div class="mt-12 bg-white/10 backdrop-blur-md rounded-full px-6 py-4 inline-flex flex-wrap items-center gap-6 border border-white/20">
+        <div class="flex items-center gap-2">
+          <span class="text-green-400 text-lg">✅</span>
+          <span class="text-xs font-bold text-white">50+ Businesses Online</span>
+        </div>
+        <div class="h-4 w-px bg-white/20"></div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-400 text-lg">🌍</span>
+          <span class="text-xs font-bold text-white">UK-Based Support</span>
+        </div>
+        <div class="h-4 w-px bg-white/20"></div>
+        <div class="flex items-center gap-2">
+          <span class="text-yellow-400 text-lg">⭐</span>
+          <span class="text-xs font-bold text-white">5-Star Rated</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="scroll-section min-h-screen flex items-center py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4 w-full">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          Your Journey to Success
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+          Transparent, fast, and professional. Here's how we get your business online in under a week with zero hassle.
+        </p>
+      </div>
+
+      <div class="relative max-w-3xl mx-auto">
+        <!-- Vertical Line -->
+        <div class="absolute left-8 top-8 bottom-8 w-0.5 bg-blue-200 dark:bg-blue-900 hidden md:block"></div>
+
+        <!-- Steps -->
+        <div class="space-y-8">
+          <div class="flex gap-6 items-start">
+            <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
+              <span class="text-2xl">📅</span>
+              <span class="text-[10px] font-bold mt-0.5">STEP 1</span>
+            </div>
+            <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Book Consultation</h3>
+                <span class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">15 Mins</span>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400">Schedule a free discovery call to discuss your business goals and specific needs.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6 items-start">
+            <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
+              <span class="text-2xl">💻</span>
+              <span class="text-[10px] font-bold mt-0.5">STEP 2</span>
+            </div>
+            <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">We Build</h3>
+                <span class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">3-5 Days</span>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400">Our expert team designs and develops your high-performance custom website from scratch.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6 items-start">
+            <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
+              <span class="text-2xl">🚀</span>
+              <span class="text-[10px] font-bold mt-0.5">STEP 3</span>
+            </div>
+            <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Review & Launch</h3>
+                <span class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">Review</span>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400">Go through the final build, request tweaks, and once you're happy, we hit the launch button.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6 items-start">
+            <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
+              <span class="text-2xl">🔧</span>
+              <span class="text-[10px] font-bold mt-0.5">STEP 4</span>
+            </div>
+            <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Maintenance</h3>
+                <span class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">Ongoing</span>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400">We manage hosting, security, and updates. Our flexible monthly plans keep your site fresh.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Services/Pricing Section -->
+  <section id="services" class="scroll-section min-h-screen flex items-center py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 w-full">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">Choose Your Path</h2>
+        <p class="text-gray-600 dark:text-gray-400 text-lg">Simple pricing tiers to suit your current stage.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div *ngFor="let plan of pricingPlans" 
+             class="group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all hover:-translate-y-2">
+          <div class="h-48 bg-cover bg-center relative" [style.background-image]="'url(' + plan.image + ')'">
+            <div class="absolute top-4 left-4 px-4 py-1 rounded-full text-xs font-black uppercase"
+                 [ngClass]="{
+                   'bg-red-500 text-white': plan.color === 'primary',
+                   'bg-blue-500 text-white': plan.color === 'blue',
+                   'bg-green-500 text-white': plan.color === 'green'
+                 }">
+              {{ plan.badge }}
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ plan.name }}</h3>
+              <span class="text-3xl"
+                    [ngClass]="{
+                      'text-red-500': plan.color === 'primary',
+                      'text-blue-500': plan.color === 'blue',
+                      'text-green-500': plan.color === 'green'
+                    }">
+                {{ plan.icon === 'calendar_month' ? '📅' : plan.icon === 'payments' ? '💳' : '🛡️' }}
+              </span>
+            </div>
+            
+            <p class="text-3xl font-black mb-1"
+               [ngClass]="{
+                 'text-red-500': plan.color === 'primary',
+                 'text-blue-500': plan.color === 'blue',
+                 'text-green-500': plan.color === 'green'
+               }">
+              {{ plan.price }}
+              <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ plan.priceLabel }}</span>
+            </p>
+            
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 min-h-[60px]">
+              {{ plan.description }}
+            </p>
+            
+            <ul class="space-y-2 mb-6">
+              <li *ngFor="let feature of plan.features" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <span class="text-green-500 text-lg">✅</span>
+                {{ feature }}
+              </li>
+            </ul>
+            
+            <button (click)="selectPlan(plan)"
+                    class="w-full py-3 rounded-full font-bold text-sm transition-all hover:scale-105 shadow-lg"
+                    [ngClass]="{
+                      'bg-red-500 text-white hover:bg-red-600': plan.color === 'primary',
+                      'bg-blue-500 text-white hover:bg-blue-600': plan.color === 'blue',
+                      'bg-green-500 text-white hover:bg-green-600': plan.color === 'green'
+                    }">
+              Select Plan
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Banner -->
+      <div class="mt-16 bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8 border border-blue-100 dark:border-blue-800 text-center">
+        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-2">Not sure which path to take?</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Our experts can help you analyze your business goals and recommend the perfect fit.</p>
+        <button (click)="scrollToSection('contact')"
+                class="bg-blue-600 text-white font-bold py-3 px-10 rounded-full hover:scale-105 transition-transform shadow-lg">
+          Get Free Advice
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Ideal Clients Section -->
+  <section id="ideal-clients" class="scroll-section min-h-screen flex items-center py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4 w-full">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          Perfect for Local Businesses
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 text-lg">
+          We specialize in high-converting websites for service providers and neighborhood favorites.
+        </p>
+      </div>
+
+      <!-- Industry Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-16">
+        <div *ngFor="let industry of industries" 
+             class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer">
+          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center text-2xl mb-4">
+            {{ industry.icon }}
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ industry.name }}</h3>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700">
+        <div class="text-center p-6 border-b border-gray-100 dark:border-gray-700">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">How We Compare</h3>
+          <p class="text-gray-600 dark:text-gray-400">Transparency in every line of code.</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 dark:bg-gray-900">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Feature</th>
+                <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">DIY/Agency</th>
+                <th class="px-6 py-4 text-center text-xs font-bold text-blue-600 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20">Our Plan</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+              <tr>
+                <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Upfront Cost</td>
+                <td class="px-6 py-4 text-center text-sm font-medium text-red-600">$$$$ / $</td>
+                <td class="px-6 py-4 text-center text-sm font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/20">Zero Down</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Professional Design</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="text-red-500 text-xl">❌</span>
+                </td>
+                <td class="px-6 py-4 text-center bg-blue-50 dark:bg-blue-900/20">
+                  <span class="text-green-600 text-xl">✅</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Time Needed</td>
+                <td class="px-6 py-4 text-center text-sm font-medium text-gray-600 dark:text-gray-400">High</td>
+                <td class="px-6 py-4 text-center text-sm font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/20">Minimal</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Hosting & Care</td>
+                <td class="px-6 py-4 text-center text-xs font-bold text-red-500 uppercase">Paid Extra</td>
+                <td class="px-6 py-4 text-center text-xs font-bold text-green-600 uppercase bg-blue-50 dark:bg-blue-900/20">Included</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Templates Section -->
+  <section id="templates" class="scroll-section min-h-screen flex items-center py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 w-full">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          Industry Templates Gallery
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 text-lg">
+          Select your niche to view tailored designs
+        </p>
+      </div>
+
+      <div class="space-y-8">
+        <div *ngFor="let template of templates" 
+             class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all">
+          
+          <!-- Browser Frame Header -->
+          <div class="bg-gray-100 dark:bg-gray-800 px-4 py-3 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700">
+            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+            <div class="ml-4 flex-1 h-6 bg-white dark:bg-gray-700 rounded-full flex items-center px-4 text-xs text-gray-400">
+              {{ template.url }}
+            </div>
+          </div>
+
+          <!-- Template Image -->
+          <div class="aspect-video bg-cover bg-center" [style.background-image]="'url(' + template.image + ')'"></div>
+
+          <!-- Template Info -->
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ template.name }}</h3>
+                <p class="text-blue-600 dark:text-blue-400 text-sm font-medium">Industry: {{ template.industry }}</p>
+              </div>
+              <span *ngIf="template.badge" 
+                    class="px-3 py-1 rounded-full text-xs font-bold uppercase"
+                    [ngClass]="{
+                      'bg-amber-100 text-amber-700': template.badge === 'Popular',
+                      'bg-green-100 text-green-700': template.badge === 'High Conversion'
+                    }">
+                {{ template.badge }}
+              </span>
+            </div>
+
+            <div class="space-y-3 mb-6">
+              <div *ngFor="let feature of template.features" 
+                   class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                <span class="text-blue-600 text-lg">✅</span>
+                <span class="text-sm">{{ feature }}</span>
+              </div>
+            </div>
+
+            <button (click)="viewTemplate(template)"
+                    class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-lg">
+              <span class="text-xl">👁️</span>
+              <span>Preview Template</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Team Section -->
+  <section id="team" class="scroll-section min-h-screen flex items-center py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4 w-full">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          Meet Our Team
+        </h2>
+        <div class="w-16 h-1 bg-yellow-500 mx-auto rounded-full mb-6"></div>
+        <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+          A human-centric approach to building professional websites for small businesses with flexible payment plans.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div *ngFor="let member of teamMembers" 
+             class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all hover:-translate-y-2">
+          
+          <div class="relative mb-6">
+            <div class="absolute inset-0 bg-blue-500/10 rounded-full scale-110 -rotate-6"></div>
+            <div class="relative w-32 h-32 mx-auto rounded-full border-4 border-white dark:border-gray-800 shadow-lg bg-cover bg-center"
+                 [style.background-image]="'url(' + member.image + ')'">
+            </div>
+          </div>
+
+          <div class="text-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ member.name }}</h3>
+            <p class="text-blue-600 dark:text-blue-400 text-sm font-bold uppercase tracking-widest">{{ member.role }}</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mt-4 leading-relaxed">
+              {{ member.bio }}
+            </p>
+          </div>
+
+          <div class="flex gap-3">
+            <button class="flex-1 h-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-bold text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors flex items-center justify-center gap-2">
+              <span class="text-lg">🔗</span>
+              LinkedIn
+            </button>
+            <button class="flex-1 h-12 rounded-lg bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg">
+              <span class="text-lg">📧</span>
+              Email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Contact Section -->
+  <section id="contact" class="scroll-section min-h-screen flex items-center py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto px-4 w-full">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold mb-4 border border-yellow-200 dark:border-yellow-800">
+          <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+          FREE CONSULTATION
+        </div>
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          Let's Scale Your Business
+        </h2>
+        <p class="text-blue-600 dark:text-blue-400 text-lg font-medium">
+          Join 50+ local businesses already online with us
+        </p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <div class="p-8">
+          <div class="flex items-center gap-3 mb-8">
+            <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-400">
+              <span class="material-symbols-outlined text-2xl">description</span>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Project Inquiry</h3>
+          </div>
+
+          <form (ngSubmit)="onSubmit()" class="space-y-6">
+            <!-- Business Name -->
+            <div>
+              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Business Name</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">storefront</span>
+                <input type="text" 
+                       [(ngModel)]="formData.businessName"
+                       name="businessName"
+                       placeholder="Acme Corp"
+                       class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white">
+              </div>
+            </div>
+
+            <!-- Website Type -->
+            <div>
+              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Website Type</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">web</span>
+                <select [(ngModel)]="formData.websiteType"
+                        name="websiteType"
+                        class="w-full pl-12 pr-10 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white appearance-none">
+                  <option>E-commerce Store</option>
+                  <option>Business Portfolio</option>
+                  <option>Service Landing Page</option>
+                  <option>Custom Platform</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">expand_more</span>
+              </div>
+            </div>
+
+            <!-- Budget Range -->
+            <div>
+              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Budget Range (Monthly)</label>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" 
+                         [(ngModel)]="formData.budget"
+                         name="budget"
+                         value="basic"
+                         class="sr-only peer">
+                  <div class="p-4 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-xl peer-checked:border-blue-600 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all text-center">
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 peer-checked:text-blue-600 block">BASIC</span>
+                    <span class="text-lg font-bold text-gray-900 dark:text-white">$99+</span>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" 
+                         [(ngModel)]="formData.budget"
+                         name="budget"
+                         value="pro"
+                         class="sr-only peer">
+                  <div class="p-4 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-xl peer-checked:border-blue-600 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all text-center relative overflow-hidden">
+                    <div class="absolute -top-1 -right-8 bg-yellow-400 text-gray-900 text-[8px] font-bold px-8 py-0.5 rotate-45">POPULAR</div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 peer-checked:text-blue-600 block">PRO</span>
+                    <span class="text-lg font-bold text-gray-900 dark:text-white">$249+</span>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" 
+                         [(ngModel)]="formData.budget"
+                         name="budget"
+                         value="custom"
+                         class="sr-only peer">
+                  <div class="p-4 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-xl peer-checked:border-blue-600 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all text-center">
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 peer-checked:text-blue-600 block">CUSTOM</span>
+                    <span class="text-lg font-bold text-gray-900 dark:text-white">Flexible</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Services Needed -->
+            <div>
+              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Services Needed</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="cursor-pointer">
+                  <input type="checkbox" 
+                         [(ngModel)]="formData.services.seo"
+                         name="seo"
+                         class="sr-only peer">
+                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-base">search</span> SEO Optimization
+                  </span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="checkbox" 
+                         [(ngModel)]="formData.services.design"
+                         name="design"
+                         class="sr-only peer">
+                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-base">brush</span> UI/UX Design
+                  </span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="checkbox" 
+                         [(ngModel)]="formData.services.maintenance"
+                         name="maintenance"
+                         class="sr-only peer">
+                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-base">settings</span> Maintenance
+                  </span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="checkbox" 
+                         [(ngModel)]="formData.services.content"
+                         name="content"
+                         class="sr-only peer">
+                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-base">ad_units</span> Content Creation
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg hover:bg-blue-700 transition-all hover:scale-105 flex items-center justify-center gap-2">
+              <span>Confirm Call & Send Details</span>
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+
+            <div class="text-center">
+              <div class="flex items-center justify-center gap-1 text-xs text-gray-400 mb-2">
+                <span class="material-symbols-outlined text-xs">lock</span>
+                Your data is secure and encrypted
+              </div>
+              <p class="text-xs text-gray-400">
+                By confirming, you agree to our <a href="#" class="underline hover:text-blue-600">Privacy Policy</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+
+
+<!-- Template Preview Modal -->
+<div *ngIf="showTemplateModal" 
+     class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+     (click)="closeTemplateModal()">
+  <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+       (click)="$event.stopPropagation()">
+    <div class="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-6 flex items-center justify-between z-10">
+      <div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ selectedTemplate?.name }}</h3>
+        <p class="text-blue-600 dark:text-blue-400 text-sm">{{ selectedTemplate?.industry }}</p>
+      </div>
+      <button (click)="closeTemplateModal()"
+              class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <span class="material-symbols-outlined text-2xl">close</span>
+      </button>
+    </div>
+
+    <div class="p-6">
+      <!-- Template Image -->
+      <div class="aspect-video bg-cover bg-center rounded-xl mb-6 shadow-lg"
+           [style.background-image]="'url(' + selectedTemplate?.image + ')'">
+      </div>
+
+      <!-- Features -->
+      <div class="mb-6">
+        <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Key Features:</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div *ngFor="let feature of selectedTemplate?.features"
+               class="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">check_circle</span>
+            <span class="text-sm text-gray-700 dark:text-gray-300">{{ feature }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button (click)="scrollToSection('contact'); closeTemplateModal()"
+                class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg">
+          Use This Template
+        </button>
+        <button (click)="closeTemplateModal()"
+                class="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-4 rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          Close Preview
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <!-- Logo & Description -->
+      <div class="col-span-1 md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="assets/logo.png" 
+               (error)="$any($event.target).src='assets/logo-placeholder.svg'"
+               alt="Aries Ventures" 
+               class="h-12 w-12 object-contain">
+          <span class="text-2xl font-bold">Aries Ventures</span>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed">
+          Professional websites for small businesses with flexible payment plans. 
+          Empowering local businesses to thrive online.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><a (click)="scrollToSection('home')" class="text-gray-400 hover:text-white transition-colors cursor-pointer">Home</a></li>
+          <li><a (click)="scrollToSection('services')" class="text-gray-400 hover:text-white transition-colors cursor-pointer">Services</a></li>
+          <li><a (click)="scrollToSection('templates')" class="text-gray-400 hover:text-white transition-colors cursor-pointer">Templates</a></li>
+          <li><a (click)="scrollToSection('team')" class="text-gray-400 hover:text-white transition-colors cursor-pointer">Team</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <h4 class="font-bold text-lg mb-4">Contact</h4>
+        <ul class="space-y-2 text-gray-400 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">mail</span>
+            info&#64;ariesventures.com
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">phone</span>
+            +44 20 1234 5678
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">location_on</span>
+            London, United Kingdom
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-gray-400 text-sm">© 2024 Aries Ventures. All rights reserved.</p>
+      <div class="flex gap-6 text-sm text-gray-400">
+        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-white transition-colors">Portfolio</a>
+      </div>
+    </div>
+  </div>
+</footer>

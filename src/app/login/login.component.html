@@ -1,0 +1,150 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+  
+  <!-- Animated Background Logo -->
+  <div class="absolute inset-0 flex items-center justify-center opacity-5">
+    <img src="assets/logo.png" 
+         alt="Background Logo" 
+         class="w-[800px] h-[800px] object-contain animate-pulse-slow">
+  </div>
+
+  <!-- Floating Particles Animation -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+    <div class="particle particle-4"></div>
+    <div class="particle particle-5"></div>
+  </div>
+
+  <!-- Login Card -->
+  <div class="relative z-10 w-full max-w-md animate-fade-in-up">
+    
+    <!-- Logo Header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-2xl shadow-2xl shadow-blue-600/50 mb-4 animate-bounce-slow">
+        <img src="assets/logo.png" 
+             alt="Aries Ventures" 
+             class="w-16 h-16 object-contain">
+      </div>
+      <h1 class="text-3xl font-black text-white mb-2">Welcome Back</h1>
+      <p class="text-blue-200">Sign in to your Aries Ventures account</p>
+    </div>
+
+    <!-- Login Form Card -->
+    <div class="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 animate-slide-in">
+      
+      <form (ngSubmit)="onSubmit()" class="space-y-6">
+        
+        <!-- Email Field -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-white">Email Address</label>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <span class="text-blue-300 text-xl">📧</span>
+            </div>
+            <input type="email" 
+                   [(ngModel)]="loginData.email"
+                   name="email"
+                   required
+                   placeholder="you@example.com"
+                   class="w-full pl-12 pr-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-blue-200/50 focus:border-blue-400 focus:bg-white/20 transition-all outline-none">
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-white">Password</label>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <span class="text-blue-300 text-xl">🔒</span>
+            </div>
+            <input [type]="showPassword ? 'text' : 'password'"
+                   [(ngModel)]="loginData.password"
+                   name="password"
+                   required
+                   placeholder="Enter your password"
+                   class="w-full pl-12 pr-12 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-blue-200/50 focus:border-blue-400 focus:bg-white/20 transition-all outline-none">
+            <button type="button"
+                    (click)="togglePassword()"
+                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-white transition-colors">
+              <span class="text-xl">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer group">
+            <input type="checkbox" 
+                   [(ngModel)]="loginData.rememberMe"
+                   name="rememberMe"
+                   class="w-4 h-4 rounded border-2 border-white/20 bg-white/10 text-blue-600 focus:ring-2 focus:ring-blue-400">
+            <span class="text-sm text-blue-200 group-hover:text-white transition-colors">Remember me</span>
+          </label>
+          <a href="#" class="text-sm text-blue-300 hover:text-white transition-colors font-medium">
+            Forgot password?
+          </a>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+                [disabled]="isLoading"
+                class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-600/50 hover:shadow-blue-600/70 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <span *ngIf="!isLoading">Sign In</span>
+          <span *ngIf="isLoading" class="flex items-center gap-2">
+            <span class="animate-spin">⏳</span>
+            Signing in...
+          </span>
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="relative my-6">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-white/20"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-4 bg-transparent text-blue-200">Or continue with</span>
+        </div>
+      </div>
+
+      <!-- Social Login -->
+      <div class="grid grid-cols-2 gap-3">
+        <button type="button" 
+                class="flex items-center justify-center gap-2 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white hover:bg-white/20 hover:border-white/30 transition-all">
+          <span class="text-xl">🔵</span>
+          <span class="font-medium">Google</span>
+        </button>
+        <button type="button"
+                class="flex items-center justify-center gap-2 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white hover:bg-white/20 hover:border-white/30 transition-all">
+          <span class="text-xl">📘</span>
+          <span class="font-medium">Facebook</span>
+        </button>
+      </div>
+
+      <!-- Register Link -->
+      <div class="mt-6 text-center">
+        <p class="text-blue-200">
+          Don't have an account? 
+          <button (click)="goToRegister()"
+                  class="text-white font-bold hover:text-blue-300 transition-colors ml-1">
+            Sign up
+          </button>
+        </p>
+      </div>
+
+      <!-- Back to Home -->
+      <div class="mt-4 text-center">
+        <button (click)="goToHome()"
+                class="text-blue-300 hover:text-white transition-colors text-sm flex items-center justify-center gap-1 mx-auto">
+          <span>←</span>
+          <span>Back to Home</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

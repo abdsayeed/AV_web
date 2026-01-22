@@ -195,13 +195,47 @@ JWT_SECRET=your-jwt-secret-key
 - `PUT /api/services/:id` - Update service (admin)
 - `DELETE /api/services/:id` - Delete service (admin)
 
-## Documentation
+## Database Schema
 
-For detailed setup and usage instructions, see the Documentation folder:
+### Users Collection
+```javascript
+{
+  _id: ObjectId,
+  email: String,
+  password: String (hashed),
+  name: String,
+  role: String (user/admin),
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-- [Setup Guide](Documentation/SETUP.md) - Complete setup instructions
-- [API Documentation](Documentation/API.md) - API endpoints and usage
-- [Deployment Guide](Documentation/DEPLOYMENT.md) - Production deployment
+### Contact Submissions Collection
+```javascript
+{
+  _id: ObjectId,
+  name: String,
+  email: String,
+  company: String,
+  message: String,
+  services: [String],
+  budget: String,
+  status: String (new/contacted/closed),
+  createdAt: Date
+}
+```
+
+## Deployment
+
+### Production Deployment
+1. Build both applications
+2. Set production environment variables
+3. Deploy to your hosting platform
+
+### Docker Deployment
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
 
 ## Browser Support
 

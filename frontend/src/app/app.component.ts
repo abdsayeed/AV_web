@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { ContextService } from './core/services/context.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,10 @@ export class AppComponent {
   selectedTemplate: any = null;
   showTemplateModal = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private contextService: ContextService
+  ) {}
 
   // Form data
   formData = {
@@ -47,37 +51,72 @@ export class AppComponent {
 
   pricingPlans = [
     {
-      name: 'Pay-As-You-Go',
-      icon: 'calendar_month',
-      price: '£99',
+      name: 'Pay-As-You-Go Website',
+      icon: '📅',
+      price: '£59',
       priceLabel: '/month',
-      description: 'Low monthly subscription with full support, maintenance, and ultra-fast hosting included. Perfect for startups.',
+      description: 'Template-based website with ongoing support. Perfect for small businesses starting online with low upfront cost.',
       color: 'primary',
       badge: 'Most Accessible',
-      features: ['5-page website', 'Mobile responsive', 'Basic SEO', 'Monthly updates', 'Email support'],
+      features: [
+        '5-page responsive website',
+        'Template-based design',
+        'Contact form & Google Maps',
+        'Basic SEO setup',
+        'Hosting, SSL & backups',
+        'Regular security updates',
+        'Small content changes',
+        'Performance monitoring'
+      ],
+      contractInfo: '6 or 12-month minimum • Website licensed, not owned • Buyout option available',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjbP5WHr5GN8HwXnnPm_6y6Q5P2ZrF3R54b6XSYmGLlP4i_BLEajfSjmUfNH0-0j--gplRqJNz71kqJr2iBQkJeSEjtb3YTMi34DWTfDV5emh3SY0Ea6QRkCEaPqBCYrKDI-8iZSqfiDPXzpqaffPgFPa2v0Rf8D85Wz3R_c-pHEym3PSch-XBZ00WyKt4IaEZ0hw1tODfN8EZVpcc5lb49y6EnrhL3NylzNUwacNaCunOgFo49yVQ5L2wG4i1-2FvqR2fZwUHtek'
     },
     {
-      name: 'Own It Outright',
-      icon: 'payments',
-      price: '£1,200',
-      priceLabel: 'One-time',
-      description: 'One-time payment for complete ownership of your custom site. No recurring contracts, just high-end design.',
+      name: 'Fully Managed Professional Website',
+      icon: '💎',
+      price: '£249',
+      priceLabel: '/month',
+      description: 'Full professional website with zero technical hassle. We own and manage everything for you.',
       color: 'blue',
-      badge: 'Full Control',
-      features: ['10-page website', 'Custom design', 'Advanced SEO', 'Full ownership', 'Priority support'],
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ'
+      badge: 'Most Popular',
+      features: [
+        'Up to 12-15 pages',
+        'Custom brand-aligned design',
+        'Mobile-first & fully responsive',
+        'Advanced forms (quotes, bookings)',
+        'Blog / CMS included',
+        'Advanced SEO & analytics',
+        'Premium hosting & CDN',
+        'Daily backups & security',
+        'Unlimited content updates',
+        'Monthly reports',
+        'Priority support'
+      ],
+      contractInfo: '6 or 12-month minimum • We own & manage • Buyout option available',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ'
     },
     {
-      name: 'Premium Managed',
-      icon: 'verified_user',
-      price: '£999',
-      priceLabel: 'Build + £149/mo',
-      description: 'High-performance build with dedicated management, priority updates, and growth-focused SEO strategy.',
+      name: 'Full Professional Website',
+      icon: '🏆',
+      price: 'Custom',
+      priceLabel: 'One-time',
+      description: 'Fully custom professional website. You own everything with full control and no long-term contracts.',
       color: 'green',
-      badge: 'Enterprise Grade',
-      features: ['Unlimited pages', 'E-commerce ready', 'Premium SEO', '24/7 support', 'Monthly reports'],
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ'
+      badge: 'Full Ownership',
+      features: [
+        'Fully custom design',
+        'Unlimited pages & features',
+        'Custom UI/UX design',
+        'Advanced integrations',
+        'Blog / CMS',
+        'SEO-ready structure',
+        'Speed optimized',
+        'Full source code included',
+        'You own the website',
+        'Optional maintenance plan'
+      ],
+      contractInfo: 'One-time payment • You own everything • No long-term contract • Maintenance optional',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ'
     }
   ];
 
@@ -202,9 +241,28 @@ export class AppComponent {
     this.selectedTemplate = null;
   }
 
+  useTemplate(template: any) {
+    // Navigate to contact form with template context
+    this.contextService.navigateToContactWithTemplate(
+      template.name.toLowerCase().replace(/\s+/g, '-'),
+      template.name,
+      template.industry
+    );
+    this.closeTemplateModal();
+  }
+
   selectPlan(plan: any) {
-    alert(`You selected: ${plan.name}\n\nPrice: ${plan.price} ${plan.priceLabel}\n\nWe'll redirect you to the contact form to get started!`);
-    this.scrollToSection('contact');
+    // Navigate to contact form with pricing context
+    const tierMap: Record<string, string> = {
+      'Pay-As-You-Go Website': 'basic',
+      'Fully Managed Professional Website': 'pro',
+      'Full Professional Website': 'custom'
+    };
+    
+    this.contextService.navigateToContactWithPricing(
+      tierMap[plan.name] || 'basic',
+      plan.price
+    );
   }
 
   goToLogin() {
@@ -213,5 +271,9 @@ export class AppComponent {
 
   goToRegister() {
     this.router.navigate(['/register']);
+  }
+
+  goToContactForm() {
+    this.router.navigate(['/contact']);
   }
 }

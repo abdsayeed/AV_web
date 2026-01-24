@@ -119,24 +119,101 @@ export class AppComponent {
 
   teamMembers = [
     {
-      name: 'Alex Rivers',
-      role: 'Founder & CEO',
-      bio: 'Strategic lead focused on empowering small business growth through innovative digital tools.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAKAooALlpfP96jDVupHjdx5yubfSRmkFeUuJO-W4MmnCjXhjsxvgHmxWA4J4Ni5E21iXjw5lV7dIEIrvRuTCmw8PkNODIFvlK1urLEFrFfYS7K2UbrI_34_no9nnTfyBJaBskuhuURsNNxSC02_xpK9OS_WhKhWpFGflOLmy3ZWqTqguVjXgjKNvdavEG2DdKYL8cI9swAdzixxe8a6qUpU3BoqPa8hcA7oQ1sKFf2Q1mQoBU9lohjLs-QV5nLzq2COzWiEgZTzdI'
+      name: 'Abdullah Al Sayeed',
+      role: 'Backend Developer',
+      bio: 'Back-end developer building APIs, handling data, and making systems work behind the scenes. Interested in scalability, security, and clean architecture.',
+      image: 'assets/Abdullah_sayed.png',
+      email: 'abdsayeedofficial@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/abdullah-al-sayeed-50522a22b'
     },
     {
-      name: 'Jordan Lee',
-      role: 'Creative Director',
-      bio: 'Design lead dedicated to aesthetic excellence and crafting seamless user experiences for modern brands.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDfU5A1UpvHiMu-Q4m-iHsFIXAJ_svXUhhQDHsaulGmelCObN286nChSWWG_SafyPZt0gga4jU4OzWPlOYjxet02V0MTNksEKaZ2LYIGSd-24Z2Hr_uUHD3Y7WV3fowNy7PeF9D7uaJhYFYeiB9Ief3w8ATYxYnD3_2Wi1ECSdj7fETSAohMzzwG46yZxsXtW_gE8p4Z1n5i6KTv_1liE-oHKstx3nf6Jk9iaQNvWdMuI2pP7_SLsFenREcZaY9dMIruEYIs3EhsMY'
+      name: 'MD Nasif',
+      role: 'Front-End Developer',
+      bio: 'Front-end engineer focused on building clean, responsive, and user-friendly interfaces. Working with HTML, CSS, JavaScript, and modern frameworks.',
+      image: 'assets/Md_Nasif.png',
+      email: 'Mdnasif17@gmail.com',
+      linkedin: 'www.linkedin.com/in/mdnasif17'
     },
     {
-      name: 'Marcus Chen',
-      role: 'Technical Lead',
-      bio: 'Expert developer building secure, high-performance systems and flexible payment integrations.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAzc86pPL1Uf6JOrOfA14tjIJ0ATJNDVDNb3rK3a1hZnifzwDvCHxusvpxHhar-zukCniWAvGfy8cUJAc-_2SQS17d2LSdudG_DH-7tjCTLkMgQa7eqVzAxuxsHgrSj0zK7GiYeMW7nACF6LReb6NHPHfo-t34zRTeX1xFh6Vf8s5MP1Q4x1RHzxjA66CDPcoYmubouw88dK7a8PbWL2RwM9MYWlK99pL7oAPDrQsY5PIS0-DXsh5FOAn4JoAznnWNfhp-DovgLiiU'
+      name: 'AR Fahad',
+      role: 'DevOps Engineer',
+      bio: 'DevOps enthusiast who likes breaking things, fixing them, and automating the boring stuff. Working with Linux, Git, Docker, and CI/CD.',
+      image: 'assets/ar_fahad.png',
+      email: 'mdarfahad@mail.com',
+      linkedin: 'https://www.linkedin.com/in/arfahad99/'
     }
   ];
+
+  // Smart email redirect function
+  openEmail(email: string) {
+    // Extract domain from email
+    const domain = email.split('@')[1].toLowerCase();
+    
+    // Define email provider URLs
+    const emailProviders: { [key: string]: string } = {
+      'gmail.com': `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`,
+      'yahoo.com': `https://compose.mail.yahoo.com/?to=${email}`,
+      'yahoo.co.uk': `https://compose.mail.yahoo.com/?to=${email}`,
+      'hotmail.com': `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
+      'outlook.com': `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
+      'live.com': `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
+      'icloud.com': `https://www.icloud.com/mail/`,
+      'me.com': `https://www.icloud.com/mail/`,
+      'mac.com': `https://www.icloud.com/mail/`
+    };
+
+    // Check if we have a specific provider URL
+    if (emailProviders[domain]) {
+      window.open(emailProviders[domain], '_blank');
+    } else {
+      // For custom domains or unknown providers, show options
+      this.showEmailOptions(email);
+    }
+  }
+
+  // Show email options for custom domains
+  showEmailOptions(email: string) {
+    // Create a more user-friendly modal-style selection
+    const modalHtml = `
+      <div id="email-modal" onclick="if(event.target === this) this.remove();" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <div onclick="event.stopPropagation();" style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 400px; width: 90%; cursor: default;">
+          <h3 style="margin: 0 0 20px 0; color: #333; text-align: center;">Send Email to ${email}</h3>
+          <p style="margin: 0 0 20px 0; color: #666; text-align: center;">Choose your preferred email service:</p>
+          <div style="display: grid; gap: 10px;">
+            <button onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=${email}', '_blank'); document.getElementById('email-modal').remove();" 
+                    style="padding: 12px; border: none; background: #4285f4; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    onmouseover="this.style.background='#3367d6'" onmouseout="this.style.background='#4285f4'">
+              📧 Gmail
+            </button>
+            <button onclick="window.open('https://compose.mail.yahoo.com/?to=${email}', '_blank'); document.getElementById('email-modal').remove();" 
+                    style="padding: 12px; border: none; background: #6001d2; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    onmouseover="this.style.background='#5000b8'" onmouseout="this.style.background='#6001d2'">
+              📧 Yahoo Mail
+            </button>
+            <button onclick="window.open('https://outlook.live.com/mail/0/deeplink/compose?to=${email}', '_blank'); document.getElementById('email-modal').remove();" 
+                    style="padding: 12px; border: none; background: #0078d4; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    onmouseover="this.style.background='#106ebe'" onmouseout="this.style.background='#0078d4'">
+              📧 Outlook
+            </button>
+            <button onclick="window.location.href='mailto:${email}'; document.getElementById('email-modal').remove();" 
+                    style="padding: 12px; border: none; background: #666; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    onmouseover="this.style.background='#555'" onmouseout="this.style.background='#666'">
+              📱 Default Email App
+            </button>
+            <button onclick="document.getElementById('email-modal').remove();" 
+                    style="padding: 8px; border: 1px solid #ddd; background: white; color: #666; border-radius: 8px; cursor: pointer; margin-top: 10px; transition: all 0.2s;"
+                    onmouseover="this.style.background='#f5f5f5'; this.style.borderColor='#999'" onmouseout="this.style.background='white'; this.style.borderColor='#ddd'">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    const modalElement = document.createElement('div');
+    modalElement.innerHTML = modalHtml;
+    document.body.appendChild(modalElement);
+  }
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {

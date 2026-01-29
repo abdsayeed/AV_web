@@ -159,7 +159,7 @@ export class AppComponent {
   teamMembers = [
     {
       name: 'Abdullah Al Sayeed',
-      role: 'Backend Developer',
+      role: 'Back-end Developer',
       bio: 'Back-end developer building APIs, handling data, and making systems work behind the scenes. Interested in scalability, security, and clean architecture.',
       image: 'assets/Abdullah_sayed.png',
       email: 'abdsayeedofficial@gmail.com',
@@ -175,7 +175,7 @@ export class AppComponent {
     },
     {
       name: 'AR Fahad',
-      role: 'DevOps Engineer',
+      role: 'Dev-Ops Engineer',
       bio: 'DevOps enthusiast who likes breaking things, fixing them, and automating the boring stuff. Working with Linux, Git, Docker, and CI/CD.',
       image: 'assets/ar_fahad.png',
       email: 'mdarfahad@mail.com',

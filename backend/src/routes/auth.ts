@@ -1,18 +1,22 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import User from '../models/User';
 import { authMiddleware } from '../middleware/auth';
 
 const router = express.Router();
 
+interface AuthRequest extends Request {
+  user?: any;
+}
+
 // Register
 router.post('/register', [
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 6 }),
   body('name').trim().isLength({ min: 2 })
-], async (req, res) => {
+], async (req: Request, res: Response): Promise<any> => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,10 +46,12 @@ router.post('/register', [
     await user.save();
 
     // Generate JWT
+    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+    const jwtOptions: SignOptions = { expiresIn: '7d' };
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      jwtSecret,
+      jwtOptions
     );
 
     res.status(201).json({
@@ -68,7 +74,7 @@ router.post('/register', [
 router.post('/login', [
   body('email').isEmail().normalizeEmail(),
   body('password').exists()
-], async (req, res) => {
+], async (req: Request, res: Response): Promise<any> => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -90,10 +96,12 @@ router.post('/login', [
     }
 
     // Generate JWT
+    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+    const jwtOptions: SignOptions = { expiresIn: process.env.JWT_EXPIRES_IN || '7d' };
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      jwtSecret,
+      jwtOptions
     );
 
     res.json({
@@ -113,9 +121,9 @@ router.post('/login', [
 });
 
 // Get profile
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get('/profile', authMiddleware, async (req: AuthRequest, res: Response): Promise<any> => {
   try {
-    const user = await User.findById(req.user.userId).select('-password');
+    const user = await User.findById(req.user?.userId).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -128,7 +136,7 @@ router.get('/profile', authMiddleware, async (req, res) => {
 });
 
 // Logout (client-side token removal)
-router.post('/logout', (req, res) => {
+router.post('/logout', (req: Request, res: Response): void => {
   res.json({ message: 'Logout successful' });
 });
 

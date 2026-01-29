@@ -171,7 +171,7 @@ export class AppComponent {
       bio: 'Front-end engineer focused on building clean, responsive, and user-friendly interfaces. Working with HTML, CSS, JavaScript, and modern frameworks.',
       image: 'assets/Md_Nasif.png',
       email: 'Mdnasif17@gmail.com',
-      linkedin: 'www.linkedin.com/in/mdnasif17'
+      linkedin: 'https://www.linkedin.com/in/mdnasif17'
     },
     {
       name: 'AR Fahad',

@@ -114,6 +114,10 @@ export class ContactFormComponent implements OnInit {
     }
   }
 
+  goHome(): void {
+    this.router.navigate(['/']);
+  }
+
   private getStepKey(step: number): keyof ContactFormData {
     const keys: Record<number, keyof ContactFormData> = {
       1: 'context',

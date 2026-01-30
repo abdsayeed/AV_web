@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormStorageService } from '../../../../core/services/form-storage.service';
+import { FormStateService } from '../../../../core/services/form-state.service';
 import { ContactFormData } from '../../../../core/models/contact-form.model';
 
 @Component({
@@ -16,15 +17,14 @@ import { ContactFormData } from '../../../../core/models/contact-form.model';
           <!-- Success Icon -->
           <div class="mb-6 flex justify-center">
             <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-12 h-12 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
+              <span class="material-symbols-outlined text-green-600 text-5xl">check_circle</span>
             </div>
           </div>
 
           <!-- Thank You Message -->
-          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            🎉 Thank You{{ contactName ? ', ' + contactName : '' }}!
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-4xl">celebration</span>
+            Thank You{{ contactName ? ', ' + contactName : '' }}!
           </h1>
           
           <p class="text-lg text-gray-600 mb-6">
@@ -40,24 +40,27 @@ import { ContactFormData } from '../../../../core/models/contact-form.model';
 
           <!-- What's Next -->
           <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">📋 What happens next?</h2>
+            <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-xl">assignment</span>
+              What happens next?
+            </h2>
             <div class="space-y-3">
               <div class="flex items-start gap-3">
-                <span class="text-2xl">✅</span>
+                <span class="material-symbols-outlined text-green-600 text-2xl">check_circle</span>
                 <div>
                   <p class="font-medium text-gray-900">We'll review your requirements</p>
                   <p class="text-sm text-gray-600">Our team will carefully analyze your project needs</p>
                 </div>
               </div>
               <div class="flex items-start gap-3">
-                <span class="text-2xl">📧</span>
+                <span class="material-symbols-outlined text-blue-600 text-2xl">schedule</span>
                 <div>
                   <p class="font-medium text-gray-900">Expect a response within 24 hours</p>
                   <p class="text-sm text-gray-600">We'll reach out via your preferred contact method</p>
                 </div>
               </div>
               <div class="flex items-start gap-3">
-                <span class="text-2xl">💬</span>
+                <span class="material-symbols-outlined text-purple-600 text-2xl">chat</span>
                 <div>
                   <p class="font-medium text-gray-900">Schedule a consultation</p>
                   <p class="text-sm text-gray-600">We'll discuss your project in detail and provide a custom quote</p>
@@ -70,13 +73,15 @@ import { ContactFormData } from '../../../../core/models/contact-form.model';
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               (click)="goHome()"
-              class="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
-              🏠 Back to Home
+              class="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">home</span>
+              Back to Home
             </button>
             <button
               (click)="viewTemplates()"
-              class="px-6 py-3 bg-white text-blue-600 font-medium rounded-lg border-2 border-blue-600 hover:bg-blue-50 transition-colors">
-              👁️ Browse Templates
+              class="px-6 py-3 bg-white text-blue-600 font-medium rounded-lg border-2 border-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">visibility</span>
+              Browse Templates
             </button>
           </div>
 
@@ -85,16 +90,16 @@ import { ContactFormData } from '../../../../core/models/contact-form.model';
             <p class="text-sm text-gray-600 mb-3">Follow us for updates and tips</p>
             <div class="flex justify-center gap-4">
               <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="text-2xl">📘</span>
+                <span class="material-symbols-outlined text-2xl">facebook</span>
               </a>
               <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="text-2xl">🐦</span>
+                <span class="material-symbols-outlined text-2xl">alternate_email</span>
               </a>
               <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="text-2xl">📷</span>
+                <span class="material-symbols-outlined text-2xl">photo_camera</span>
               </a>
               <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="text-2xl">💼</span>
+                <span class="material-symbols-outlined text-2xl">work</span>
               </a>
             </div>
           </div>
@@ -109,11 +114,14 @@ export class ThankYouComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private storageService: FormStorageService
+    private storageService: FormStorageService,
+    private formStateService: FormStateService
   ) {}
 
   ngOnInit(): void {
     this.loadSubmissionData();
+    // Clear form data after successful submission
+    this.formStateService.resetForm();
   }
 
   private loadSubmissionData(): void {

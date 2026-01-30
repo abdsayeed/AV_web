@@ -39,6 +39,11 @@ export class AppComponent {
     }
   };
 
+  // Professional loading states
+  isSubmitting = false;
+  submitSuccess = false;
+  submitError = '';
+
   navItems = [
     { id: 'home', label: 'Home' },
     { id: 'how-it-works', label: 'How It Works' },
@@ -52,7 +57,7 @@ export class AppComponent {
   pricingPlans = [
     {
       name: 'Pay-As-You-Go Website',
-      icon: '📅',
+      icon: 'schedule',
       price: '£59',
       priceLabel: '/month',
       description: 'Template-based website with ongoing support. Perfect for small businesses starting online with low upfront cost.',
@@ -73,7 +78,7 @@ export class AppComponent {
     },
     {
       name: 'Fully Managed Professional Website',
-      icon: '💎',
+      icon: 'diamond',
       price: '£249',
       priceLabel: '/month',
       description: 'Full professional website with zero technical hassle. We own and manage everything for you.',
@@ -97,7 +102,7 @@ export class AppComponent {
     },
     {
       name: 'Full Professional Website',
-      icon: '🏆',
+      icon: 'workspace_premium',
       price: 'Custom',
       priceLabel: 'One-time',
       description: 'Fully custom professional website. You own everything with full control and no long-term contracts.',
@@ -121,12 +126,12 @@ export class AppComponent {
   ];
 
   industries = [
-    { name: 'Barbershops', icon: '💈' },
-    { name: 'Cafes & Dining', icon: '☕' },
-    { name: 'Home Services', icon: '🔧' },
-    { name: 'Landscapers', icon: '🌳' },
-    { name: 'Boutique Retail', icon: '🛍️' },
-    { name: 'Professional', icon: '💼' }
+    { name: 'Barbershops', icon: 'content_cut' },
+    { name: 'Cafes & Dining', icon: 'restaurant' },
+    { name: 'Home Services', icon: 'home_repair_service' },
+    { name: 'Landscapers', icon: 'park' },
+    { name: 'Boutique Retail', icon: 'storefront' },
+    { name: 'Professional', icon: 'business_center' }
   ];
 
   templates = [
@@ -159,7 +164,7 @@ export class AppComponent {
   teamMembers = [
     {
       name: 'Abdullah Al Sayeed',
-      role: 'Back-end Developer',
+      role: 'Backend Developer',
       bio: 'Back-end developer building APIs, handling data, and making systems work behind the scenes. Interested in scalability, security, and clean architecture.',
       image: 'assets/Abdullah_sayed.png',
       email: 'abdsayeedofficial@gmail.com',
@@ -167,7 +172,7 @@ export class AppComponent {
     },
     {
       name: 'MD Nasif',
-      role: 'Front-End Developer',
+      role: 'Frontend Developer',
       bio: 'Front-end engineer focused on building clean, responsive, and user-friendly interfaces. Working with HTML, CSS, JavaScript, and modern frameworks.',
       image: 'assets/Md_Nasif.png',
       email: 'Mdnasif17@gmail.com',
@@ -175,13 +180,103 @@ export class AppComponent {
     },
     {
       name: 'AR Fahad',
-      role: 'Dev-Ops Engineer',
+      role: 'DevOps Engineer',
       bio: 'DevOps enthusiast who likes breaking things, fixing them, and automating the boring stuff. Working with Linux, Git, Docker, and CI/CD.',
       image: 'assets/ar_fahad.png',
-      email: 'mdarfahad@mail.com',
+      email: 'mdarfahad@gmail.com',
       linkedin: 'https://www.linkedin.com/in/arfahad99/'
     }
   ];
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const sections = document.querySelectorAll('.scroll-section');
+    let current = '';
+
+    sections.forEach(section => {
+      const sectionTop = (section as HTMLElement).offsetTop;
+      if (window.pageYOffset >= sectionTop - 200) {
+        current = section.getAttribute('id') || '';
+      }
+    });
+
+    this.activeSection = current;
+    this.addScrollAnimations();
+  }
+
+  // Professional scroll animations
+  addScrollAnimations() {
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in-up');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    elements.forEach(el => observer.observe(el));
+  }
+
+  scrollToSection(sectionId: string) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      this.mobileMenuOpen = false;
+    }
+  }
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  async onSubmit() {
+    if (this.isSubmitting) return;
+    
+    if (!this.formData.businessName || !this.formData.email) {
+      this.submitError = 'Please fill in all required fields!';
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.submitError = '';
+    
+    try {
+      // Simulate API call with realistic delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      console.log('Form submitted:', this.formData);
+      
+      // Success state
+      this.submitSuccess = true;
+      
+      // Reset form after success
+      this.formData = {
+        businessName: '',
+        email: '',
+        phone: '',
+        websiteType: 'E-commerce Store',
+        budget: 'basic',
+        message: '',
+        services: {
+          seo: false,
+          design: true,
+          maintenance: false,
+          content: false
+        }
+      };
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        this.submitSuccess = false;
+      }, 5000);
+      
+    } catch (error) {
+      this.submitError = 'Something went wrong. Please try again.';
+    } finally {
+      this.isSubmitting = false;
+    }
+  }
 
   // Smart email redirect function
   openEmail(email: string) {
@@ -220,24 +315,24 @@ export class AppComponent {
           <p style="margin: 0 0 20px 0; color: #666; text-align: center;">Choose your preferred email service:</p>
           <div style="display: grid; gap: 10px;">
             <button onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=${email}', '_blank'); document.getElementById('email-modal').remove();" 
-                    style="padding: 12px; border: none; background: #4285f4; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    style="padding: 12px; border: none; background: #4285f4; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;"
                     onmouseover="this.style.background='#3367d6'" onmouseout="this.style.background='#4285f4'">
-              📧 Gmail
+              <span class="material-symbols-outlined">mail</span> Gmail
             </button>
             <button onclick="window.open('https://compose.mail.yahoo.com/?to=${email}', '_blank'); document.getElementById('email-modal').remove();" 
-                    style="padding: 12px; border: none; background: #6001d2; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    style="padding: 12px; border: none; background: #6001d2; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;"
                     onmouseover="this.style.background='#5000b8'" onmouseout="this.style.background='#6001d2'">
-              📧 Yahoo Mail
+              <span class="material-symbols-outlined">mail</span> Yahoo Mail
             </button>
             <button onclick="window.open('https://outlook.live.com/mail/0/deeplink/compose?to=${email}', '_blank'); document.getElementById('email-modal').remove();" 
-                    style="padding: 12px; border: none; background: #0078d4; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    style="padding: 12px; border: none; background: #0078d4; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;"
                     onmouseover="this.style.background='#106ebe'" onmouseout="this.style.background='#0078d4'">
-              📧 Outlook
+              <span class="material-symbols-outlined">mail</span> Outlook
             </button>
             <button onclick="window.location.href='mailto:${email}'; document.getElementById('email-modal').remove();" 
-                    style="padding: 12px; border: none; background: #666; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s;"
+                    style="padding: 12px; border: none; background: #666; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;"
                     onmouseover="this.style.background='#555'" onmouseout="this.style.background='#666'">
-              📱 Default Email App
+              <span class="material-symbols-outlined">smartphone</span> Default Email App
             </button>
             <button onclick="document.getElementById('email-modal').remove();" 
                     style="padding: 8px; border: 1px solid #ddd; background: white; color: #666; border-radius: 8px; cursor: pointer; margin-top: 10px; transition: all 0.2s;"
@@ -252,60 +347,6 @@ export class AppComponent {
     const modalElement = document.createElement('div');
     modalElement.innerHTML = modalHtml;
     document.body.appendChild(modalElement);
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
-    const sections = document.querySelectorAll('.scroll-section');
-    let current = '';
-
-    sections.forEach(section => {
-      const sectionTop = (section as HTMLElement).offsetTop;
-      const sectionHeight = (section as HTMLElement).clientHeight;
-      if (window.pageYOffset >= sectionTop - 200) {
-        current = section.getAttribute('id') || '';
-      }
-    });
-
-    this.activeSection = current;
-  }
-
-  scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      this.mobileMenuOpen = false;
-    }
-  }
-
-  toggleMobileMenu() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
-
-  onSubmit() {
-    if (!this.formData.businessName || !this.formData.email) {
-      alert('Please fill in all required fields!');
-      return;
-    }
-
-    console.log('Form submitted:', this.formData);
-    alert(`Thank you ${this.formData.businessName}! We will contact you at ${this.formData.email} within 24 hours.`);
-    
-    // Reset form
-    this.formData = {
-      businessName: '',
-      email: '',
-      phone: '',
-      websiteType: 'E-commerce Store',
-      budget: 'basic',
-      message: '',
-      services: {
-        seo: false,
-        design: true,
-        maintenance: false,
-        content: false
-      }
-    };
   }
 
   viewTemplate(template: any) {

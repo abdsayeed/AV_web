@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormStateService } from '../../../../core/services/form-state.service';
 import { FormStorageService } from '../../../../core/services/form-storage.service';
-import { MockApiService } from '../../../../core/services/mock-api.service';
+import { ApiService } from '../../../../core/services/api.service';
 import { ContactFormData } from '../../../../core/models/contact-form.model';
 
 @Component({
@@ -22,7 +22,7 @@ export class StepFourComponent implements OnInit {
     private fb: FormBuilder,
     private formStateService: FormStateService,
     private storageService: FormStorageService,
-    private apiService: MockApiService
+    private apiService: ApiService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -59,8 +59,8 @@ export class StepFourComponent implements OnInit {
         }
       } as ContactFormData;
 
-      // Submit to mock API
-      this.apiService.submitForm(completeData).subscribe({
+      // Submit to API
+      this.apiService.submitContactForm(completeData).subscribe({
         next: (response) => {
           console.log('Form submitted successfully:', response);
           this.storageService.saveSubmission(completeData);
@@ -71,7 +71,10 @@ export class StepFourComponent implements OnInit {
         error: (error) => {
           console.error('Submission error:', error);
           this.isSubmitting.set(false);
-          alert('There was an error submitting your form. Please try again.');
+          
+          // Show user-friendly error message
+          const errorMessage = error.error?.message || 'There was an error submitting your form. Please try again.';
+          alert(errorMessage);
         }
       });
     } else {

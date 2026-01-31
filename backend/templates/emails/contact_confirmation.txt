@@ -1,0 +1,30 @@
+Hello {{ submission.contact_name }},
+
+Thank you for your inquiry! We've received your project details and are excited to help bring your vision to life.
+
+Your Reference Number: {{ submission.reference_number }}
+
+PROJECT DETAILS:
+- Business: {{ submission.business_name }}
+- Industry: {{ submission.industry }}
+- Website Type: {{ submission.website_type }}
+- Budget Range: {{ submission.budget_range }}
+- Timeline: {{ submission.timeline }}
+
+WHAT HAPPENS NEXT:
+1. Our team will review your requirements (within 24 hours)
+2. We'll prepare a customized proposal for your project
+3. Schedule a consultation call to discuss details
+4. Begin your project once everything is approved
+
+You can track your inquiry status at: {{ dashboard_url }}
+
+If you have any questions, simply reply to this email or contact us at {{ support_email }}.
+
+Best regards,
+The Aries Ventures Team
+
+---
+Aries Ventures
+Building exceptional websites for ambitious businesses
+{{ contact_url }}

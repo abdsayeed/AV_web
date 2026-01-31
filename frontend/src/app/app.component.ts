@@ -1,8 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ContextService } from './core/services/context.service';
+import { ApiService } from './core/services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -11,17 +12,67 @@ import { ContextService } from './core/services/context.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private apiService = inject(ApiService);
+  
   title = 'Aries Ventures';
   activeSection = 'home';
   mobileMenuOpen = false;
   selectedTemplate: any = null;
   showTemplateModal = false;
 
+  // Authentication state
+  currentUser: any = null;
+  isAuthenticated = false;
+
   constructor(
     private router: Router,
     private contextService: ContextService
   ) {}
+
+  ngOnInit() {
+    // Subscribe to authentication state
+    this.apiService.currentUser$.subscribe(user => {
+      const wasAuthenticated = this.isAuthenticated;
+      this.currentUser = user;
+      this.isAuthenticated = !!user && this.apiService.isAuthenticated();
+      
+      // Show welcome message when user becomes authenticated (login/register)
+      if (!wasAuthenticated && this.isAuthenticated && user) {
+        // Small delay to ensure the page has loaded
+        setTimeout(() => {
+          this.showWelcomeMessage(user.name || 'User');
+        }, 500);
+      }
+    });
+  }
+
+  private showWelcomeMessage(userName: string) {
+    // Create and show a welcome popup
+    const welcomeDiv = document.createElement('div');
+    welcomeDiv.className = 'fixed top-4 right-4 z-50 bg-blue-600 text-white px-6 py-4 rounded-xl shadow-lg animate-slide-in-right';
+    welcomeDiv.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-2xl">waving_hand</span>
+        <div>
+          <div class="font-bold">Welcome back, ${userName}!</div>
+          <div class="text-sm opacity-90">You're now logged in</div>
+        </div>
+        <button onclick="this.parentElement.parentElement.remove()" class="ml-2 opacity-70 hover:opacity-100">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(welcomeDiv);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      if (welcomeDiv.parentElement) {
+        welcomeDiv.remove();
+      }
+    }, 4000);
+  }
 
   // Form data
   formData = {
@@ -393,5 +444,27 @@ export class AppComponent {
 
   goToContactForm() {
     this.router.navigate(['/contact']);
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
+  logout() {
+    this.apiService.logout().subscribe({
+      next: () => {
+        // User will be automatically updated via subscription
+        console.log('Logged out successfully');
+      },
+      error: (error) => {
+        console.error('Logout error:', error);
+        // Force logout even if API call fails
+        localStorage.removeItem('token');
+      }
+    });
   }
 }

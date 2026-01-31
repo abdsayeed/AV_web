@@ -35,6 +35,14 @@
       
       <form (ngSubmit)="onSubmit()" class="space-y-6">
         
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="bg-red-500/20 border border-red-500/50 rounded-xl p-4 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 text-xl">⚠️</span>
+            <p class="text-red-200 text-sm">{{ errorMessage }}</p>
+          </div>
+        </div>
+
         <!-- Email Field -->
         <div class="space-y-2">
           <label class="block text-sm font-bold text-white">Email Address</label>
@@ -81,7 +89,9 @@
                    class="w-4 h-4 rounded border-2 border-white/20 bg-white/10 text-blue-600 focus:ring-2 focus:ring-blue-400">
             <span class="text-sm text-blue-200 group-hover:text-white transition-colors">Remember me</span>
           </label>
-          <a href="#" class="text-sm text-blue-300 hover:text-white transition-colors font-medium">
+          <a href="#" 
+             (click)="onForgotPassword(); $event.preventDefault()"
+             class="text-sm text-blue-300 hover:text-white transition-colors font-medium">
             Forgot password?
           </a>
         </div>

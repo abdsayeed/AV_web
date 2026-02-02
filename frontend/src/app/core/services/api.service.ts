@@ -169,6 +169,40 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  // Auth0 Integration Methods
+  syncAuth0User(auth0User: {
+    id?: string;
+    email: string;
+    name: string;
+    picture?: string;
+    auth_provider?: string;
+    auth0_sub?: string;
+  }): Observable<{ success: boolean; user: User }> {
+    return this.http.post<{ success: boolean; user: User }>(`${this.apiUrl}/auth/auth0/sync/`, auth0User)
+      .pipe(
+        tap(response => {
+          if (response.success) {
+            this.currentUserSubject.next(response.user);
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  validateAuth0Token(token: string): Observable<{ success: boolean; user: User }> {
+    return this.http.post<{ success: boolean; user: User }>(`${this.apiUrl}/auth/auth0/validate/`, { token })
+      .pipe(
+        tap(response => {
+          if (response.success) {
+            this.currentUserSubject.next(response.user);
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   // Contact Form Methods
   submitContactForm(formData: ContactFormData): Observable<ContactSubmissionResponse> {
     return this.http.post<ContactSubmissionResponse>(`${this.apiUrl}/contact/submit/`, formData)

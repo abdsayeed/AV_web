@@ -95,6 +95,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     last_ip = models.GenericIPAddressField(null=True, blank=True)
     login_count = models.PositiveIntegerField(default=0)
+    
+    # Auth0 Integration
+    auth_provider = models.CharField(
+        max_length=20,
+        choices=[
+            ('custom', 'Custom'),
+            ('auth0', 'Auth0'),
+        ],
+        default='custom',
+        help_text='Authentication provider'
+    )
+    auth0_sub = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        unique=True,
+        help_text='Auth0 subject identifier'
+    )
 
     objects = UserManager()
 

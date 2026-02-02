@@ -10,6 +10,7 @@ from django.contrib.auth import login
 from django.utils import timezone
 from django.db import transaction
 from .models import User, UserActivity
+from .auth0_backend import Auth0Backend
 from .serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -468,3 +469,178 @@ def user_stats(request):
         'success': True,
         'stats': stats
     })
+
+
+# Auth0 Integration Views
+
+class Auth0SyncView(APIView):
+    """
+    Sync Auth0 user with Django backend.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        """
+        Sync Auth0 user data with Django user.
+        """
+        try:
+            auth0_user_data = request.data
+            
+            # Validate required fields
+            required_fields = ['email', 'auth0_sub']
+            for field in required_fields:
+                if not auth0_user_data.get(field):
+                    return Response({
+                        'success': False,
+                        'message': f'Missing required field: {field}'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            
+            email = auth0_user_data['email']
+            auth0_sub = auth0_user_data['auth0_sub']
+            
+            with transaction.atomic():
+                # Try to find existing user by Auth0 sub
+                try:
+                    user = User.objects.get(auth0_sub=auth0_sub)
+                    # Update existing user
+                    self._update_user_from_auth0(user, auth0_user_data)
+                    
+                except User.DoesNotExist:
+                    # Try to find by email
+                    try:
+                        user = User.objects.get(email=email)
+                        # Link existing user to Auth0
+                        user.auth0_sub = auth0_sub
+                        user.auth_provider = 'auth0'
+                        self._update_user_from_auth0(user, auth0_user_data)
+                        
+                    except User.DoesNotExist:
+                        # Create new user
+                        user = self._create_user_from_auth0(auth0_user_data)
+                
+                # Log activity
+                log_user_activity(
+                    user=user,
+                    action='login',
+                    description='Auth0 sync',
+                    request=request
+                )
+                
+                # Return user data
+                serializer = UserProfileSerializer(user)
+                return Response({
+                    'success': True,
+                    'user': serializer.data,
+                    'message': 'User synced successfully'
+                })
+                
+        except Exception as e:
+            logger.error(f"Auth0 sync error: {str(e)}")
+            return Response({
+                'success': False,
+                'message': 'Failed to sync user'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def _create_user_from_auth0(self, auth0_data):
+        """Create new user from Auth0 data."""
+        user_data = {
+            'email': auth0_data['email'],
+            'name': auth0_data.get('name', ''),
+            'auth0_sub': auth0_data['auth0_sub'],
+            'auth_provider': 'auth0',
+            'is_verified': auth0_data.get('email_verified', False),
+            'avatar': auth0_data.get('picture', ''),
+        }
+        
+        # Create user without password (Auth0 handles authentication)
+        user = User.objects.create_user(
+            email=user_data['email'],
+            name=user_data['name'],
+            password=None,  # No password for Auth0 users
+            **{k: v for k, v in user_data.items() if k not in ['email', 'name']}
+        )
+        
+        return user
+    
+    def _update_user_from_auth0(self, user, auth0_data):
+        """Update user with Auth0 data."""
+        updated = False
+        
+        # Update name if changed
+        name = auth0_data.get('name', '')
+        if name and user.name != name:
+            user.name = name
+            updated = True
+        
+        # Update avatar if changed
+        picture = auth0_data.get('picture', '')
+        if picture and user.avatar != picture:
+            user.avatar = picture
+            updated = True
+        
+        # Update verification status
+        email_verified = auth0_data.get('email_verified', False)
+        if email_verified and not user.is_verified:
+            user.is_verified = True
+            updated = True
+        
+        if updated:
+            user.save()
+
+
+class Auth0ValidateView(APIView):
+    """
+    Validate Auth0 JWT token.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        """
+        Validate Auth0 JWT token and return user data.
+        """
+        try:
+            token = request.data.get('token')
+            if not token:
+                return Response({
+                    'success': False,
+                    'message': 'Token is required'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Use Auth0 backend to authenticate
+            auth0_backend = Auth0Backend()
+            user = auth0_backend.authenticate(request, token=token)
+            
+            if not user:
+                return Response({
+                    'success': False,
+                    'message': 'Invalid token'
+                }, status=status.HTTP_401_UNAUTHORIZED)
+            
+            # Log activity
+            log_user_activity(
+                user=user,
+                action='login',
+                description='Auth0 token validation',
+                request=request
+            )
+            
+            # Return user data
+            serializer = UserProfileSerializer(user)
+            return Response({
+                'success': True,
+                'user': serializer.data,
+                'message': 'Token validated successfully'
+            })
+            
+        except ValidationError as e:
+            return Response({
+                'success': False,
+                'message': str(e)
+            }, status=status.HTTP_401_UNAUTHORIZED)
+            
+        except Exception as e:
+            logger.error(f"Auth0 token validation error: {str(e)}")
+            return Response({
+                'success': False,
+                'message': 'Token validation failed'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -127,37 +127,96 @@
   
   <!-- Hero Section -->
   <section id="home" class="scroll-section min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+    
+    <!-- Background Image with Overlay -->
     <div class="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay" 
          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMf8lH5a1yGOVNfV2LWHFmOghvR4QlqTQudZgMsSvqXk5Nq_nWJ93_ads7--BM3UXyNRA-ZY9lK0ffkbG0mA9DUSoDWKsrc1twWLLM9CuLQ3bJnoV08OUbfXSiOhPMN3XxIPPQwbt4NTAqE7eSJ2MzoVWKqQ4NtwNgZCmgZGl-zt2Q_yddk9vn1Ks4NaThTN0x47gZmo0g0xJjH3HX7K17CUJ0cdHwY7m3i4CtNi54CBJPjYYOmxKUOAerd-EPe4pqrttvt2yAG_o');">
     </div>
+
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <!-- Floating Orbs Animation -->
+      <div class="floating-orb orb-1"></div>
+      <div class="floating-orb orb-2"></div>
+      <div class="floating-orb orb-3"></div>
+      <div class="floating-orb orb-4"></div>
+      <div class="floating-orb orb-5"></div>
+      <div class="floating-orb orb-6"></div>
+
+      <!-- Geometric Shapes -->
+      <div class="geometric-shape shape-1"></div>
+      <div class="geometric-shape shape-2"></div>
+      <div class="geometric-shape shape-3"></div>
+
+      <!-- Particle Network -->
+      <div class="particle-network">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+        <div class="particle particle-6"></div>
+        <div class="particle particle-7"></div>
+        <div class="particle particle-8"></div>
+      </div>
+
+      <!-- Animated Grid -->
+      <div class="animated-grid">
+        <div class="grid-line grid-line-1"></div>
+        <div class="grid-line grid-line-2"></div>
+        <div class="grid-line grid-line-3"></div>
+        <div class="grid-line grid-line-4"></div>
+      </div>
+
+      <!-- Floating Icons -->
+      <div class="floating-icons">
+        <div class="floating-icon icon-1">
+          <span class="material-symbols-outlined">code</span>
+        </div>
+        <div class="floating-icon icon-2">
+          <span class="material-symbols-outlined">design_services</span>
+        </div>
+        <div class="floating-icon icon-3">
+          <span class="material-symbols-outlined">rocket_launch</span>
+        </div>
+        <div class="floating-icon icon-4">
+          <span class="material-symbols-outlined">trending_up</span>
+        </div>
+        <div class="floating-icon icon-5">
+          <span class="material-symbols-outlined">devices</span>
+        </div>
+      </div>
+    </div>
     
     <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
-      <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 mb-6">
+      <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 mb-6 animate-fade-in-down">
         <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
         <span class="text-white text-xs font-bold uppercase tracking-widest">Now Booking for Q4</span>
       </div>
       
-      <h1 class="text-white text-5xl md:text-6xl font-black leading-tight mb-6">
+      <h1 class="text-white text-5xl md:text-6xl font-black leading-tight mb-6 animate-fade-in-up">
         Professional Websites<br>for Small Businesses
       </h1>
       
-      <p class="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+      <p class="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
         High-performance websites tailored to your budget. Flexible payment plans designed to scale with your business growth. Get online in under a week.
       </p>
       
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-400">
         <button (click)="scrollToSection('services')"
-                class="bg-blue-600 text-white px-8 py-4 rounded-full text-base font-bold shadow-lg hover:scale-105 transition-transform">
+                appMicroInteraction="click-ripple"
+                class="bg-blue-600 text-white px-8 py-4 rounded-full text-base font-bold shadow-lg hover:scale-105 transition-all duration-300 hover:shadow-blue-500/50">
           View Packages
         </button>
         <button (click)="scrollToSection('contact')"
-                class="bg-white/10 text-white px-8 py-4 rounded-full text-base font-bold backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all">
+                appMicroInteraction="hover-glow"
+                class="bg-white/10 text-white px-8 py-4 rounded-full text-base font-bold backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300">
           Book a Call
         </button>
       </div>
       
       <!-- Trust Bar -->
-      <div class="mt-12 bg-white/10 backdrop-blur-md rounded-full px-6 py-4 inline-flex flex-wrap items-center gap-6 border border-white/20">
+      <div class="mt-12 bg-white/10 backdrop-blur-md rounded-full px-6 py-4 inline-flex flex-wrap items-center gap-6 border border-white/20 animate-fade-in-up animation-delay-600">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-green-400 text-lg">check_circle</span>
           <span class="text-xs font-bold text-white">50+ Businesses Online</span>
@@ -174,8 +233,17 @@
         </div>
       </div>
     </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center cursor-pointer hover:border-white transition-colors" (click)="scrollToSection('how-it-works')">
+        <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+      </div>
+    </div>
   </section>
 
+  <!-- Live Stats Counter -->
+  <app-stats-counter></app-stats-counter>
 
   <!-- How It Works Section -->
   <section id="how-it-works" class="scroll-section min-h-screen flex items-center py-20 bg-gray-50 dark:bg-gray-900">
@@ -536,6 +604,11 @@
     </div>
   </section>
 
+  <!-- Customer Testimonials -->
+  <app-testimonials></app-testimonials>
+
+  <!-- FAQ Section -->
+  <app-faq></app-faq>
 
   <!-- Contact Section -->
   <section id="contact" class="scroll-section min-h-screen flex items-center py-20 bg-white dark:bg-gray-800">
@@ -659,6 +732,9 @@
   </div>
 </div>
 
+<!-- Trust Badges -->
+<app-trust-badges></app-trust-badges>
+
 <!-- Footer -->
 <footer class="bg-gray-900 text-white py-12">
   <div class="max-w-7xl mx-auto px-4">
@@ -719,3 +795,9 @@
     </div>
   </div>
 </footer>
+
+<!-- Live Activity Notifications -->
+<!-- <app-live-activity></app-live-activity> -->
+
+<!-- Sticky CTA Bar -->
+<app-sticky-cta></app-sticky-cta>

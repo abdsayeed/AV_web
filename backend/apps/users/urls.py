@@ -28,4 +28,8 @@ urlpatterns = [
     path('list/', views.UserListView.as_view(), name='user_list'),
     path('activities/', views.UserActivityListView.as_view(), name='user_activities'),
     path('stats/', views.user_stats, name='user_stats'),
+    
+    # Auth0 Integration
+    path('auth0/sync/', views.Auth0SyncView.as_view(), name='auth0_sync'),
+    path('auth0/validate/', views.Auth0ValidateView.as_view(), name='auth0_validate'),
 ]

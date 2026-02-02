@@ -128,6 +128,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    'apps.users.auth0_backend.Auth0Backend',  # Auth0 backend
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+]
+
+# Auth0 Configuration
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN', 'your-auth0-domain.auth0.com')
+AUTH0_API_IDENTIFIER = os.getenv('AUTH0_API_IDENTIFIER', 'https://your-auth0-domain.auth0.com/api/v2/')
+AUTH0_CLIENT_ID = os.getenv('AUTH0_CLIENT_ID', 'your-auth0-client-id')
+AUTH0_CLIENT_SECRET = os.getenv('AUTH0_CLIENT_SECRET', 'your-auth0-client-secret')
+
 # REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

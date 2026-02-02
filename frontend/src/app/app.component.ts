@@ -4,11 +4,27 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ContextService } from './core/services/context.service';
 import { ApiService } from './core/services/api.service';
+import { TestimonialsComponent } from './shared/components/testimonials/testimonials.component';
+import { StatsCounterComponent } from './shared/components/stats-counter/stats-counter.component';
+import { TrustBadgesComponent } from './shared/components/trust-badges/trust-badges.component';
+import { FaqComponent } from './shared/components/faq/faq.component';
+import { StickyCTAComponent } from './shared/components/sticky-cta/sticky-cta.component';
+import { MicroInteractionsDirective } from './shared/directives/micro-interactions.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterModule,
+    TestimonialsComponent,
+    StatsCounterComponent,
+    TrustBadgesComponent,
+    FaqComponent,
+    StickyCTAComponent,
+    MicroInteractionsDirective
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -34,15 +50,21 @@ export class AppComponent implements OnInit {
     // Subscribe to authentication state
     this.apiService.currentUser$.subscribe(user => {
       const wasAuthenticated = this.isAuthenticated;
+      const previousUser = this.currentUser;
+      
       this.currentUser = user;
       this.isAuthenticated = !!user && this.apiService.isAuthenticated();
       
-      // Show welcome message when user becomes authenticated (login/register)
-      if (!wasAuthenticated && this.isAuthenticated && user) {
-        // Small delay to ensure the page has loaded
-        setTimeout(() => {
-          this.showWelcomeMessage(user.name || 'User');
-        }, 500);
+      // Show welcome message only when user actually logs in (not on page refresh)
+      if (!wasAuthenticated && this.isAuthenticated && user && !previousUser) {
+        // Check if this is a fresh login (not a page refresh)
+        const isPageRefresh = performance.navigation.type === 1;
+        if (!isPageRefresh) {
+          // Small delay to ensure the page has loaded
+          setTimeout(() => {
+            this.showWelcomeMessage(user.name || 'User');
+          }, 500);
+        }
       }
     });
   }

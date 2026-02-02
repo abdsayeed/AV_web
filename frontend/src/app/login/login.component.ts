@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
+import { AuthService } from '../core/services/auth.service';
 import { NotificationService } from '../core/services/notification.service';
 import { ErrorHandlerService } from '../core/services/error-handler.service';
 
@@ -27,6 +28,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private apiService: ApiService,
+    private authService: AuthService,
     private notificationService: NotificationService,
     private errorHandler: ErrorHandlerService
   ) {}
@@ -98,6 +100,22 @@ export class LoginComponent {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  // Auth0 Login Methods
+  loginWithAuth0() {
+    localStorage.setItem('auth_return_url', '/dashboard');
+    this.authService.loginWithAuth0();
+  }
+
+  loginWithGoogle() {
+    localStorage.setItem('auth_return_url', '/dashboard');
+    this.authService.loginWithGoogle();
+  }
+
+  loginWithFacebook() {
+    localStorage.setItem('auth_return_url', '/dashboard');
+    this.authService.loginWithFacebook();
   }
 
   goToRegister() {

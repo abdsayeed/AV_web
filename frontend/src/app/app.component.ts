@@ -39,7 +39,6 @@ export class AppComponent {
         demoUrl: '', // Add demo URL here later
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCN_T8RjyUiYAVEDPHxVDcQTlA_l8NmtWi4fB7jPc6lovF1WF6WKryMUEkyo-scX79nFThIATt7jojBdmPzsJ3Ni977jX45KqUJbkH4PwsU4-NnN1wmBKNvTTB4zugpuUKlNC5wl9__DxCIfHMrKaBrC1jhSSYALG1APTXjrGO3CyeYB32KRY90gfV7DMR1p5JeXUPRGleEoZ5iMuf2w-yvVH6b7VP6MFU5MUGt5GxrNAP_LCySBrEjoOGdnkqXIbJOW3_7zlSqDAo',
         description: 'A modern, sustainable technology website template featuring clean design, product showcases, and environmental impact metrics. Perfect for eco-conscious tech companies.',
-        features: ['Sustainable Design Focus', 'Product Showcase', 'Environmental Impact Metrics'],
         badge: 'Popular'
       },
       {
@@ -49,7 +48,6 @@ export class AppComponent {
         demoUrl: '', // Add demo URL here later
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9miYKakWMRhV7pkOlbCCHqaXCl8R6jAcxcnqoWcWLRevLmTAIyeGTLRuzNkhCMMgFO8T5Ek_eEqAL_9PySId_0_0gHiOkSdazG7bfGgKcwOiMkMChfkXLUY4ABUMlxRpZXkGdftBfbSbbzmZaJabygf06ZaZqb3QiMIZJAdBDk3jmPaaPfALD1ne4APqNm1PAbtKbVUTKwb2nYm6o3dJ7Ve9m1EwZQ3uVDtcYnuuohoUDo_u-bEg5nQbk_ZZ1-MFEOX4VBVZcBh0',
         description: 'Warm and inviting food & beverage template with recipe integration, brand storytelling, and beautiful product catalogs. Ideal for artisanal food brands.',
-        features: ['Recipe Integration', 'Brand Storytelling', 'Product Catalog'],
         badge: ''
       },
       {
@@ -59,7 +57,6 @@ export class AppComponent {
         demoUrl: '', // Add demo URL here later
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjbP5WHr5GN8HwXnnPm_6y6Q5P2ZrF3R54b6XSYmGLlP4i_BLEajfSjmUfNH0-0j--gplRqJNz71kqJr2iBQkJeSEjtb3YTMi34DWTfDV5emh3SY0Ea6QRkCEaPqBCYrKDI-8iZSqfiDPXzpqaffPgFPa2v0Rf8D85Wz3R_c-pHEym3PSch-XBZ00WyKt4IaEZ0hw1tODfN8EZVpcc5lb49y6EnrhL3NylzNUwacNaCunOgFo49yVQ5L2wG4i1-2FvqR2fZwUHtek',
         description: 'Professional biotech template with scientific data visualization, research portfolios, and technical documentation. Built for cutting-edge research companies.',
-        features: ['Scientific Data Visualization', 'Research Portfolio', 'Technical Documentation'],
         badge: ''
       },
       {
@@ -69,7 +66,6 @@ export class AppComponent {
         demoUrl: '', // Add demo URL here later
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNFkEs9OhPwm7J9_tqSewPde-RObtieVzMPQL1k_pYR5k5XCfkpATOIHeIN7y_iUodpw8P1k17KKuY8OlcgOlW16e89FyjoPfqPqq0IR2JSyD_8wg4YV1hpKYzeEVtp_Sf-4Nb4_o-J0_47IyvjwhfMps-YtG7B8HUBx4-umlyuMB0SGep0rG4ZniSpLB4hydDzpeFQi8PhBxVPoHsn-h4RMg5JNDjj8jT1ADC_vDsKXqNBwlX2IPoUEDhSBnofIn8WpBzu38VgKo',
         description: 'Developer-focused software template featuring comprehensive documentation, API integration guides, and interactive code examples. Perfect for SaaS products.',
-        features: ['Developer Documentation', 'API Integration', 'Code Examples'],
         badge: 'High Conversion'
       },
       {
@@ -79,7 +75,6 @@ export class AppComponent {
         demoUrl: '', // Add demo URL here later
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ',
         description: 'Trusted healthcare template with medical services directory, appointment booking system, and comprehensive patient resources. Designed for medical institutions.',
-        features: ['Medical Services Directory', 'Appointment Booking', 'Patient Resources'],
         badge: ''
       },
       {
@@ -89,10 +84,10 @@ export class AppComponent {
         demoUrl: '', // Add demo URL here later
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ',
         description: 'Eco-friendly sustainability template showcasing environmental metrics, educational content, and community features. Great for green initiatives and NGOs.',
-        features: ['Sustainability Metrics', 'Educational Content', 'Community Features'],
         badge: 'Popular'
-      }
+      },
       // Add more templates here in the future
+      
     ];
 
     // Initially show first 6 templates

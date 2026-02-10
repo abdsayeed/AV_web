@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
-import { NotificationService } from '../core/services/notification.service';
-import { ErrorHandlerService } from '../core/services/error-handler.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -32,8 +31,7 @@ export class RegisterComponent {
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private notificationService: NotificationService,
-    private errorHandler: ErrorHandlerService
+    private authService: AuthService
   ) {}
 
   onSubmit() {
@@ -56,29 +54,24 @@ export class RegisterComponent {
       marketing_emails: false // Default to false
     };
 
-    this.apiService.register(userData).subscribe({
+    // Use AuthService for unified authentication
+    this.authService.registerWithCustom(userData).subscribe({
       next: (response) => {
         this.isLoading = false;
         
         if (response.success) {
-          this.notificationService.success(
-            'Registration Successful!', 
-            'Please check your email for verification instructions.'
-          );
+          console.log('Registration successful');
           
           // Redirect to home page instead of dashboard
           this.router.navigate(['/']);
         } else {
           this.errorMessage = response.message || 'Registration failed';
-          this.notificationService.error('Registration Failed', this.errorMessage);
         }
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = this.errorHandler.getErrorMessage(error);
-        this.errorHandler.logError(error, 'Registration');
-        
-        this.notificationService.error('Registration Failed', this.errorMessage);
+        this.errorMessage = error.message || 'Registration failed. Please try again.';
+        console.error('Registration error:', error);
       }
     });
   }
@@ -123,6 +116,41 @@ export class RegisterComponent {
 
   toggleConfirmPassword() {
     this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  // Social Login Methods
+  loginWithGoogle() {
+    this.authService.loginWithGoogle().subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('Google registration successful');
+          this.router.navigate(['/']);
+        } else {
+          this.errorMessage = response.message || 'Google registration failed';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Google registration failed';
+        console.error('Google registration error:', error);
+      }
+    });
+  }
+
+  loginWithFacebook() {
+    this.authService.loginWithFacebook().subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('Facebook registration successful');
+          this.router.navigate(['/']);
+        } else {
+          this.errorMessage = response.message || 'Facebook registration failed';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Facebook registration failed';
+        console.error('Facebook registration error:', error);
+      }
+    });
   }
 
   goToLogin() {

@@ -588,6 +588,82 @@ class Auth0SyncView(APIView):
             user.save()
 
 
+class SocialLoginView(APIView):
+    """
+    Social login endpoint for Google and Facebook.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        """
+        Handle social login/registration.
+        """
+        try:
+            social_data = request.data
+            
+            # Validate required fields
+            required_fields = ['email', 'name', 'auth_provider', 'social_id']
+            for field in required_fields:
+                if not social_data.get(field):
+                    return Response({
+                        'success': False,
+                        'message': f'Missing required field: {field}'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            
+            email = social_data['email']
+            name = social_data['name']
+            auth_provider = social_data['auth_provider']
+            social_id = social_data['social_id']
+            
+            with transaction.atomic():
+                # Try to find existing user by email
+                try:
+                    user = User.objects.get(email=email)
+                    # Update user with social data if needed
+                    if not user.auth_provider or user.auth_provider == 'custom':
+                        user.auth_provider = auth_provider
+                        user.save()
+                    
+                except User.DoesNotExist:
+                    # Create new user from social data
+                    user = User.objects.create_user(
+                        email=email,
+                        name=name,
+                        auth_provider=auth_provider,
+                        is_verified=True,  # Social accounts are pre-verified
+                        avatar=social_data.get('avatar', ''),
+                        signup_source='social_' + auth_provider
+                    )
+                
+                # Log activity
+                log_user_activity(
+                    user=user,
+                    action='login',
+                    description=f'Social login via {auth_provider}',
+                    request=request
+                )
+                
+                # Generate JWT tokens
+                refresh = RefreshToken.for_user(user)
+                
+                return Response({
+                    'success': True,
+                    'message': f'{auth_provider.title()} login successful',
+                    'user': UserProfileSerializer(user).data,
+                    'tokens': {
+                        'refresh': str(refresh),
+                        'access': str(refresh.access_token),
+                    }
+                }, status=status.HTTP_200_OK)
+                
+        except Exception as e:
+            logger.error(f"Social login error: {str(e)}")
+            return Response({
+                'success': False,
+                'message': 'Social login failed'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class Auth0ValidateView(APIView):
     """
     Validate Auth0 JWT token.

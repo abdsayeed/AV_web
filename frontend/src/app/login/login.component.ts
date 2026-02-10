@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
 import { AuthService } from '../core/services/auth.service';
-import { NotificationService } from '../core/services/notification.service';
-import { ErrorHandlerService } from '../core/services/error-handler.service';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +26,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private authService: AuthService,
-    private notificationService: NotificationService,
-    private errorHandler: ErrorHandlerService
+    private authService: AuthService
   ) {}
 
   onSubmit() {
@@ -45,17 +41,13 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const credentials = {
-      email: this.loginData.email,
-      password: this.loginData.password
-    };
-
-    this.apiService.login(credentials).subscribe({
+    // Use AuthService for unified authentication
+    this.authService.loginWithCustom(this.loginData.email, this.loginData.password).subscribe({
       next: (response) => {
         this.isLoading = false;
         
         if (response.success) {
-          this.notificationService.success('Welcome back!', 'You have been logged in successfully.');
+          console.log('Login successful');
           
           // Check for redirect URL, otherwise go to home
           const redirectUrl = localStorage.getItem('redirectUrl') || '/';
@@ -67,10 +59,8 @@ export class LoginComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = this.errorHandler.getErrorMessage(error);
-        this.errorHandler.logError(error, 'Login');
-        
-        this.notificationService.error('Login Failed', this.errorMessage);
+        this.errorMessage = error.message || 'Login failed. Please try again.';
+        console.error('Login error:', error);
       }
     });
   }
@@ -81,19 +71,17 @@ export class LoginComponent {
       return;
     }
 
-    this.apiService.requestPasswordReset(this.loginData.email).subscribe({
+    this.authService.resetPassword(this.loginData.email).subscribe({
       next: (response) => {
         if (response.success) {
-          this.notificationService.success('Reset Email Sent', 'Password reset instructions have been sent to your email.');
+          console.log('Reset email sent successfully');
         } else {
           this.errorMessage = response.message || 'Failed to send reset email';
-          this.notificationService.error('Reset Failed', this.errorMessage);
         }
       },
       error: (error) => {
-        this.errorMessage = this.errorHandler.getErrorMessage(error);
-        this.errorHandler.logError(error, 'Password Reset');
-        this.notificationService.error('Reset Failed', this.errorMessage);
+        this.errorMessage = error.message || 'Failed to send reset email';
+        console.error('Password reset error:', error);
       }
     });
   }
@@ -102,20 +90,39 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  // Auth0 Login Methods
-  loginWithAuth0() {
-    localStorage.setItem('auth_return_url', '/dashboard');
-    this.authService.loginWithAuth0();
-  }
-
+  // Social Login Methods
   loginWithGoogle() {
-    localStorage.setItem('auth_return_url', '/dashboard');
-    this.authService.loginWithGoogle();
+    this.authService.loginWithGoogle().subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('Google login successful');
+          this.router.navigate(['/']);
+        } else {
+          this.errorMessage = response.message || 'Google login failed';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Google login failed';
+        console.error('Google login error:', error);
+      }
+    });
   }
 
   loginWithFacebook() {
-    localStorage.setItem('auth_return_url', '/dashboard');
-    this.authService.loginWithFacebook();
+    this.authService.loginWithFacebook().subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('Facebook login successful');
+          this.router.navigate(['/']);
+        } else {
+          this.errorMessage = response.message || 'Facebook login failed';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Facebook login failed';
+        console.error('Facebook login error:', error);
+      }
+    });
   }
 
   goToRegister() {

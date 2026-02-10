@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -317,6 +318,7 @@ import { ApiService } from '../core/services/api.service';
 })
 export class ProfileComponent implements OnInit {
   private apiService = inject(ApiService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   profileData = {
@@ -498,16 +500,6 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
-    this.apiService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error('Logout error:', error);
-        // Force logout even if API call fails
-        localStorage.removeItem('token');
-        this.router.navigate(['/']);
-      }
-    });
+    this.authService.logout();
   }
 }

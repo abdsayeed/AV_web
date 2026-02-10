@@ -169,7 +169,26 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
-  // Auth0 Integration Methods
+  // Social Login Method
+  socialLogin(socialData: {
+    email: string;
+    name: string;
+    auth_provider: string;
+    social_id: string;
+    avatar?: string;
+    first_name?: string;
+    last_name?: string;
+  }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/social-login/`, socialData)
+      .pipe(
+        tap(response => {
+          if (response.success && response.tokens) {
+            this.setAuthData(response.user, response.tokens);
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
   syncAuth0User(auth0User: {
     id?: string;
     email: string;

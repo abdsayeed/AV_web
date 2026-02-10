@@ -2,6 +2,7 @@ import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
+import { AuthService } from '../core/services/auth.service';
 
 // Interfaces for type safety
 interface MetricCardData {
@@ -1230,6 +1231,7 @@ interface Activity {
 })
 export class DashboardComponent implements OnInit {
   private apiService = inject(ApiService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   // Component state
@@ -1371,16 +1373,7 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.apiService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error('Logout error:', error);
-        localStorage.removeItem('token');
-        this.router.navigate(['/']);
-      }
-    });
+    this.authService.logout();
   }
 
   // Utility methods

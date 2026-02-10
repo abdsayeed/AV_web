@@ -4,6 +4,8 @@ import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { map, switchMap, tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
+import { SocialAuthService, SocialUser } from './social-auth.service';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   id?: string;
@@ -27,6 +29,7 @@ export interface AuthState {
 export class AuthService {
   private auth0 = inject(Auth0Service);
   private apiService = inject(ApiService);
+  private socialAuthService = inject(SocialAuthService);
   private router = inject(Router);
 
   private authStateSubject = new BehaviorSubject<AuthState>({
@@ -46,7 +49,7 @@ export class AuthService {
 
   private initializeAuth() {
     // Check for existing custom JWT token
-    const customToken = localStorage.getItem('token');
+    const customToken = localStorage.getItem('token') || localStorage.getItem('accessToken');
     
     // Combine Auth0 and custom auth states
     combineLatest([
@@ -123,6 +126,9 @@ export class AuthService {
       catchError((error) => {
         console.error('Custom token validation failed:', error);
         localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('currentUser');
         this.updateAuthState({
           isAuthenticated: false,
           user: null,
@@ -159,28 +165,82 @@ export class AuthService {
     });
   }
 
-  // Social Login Methods
-  loginWithGoogle() {
-    this.auth0.loginWithRedirect({
-      authorizationParams: {
-        connection: 'google-oauth2'
-      }
-    });
+  // Social Login Methods (Direct OAuth)
+  loginWithGoogle(): Observable<any> {
+    if (!environment.enableGoogleLogin) {
+      return of({ success: false, message: 'Google login is disabled' });
+    }
+
+    return this.socialAuthService.loginWithGoogle().pipe(
+      switchMap((socialUser: SocialUser) => {
+        return this.handleSocialLogin(socialUser);
+      }),
+      catchError((error) => {
+        console.error('Google login error:', error);
+        return of({ success: false, message: 'Google login failed' });
+      })
+    );
   }
 
-  loginWithFacebook() {
-    this.auth0.loginWithRedirect({
-      authorizationParams: {
-        connection: 'facebook'
-      }
-    });
+  loginWithFacebook(): Observable<any> {
+    if (!environment.enableFacebookLogin) {
+      return of({ success: false, message: 'Facebook login is disabled' });
+    }
+
+    return this.socialAuthService.loginWithFacebook().pipe(
+      switchMap((socialUser: SocialUser) => {
+        return this.handleSocialLogin(socialUser);
+      }),
+      catchError((error) => {
+        console.error('Facebook login error:', error);
+        return of({ success: false, message: 'Facebook login failed' });
+      })
+    );
+  }
+
+  private handleSocialLogin(socialUser: SocialUser): Observable<any> {
+    // Convert social user to backend format
+    const userData = {
+      email: socialUser.email,
+      name: socialUser.name,
+      auth_provider: socialUser.provider,
+      social_id: socialUser.id,
+      avatar: socialUser.photoUrl,
+      first_name: socialUser.firstName,
+      last_name: socialUser.lastName
+    };
+
+    // Try to login/register with backend
+    return this.apiService.socialLogin(userData).pipe(
+      tap((response) => {
+        if (response.success) {
+          // Store tokens in both formats for compatibility
+          localStorage.setItem('token', response.tokens.access);
+          localStorage.setItem('accessToken', response.tokens.access);
+          localStorage.setItem('refreshToken', response.tokens.refresh);
+          this.updateAuthState({
+            isAuthenticated: true,
+            user: { ...response.user, auth_provider: 'custom' }, // Use 'custom' for social logins
+            token: response.tokens.access,
+            provider: 'custom'
+          });
+        }
+      }),
+      catchError((error) => {
+        console.error('Social login backend error:', error);
+        return of({ success: false, message: 'Failed to authenticate with server' });
+      })
+    );
   }
 
   // Custom JWT Login Methods
   loginWithCustom(email: string, password: string): Observable<any> {
     return this.apiService.login({ email, password }).pipe(
       tap((response) => {
+        // Store tokens in both formats for compatibility
         localStorage.setItem('token', response.tokens.access);
+        localStorage.setItem('accessToken', response.tokens.access);
+        localStorage.setItem('refreshToken', response.tokens.refresh);
         this.updateAuthState({
           isAuthenticated: true,
           user: { ...response.user, auth_provider: 'custom' },
@@ -194,7 +254,10 @@ export class AuthService {
   registerWithCustom(userData: any): Observable<any> {
     return this.apiService.register(userData).pipe(
       tap((response) => {
+        // Store tokens in both formats for compatibility
         localStorage.setItem('token', response.tokens.access);
+        localStorage.setItem('accessToken', response.tokens.access);
+        localStorage.setItem('refreshToken', response.tokens.refresh);
         this.updateAuthState({
           isAuthenticated: true,
           user: { ...response.user, auth_provider: 'custom' },
@@ -217,16 +280,37 @@ export class AuthService {
         }
       });
     } else {
-      // Custom logout
-      localStorage.removeItem('token');
-      this.updateAuthState({
-        isAuthenticated: false,
-        user: null,
-        token: null,
-        provider: null
+      // Custom logout - call API first, then clear local data
+      const refreshToken = localStorage.getItem('refreshToken');
+      
+      // Call API logout endpoint
+      this.apiService.logout().subscribe({
+        next: () => {
+          console.log('API logout successful');
+        },
+        error: (error) => {
+          console.error('API logout error:', error);
+        },
+        complete: () => {
+          // Always clear local data regardless of API response
+          this.clearLocalAuthData();
+        }
       });
-      this.router.navigate(['/']);
     }
+  }
+
+  private clearLocalAuthData() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('currentUser');
+    this.updateAuthState({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      provider: null
+    });
+    this.router.navigate(['/']);
   }
 
   // Utility Methods

@@ -32,9 +32,19 @@ export class LoginComponent {
   onSubmit() {
     if (this.isLoading) return;
     
+    // Trim whitespace
+    this.loginData.email = this.loginData.email.trim();
+    
     // Basic validation
     if (!this.loginData.email || !this.loginData.password) {
       this.errorMessage = 'Please fill in all required fields';
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.loginData.email)) {
+      this.errorMessage = 'Please enter a valid email address';
       return;
     }
 
@@ -52,35 +62,76 @@ export class LoginComponent {
           // Check for redirect URL, otherwise go to home
           const redirectUrl = localStorage.getItem('redirectUrl') || '/';
           localStorage.removeItem('redirectUrl');
-          this.router.navigate([redirectUrl]);
+          
+          // Small delay to ensure auth state is updated
+          setTimeout(() => {
+            this.router.navigate([redirectUrl]);
+          }, 100);
         } else {
           this.errorMessage = response.message || 'Login failed';
         }
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = error.message || 'Login failed. Please try again.';
+        
+        // Handle different error types
+        if (error.message) {
+          this.errorMessage = error.message;
+        } else if (error.error?.message) {
+          this.errorMessage = error.error.message;
+        } else if (!navigator.onLine) {
+          this.errorMessage = 'No internet connection. Please check your network.';
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+        }
+        
         console.error('Login error:', error);
       }
     });
   }
 
   onForgotPassword() {
-    if (!this.loginData.email) {
+    // Trim whitespace
+    const email = this.loginData.email.trim();
+    
+    if (!email) {
       this.errorMessage = 'Please enter your email address first';
       return;
     }
 
-    this.authService.resetPassword(this.loginData.email).subscribe({
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.errorMessage = 'Please enter a valid email address';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.authService.resetPassword(email).subscribe({
       next: (response) => {
+        this.isLoading = false;
+        
         if (response.success) {
-          console.log('Reset email sent successfully');
+          // Show success message
+          this.errorMessage = '';
+          alert('Password reset email sent! Please check your inbox.');
         } else {
           this.errorMessage = response.message || 'Failed to send reset email';
         }
       },
       error: (error) => {
-        this.errorMessage = error.message || 'Failed to send reset email';
+        this.isLoading = false;
+        
+        if (error.message) {
+          this.errorMessage = error.message;
+        } else if (!navigator.onLine) {
+          this.errorMessage = 'No internet connection. Please check your network.';
+        } else {
+          this.errorMessage = 'Failed to send reset email. Please try again.';
+        }
+        
         console.error('Password reset error:', error);
       }
     });
@@ -88,41 +139,6 @@ export class LoginComponent {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
-  }
-
-  // Social Login Methods
-  loginWithGoogle() {
-    this.authService.loginWithGoogle().subscribe({
-      next: (response) => {
-        if (response.success) {
-          console.log('Google login successful');
-          this.router.navigate(['/']);
-        } else {
-          this.errorMessage = response.message || 'Google login failed';
-        }
-      },
-      error: (error) => {
-        this.errorMessage = error.message || 'Google login failed';
-        console.error('Google login error:', error);
-      }
-    });
-  }
-
-  loginWithFacebook() {
-    this.authService.loginWithFacebook().subscribe({
-      next: (response) => {
-        if (response.success) {
-          console.log('Facebook login successful');
-          this.router.navigate(['/']);
-        } else {
-          this.errorMessage = response.message || 'Facebook login failed';
-        }
-      },
-      error: (error) => {
-        this.errorMessage = error.message || 'Facebook login failed';
-        console.error('Facebook login error:', error);
-      }
-    });
   }
 
   goToRegister() {

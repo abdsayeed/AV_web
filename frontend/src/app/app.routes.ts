@@ -41,9 +41,5 @@ export const routes: Routes = [
     loadComponent: () => import('./features/help/help-form.component').then(m => m.HelpFormComponent),
     canActivate: [AuthGuard]
   },
-  {
-    path: 'callback',
-    loadComponent: () => import('./auth/callback/callback.component').then(m => m.CallbackComponent)
-  },
   { path: '**', redirectTo: '' }
 ];

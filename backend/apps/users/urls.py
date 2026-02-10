@@ -11,7 +11,6 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('social-login/', views.SocialLoginView.as_view(), name='social_login'),
     
     # Profile
     path('profile/', views.ProfileView.as_view(), name='profile'),
@@ -29,8 +28,4 @@ urlpatterns = [
     path('list/', views.UserListView.as_view(), name='user_list'),
     path('activities/', views.UserActivityListView.as_view(), name='user_activities'),
     path('stats/', views.user_stats, name='user_stats'),
-    
-    # Auth0 Integration
-    path('auth0/sync/', views.Auth0SyncView.as_view(), name='auth0_sync'),
-    path('auth0/validate/', views.Auth0ValidateView.as_view(), name='auth0_validate'),
 ]

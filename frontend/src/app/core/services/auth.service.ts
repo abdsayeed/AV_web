@@ -1,141 +1,96 @@
 import { Injectable, inject } from '@angular/core';
-import { AuthService as Auth0Service } from '@auth0/auth0-angular';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { map, switchMap, tap, catchError } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
+import { map, tap, catchError, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
-import { SocialAuthService, SocialUser } from './social-auth.service';
-import { environment } from '../../../environments/environment';
 
 export interface User {
   id?: string;
   email: string;
   name: string;
   picture?: string;
-  auth_provider?: 'auth0' | 'custom';
-  auth0_sub?: string;
+  auth_provider?: 'jwt';
 }
 
 export interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
-  provider: 'auth0' | 'custom' | null;
+  isLoading: boolean; // Track loading state
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private auth0 = inject(Auth0Service);
   private apiService = inject(ApiService);
-  private socialAuthService = inject(SocialAuthService);
   private router = inject(Router);
 
   private authStateSubject = new BehaviorSubject<AuthState>({
     isAuthenticated: false,
     user: null,
     token: null,
-    provider: null
+    isLoading: true // Start as loading
   });
 
   public authState$ = this.authStateSubject.asObservable();
   public isAuthenticated$ = this.authState$.pipe(map(state => state.isAuthenticated));
   public user$ = this.authState$.pipe(map(state => state.user));
+  public isLoading$ = this.authState$.pipe(map(state => state.isLoading));
 
   constructor() {
     this.initializeAuth();
   }
 
   private initializeAuth() {
-    // Check for existing custom JWT token
-    const customToken = localStorage.getItem('token') || localStorage.getItem('accessToken');
+    // Check for existing JWT token
+    const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
     
-    // Combine Auth0 and custom auth states
-    combineLatest([
-      this.auth0.isAuthenticated$,
-      this.auth0.user$,
-      this.auth0.getAccessTokenSilently().pipe(catchError(() => of(null)))
-    ]).pipe(
-      switchMap(([isAuth0Authenticated, auth0User, auth0Token]) => {
-        if (isAuth0Authenticated && auth0User && auth0Token) {
-          // User is authenticated with Auth0
-          return this.handleAuth0Authentication(auth0User, auth0Token);
-        } else if (customToken) {
-          // User might be authenticated with custom JWT
-          return this.handleCustomAuthentication(customToken);
-        } else {
-          // User is not authenticated
+    if (token) {
+      // Validate token with backend
+      this.handleJWTAuthentication(token).subscribe({
+        next: () => {
+          // Token validated successfully
+        },
+        error: () => {
+          // Token validation failed, clear auth state
           this.updateAuthState({
             isAuthenticated: false,
             user: null,
             token: null,
-            provider: null
+            isLoading: false
           });
-          return of(null);
         }
-      })
-    ).subscribe();
+      });
+    } else {
+      // No token, user is not authenticated
+      this.updateAuthState({
+        isAuthenticated: false,
+        user: null,
+        token: null,
+        isLoading: false
+      });
+    }
   }
 
-  private handleAuth0Authentication(auth0User: any, token: string): Observable<any> {
-    const user: User = {
-      id: auth0User.sub,
-      email: auth0User.email,
-      name: auth0User.name || auth0User.nickname,
-      picture: auth0User.picture,
-      auth_provider: 'auth0',
-      auth0_sub: auth0User.sub
-    };
-
-    // Sync Auth0 user with backend
-    return this.apiService.syncAuth0User(user).pipe(
-      tap((backendUser) => {
-        this.updateAuthState({
-          isAuthenticated: true,
-          user: { ...user, ...backendUser },
-          token,
-          provider: 'auth0'
-        });
-      }),
-      catchError((error) => {
-        console.error('Error syncing Auth0 user:', error);
-        this.updateAuthState({
-          isAuthenticated: true,
-          user,
-          token,
-          provider: 'auth0'
-        });
-        return of(user);
-      })
-    );
-  }
-
-  private handleCustomAuthentication(token: string): Observable<any> {
+  private handleJWTAuthentication(token: string): Observable<any> {
     return this.apiService.getProfile().pipe(
       tap((response) => {
         if (response.success) {
           this.updateAuthState({
             isAuthenticated: true,
-            user: { ...response.user, auth_provider: 'custom' },
+            user: { ...response.user, auth_provider: 'jwt' },
             token,
-            provider: 'custom'
+            isLoading: false
           });
+        } else {
+          throw new Error('Profile fetch failed');
         }
       }),
       catchError((error) => {
-        console.error('Custom token validation failed:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('currentUser');
-        this.updateAuthState({
-          isAuthenticated: false,
-          user: null,
-          token: null,
-          provider: null
-        });
-        return of(null);
+        console.error('Token validation failed:', error);
+        this.clearLocalAuthData();
+        return throwError(() => error);
       })
     );
   }
@@ -144,162 +99,149 @@ export class AuthService {
     this.authStateSubject.next(state);
   }
 
-  // Auth0 Login Methods
-  loginWithAuth0() {
-    this.auth0.loginWithRedirect({
-      authorizationParams: {
-        screen_hint: 'login'
-      }
-    });
-  }
-
-  loginWithAuth0Popup() {
-    return this.auth0.loginWithPopup();
-  }
-
-  signupWithAuth0() {
-    this.auth0.loginWithRedirect({
-      authorizationParams: {
-        screen_hint: 'signup'
-      }
-    });
-  }
-
-  // Social Login Methods (Direct OAuth)
-  loginWithGoogle(): Observable<any> {
-    if (!environment.enableGoogleLogin) {
-      return of({ success: false, message: 'Google login is disabled' });
+  // JWT Login Methods
+  loginWithCustom(email: string, password: string): Observable<any> {
+    // Validate email format
+    if (!this.isValidEmail(email)) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Please enter a valid email address' 
+      }));
     }
 
-    return this.socialAuthService.loginWithGoogle().pipe(
-      switchMap((socialUser: SocialUser) => {
-        return this.handleSocialLogin(socialUser);
-      }),
-      catchError((error) => {
-        console.error('Google login error:', error);
-        return of({ success: false, message: 'Google login failed' });
-      })
-    );
-  }
-
-  loginWithFacebook(): Observable<any> {
-    if (!environment.enableFacebookLogin) {
-      return of({ success: false, message: 'Facebook login is disabled' });
+    // Validate password
+    if (!password || password.length < 6) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Password must be at least 6 characters' 
+      }));
     }
 
-    return this.socialAuthService.loginWithFacebook().pipe(
-      switchMap((socialUser: SocialUser) => {
-        return this.handleSocialLogin(socialUser);
-      }),
-      catchError((error) => {
-        console.error('Facebook login error:', error);
-        return of({ success: false, message: 'Facebook login failed' });
-      })
-    );
-  }
-
-  private handleSocialLogin(socialUser: SocialUser): Observable<any> {
-    // Convert social user to backend format
-    const userData = {
-      email: socialUser.email,
-      name: socialUser.name,
-      auth_provider: socialUser.provider,
-      social_id: socialUser.id,
-      avatar: socialUser.photoUrl,
-      first_name: socialUser.firstName,
-      last_name: socialUser.lastName
-    };
-
-    // Try to login/register with backend
-    return this.apiService.socialLogin(userData).pipe(
+    return this.apiService.login({ email, password }).pipe(
       tap((response) => {
-        if (response.success) {
+        if (response.success && response.tokens) {
           // Store tokens in both formats for compatibility
           localStorage.setItem('token', response.tokens.access);
           localStorage.setItem('accessToken', response.tokens.access);
           localStorage.setItem('refreshToken', response.tokens.refresh);
           this.updateAuthState({
             isAuthenticated: true,
-            user: { ...response.user, auth_provider: 'custom' }, // Use 'custom' for social logins
+            user: { ...response.user, auth_provider: 'jwt' },
             token: response.tokens.access,
-            provider: 'custom'
+            isLoading: false
           });
+        } else {
+          throw new Error(response.message || 'Login failed');
         }
       }),
       catchError((error) => {
-        console.error('Social login backend error:', error);
-        return of({ success: false, message: 'Failed to authenticate with server' });
-      })
-    );
-  }
-
-  // Custom JWT Login Methods
-  loginWithCustom(email: string, password: string): Observable<any> {
-    return this.apiService.login({ email, password }).pipe(
-      tap((response) => {
-        // Store tokens in both formats for compatibility
-        localStorage.setItem('token', response.tokens.access);
-        localStorage.setItem('accessToken', response.tokens.access);
-        localStorage.setItem('refreshToken', response.tokens.refresh);
-        this.updateAuthState({
-          isAuthenticated: true,
-          user: { ...response.user, auth_provider: 'custom' },
-          token: response.tokens.access,
-          provider: 'custom'
-        });
+        // Handle network errors
+        if (!navigator.onLine) {
+          return throwError(() => ({ 
+            success: false, 
+            message: 'No internet connection. Please check your network.' 
+          }));
+        }
+        
+        // Handle API errors
+        const errorMessage = error.error?.message || error.message || 'Login failed. Please try again.';
+        return throwError(() => ({ 
+          success: false, 
+          message: errorMessage 
+        }));
       })
     );
   }
 
   registerWithCustom(userData: any): Observable<any> {
+    // Validate email format
+    if (!this.isValidEmail(userData.email)) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Please enter a valid email address' 
+      }));
+    }
+
+    // Validate password strength
+    if (!userData.password || userData.password.length < 8) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Password must be at least 8 characters' 
+      }));
+    }
+
+    // Validate password match
+    if (userData.password !== userData.confirm_password) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Passwords do not match' 
+      }));
+    }
+
     return this.apiService.register(userData).pipe(
       tap((response) => {
-        // Store tokens in both formats for compatibility
-        localStorage.setItem('token', response.tokens.access);
-        localStorage.setItem('accessToken', response.tokens.access);
-        localStorage.setItem('refreshToken', response.tokens.refresh);
-        this.updateAuthState({
-          isAuthenticated: true,
-          user: { ...response.user, auth_provider: 'custom' },
-          token: response.tokens.access,
-          provider: 'custom'
-        });
+        if (response.success && response.tokens) {
+          // Store tokens in both formats for compatibility
+          localStorage.setItem('token', response.tokens.access);
+          localStorage.setItem('accessToken', response.tokens.access);
+          localStorage.setItem('refreshToken', response.tokens.refresh);
+          this.updateAuthState({
+            isAuthenticated: true,
+            user: { ...response.user, auth_provider: 'jwt' },
+            token: response.tokens.access,
+            isLoading: false
+          });
+        } else {
+          throw new Error(response.message || 'Registration failed');
+        }
+      }),
+      catchError((error) => {
+        // Handle network errors
+        if (!navigator.onLine) {
+          return throwError(() => ({ 
+            success: false, 
+            message: 'No internet connection. Please check your network.' 
+          }));
+        }
+        
+        // Handle API errors
+        const errorMessage = error.error?.message || error.message || 'Registration failed. Please try again.';
+        return throwError(() => ({ 
+          success: false, 
+          message: errorMessage 
+        }));
       })
     );
   }
 
   // Universal Logout
-  logout() {
-    const currentState = this.authStateSubject.value;
+  logout(): void {
+    // Call API logout endpoint with proper cleanup
+    const refreshToken = localStorage.getItem('refreshToken');
     
-    if (currentState.provider === 'auth0') {
-      // Auth0 logout
-      this.auth0.logout({
-        logoutParams: {
-          returnTo: window.location.origin
-        }
-      });
-    } else {
-      // Custom logout - call API first, then clear local data
-      const refreshToken = localStorage.getItem('refreshToken');
-      
-      // Call API logout endpoint
-      this.apiService.logout().subscribe({
+    if (refreshToken) {
+      // Use finalize to ensure cleanup happens regardless of success/failure
+      this.apiService.logout().pipe(
+        finalize(() => {
+          // Always clear local data
+          this.clearLocalAuthData();
+        })
+      ).subscribe({
         next: () => {
           console.log('API logout successful');
         },
         error: (error) => {
           console.error('API logout error:', error);
-        },
-        complete: () => {
-          // Always clear local data regardless of API response
-          this.clearLocalAuthData();
+          // Still clear local data even if API call fails
         }
       });
+    } else {
+      // No refresh token, just clear local data
+      this.clearLocalAuthData();
     }
   }
 
-  private clearLocalAuthData() {
+  private clearLocalAuthData(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
@@ -308,7 +250,7 @@ export class AuthService {
       isAuthenticated: false,
       user: null,
       token: null,
-      provider: null
+      isLoading: false
     });
     this.router.navigate(['/']);
   }
@@ -326,21 +268,75 @@ export class AuthService {
     return this.authStateSubject.value.isAuthenticated;
   }
 
-  getAuthProvider(): 'auth0' | 'custom' | null {
-    return this.authStateSubject.value.provider;
+  isLoading(): boolean {
+    return this.authStateSubject.value.isLoading;
   }
 
-  // Password Reset (Custom Auth only)
+  // Email validation helper
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Password Reset
   resetPassword(email: string): Observable<any> {
-    return this.apiService.requestPasswordReset(email);
+    if (!this.isValidEmail(email)) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Please enter a valid email address' 
+      }));
+    }
+
+    return this.apiService.requestPasswordReset(email).pipe(
+      catchError((error) => {
+        if (!navigator.onLine) {
+          return throwError(() => ({ 
+            success: false, 
+            message: 'No internet connection. Please check your network.' 
+          }));
+        }
+        return throwError(() => error);
+      })
+    );
   }
 
-  // Change Password (Custom Auth only)
+  // Change Password
   changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    if (!oldPassword || !newPassword) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'Please fill in all password fields' 
+      }));
+    }
+
+    if (newPassword.length < 8) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'New password must be at least 8 characters' 
+      }));
+    }
+
+    if (oldPassword === newPassword) {
+      return throwError(() => ({ 
+        success: false, 
+        message: 'New password must be different from old password' 
+      }));
+    }
+
     return this.apiService.changePassword({
       current_password: oldPassword,
       new_password: newPassword,
       confirm_password: newPassword
-    });
+    }).pipe(
+      catchError((error) => {
+        if (!navigator.onLine) {
+          return throwError(() => ({ 
+            success: false, 
+            message: 'No internet connection. Please check your network.' 
+          }));
+        }
+        return throwError(() => error);
+      })
+    );
   }
 }

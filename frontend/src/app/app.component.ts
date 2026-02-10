@@ -1,17 +1,38 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ContextService } from './core/services/context.service';
+import { ApiService } from './core/services/api.service';
+import { AuthService } from './core/services/auth.service';
+import { TestimonialsComponent } from './shared/components/testimonials/testimonials.component';
+import { StatsCounterComponent } from './shared/components/stats-counter/stats-counter.component';
+import { TrustBadgesComponent } from './shared/components/trust-badges/trust-badges.component';
+import { FaqComponent } from './shared/components/faq/faq.component';
+import { StickyCTAComponent } from './shared/components/sticky-cta/sticky-cta.component';
+import { MicroInteractionsDirective } from './shared/directives/micro-interactions.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterModule,
+    TestimonialsComponent,
+    StatsCounterComponent,
+    TrustBadgesComponent,
+    FaqComponent,
+    StickyCTAComponent,
+    MicroInteractionsDirective
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private apiService = inject(ApiService);
+  private authService = inject(AuthService);
+  
   title = 'Aries Ventures';
   activeSection = 'home';
   mobileMenuOpen = false;
@@ -22,11 +43,65 @@ export class AppComponent {
   allTemplates: any[] = []; // This will hold all templates
   displayedTemplates: any[] = []; // This will hold currently displayed templates
 
+  // Authentication state
+  currentUser: any = null;
+  isAuthenticated = false;
+
   constructor(
     private router: Router,
     private contextService: ContextService
   ) {
     this.initializeTemplates();
+  }
+
+  ngOnInit() {
+    // Subscribe to authentication state from AuthService
+    this.authService.authState$.subscribe(authState => {
+      const wasAuthenticated = this.isAuthenticated;
+      const previousUser = this.currentUser;
+      
+      this.currentUser = authState.user;
+      this.isAuthenticated = authState.isAuthenticated;
+      
+      // Show welcome message only when user actually logs in (not on page refresh)
+      if (!wasAuthenticated && this.isAuthenticated && authState.user && !previousUser) {
+        // Check if this is a fresh login (not a page refresh)
+        const isPageRefresh = performance.navigation.type === 1;
+        if (!isPageRefresh) {
+          // Small delay to ensure the page has loaded
+          setTimeout(() => {
+            this.showWelcomeMessage(authState.user!.name || 'User');
+          }, 500);
+        }
+      }
+    });
+  }
+
+  private showWelcomeMessage(userName: string) {
+    // Create and show a welcome popup
+    const welcomeDiv = document.createElement('div');
+    welcomeDiv.className = 'fixed top-4 right-4 z-50 bg-blue-600 text-white px-6 py-4 rounded-xl shadow-lg animate-slide-in-right';
+    welcomeDiv.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-2xl">waving_hand</span>
+        <div>
+          <div class="font-bold">Welcome back, ${userName}!</div>
+          <div class="text-sm opacity-90">You're now logged in</div>
+        </div>
+        <button onclick="this.parentElement.parentElement.remove()" class="ml-2 opacity-70 hover:opacity-100">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(welcomeDiv);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      if (welcomeDiv.parentElement) {
+        welcomeDiv.remove();
+      }
+    }, 4000);
   }
 
   initializeTemplates() {
@@ -480,5 +555,17 @@ export class AppComponent {
       // No more templates to load, hide the button
       this.showLoadMoreButton = false;
     }
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

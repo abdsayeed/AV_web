@@ -77,13 +77,31 @@ export class RegisterComponent {
   }
 
   private validateForm(): boolean {
-    if (!this.registerData.fullName.trim()) {
+    // Trim whitespace
+    this.registerData.fullName = this.registerData.fullName.trim();
+    this.registerData.email = this.registerData.email.trim();
+    this.registerData.businessName = this.registerData.businessName.trim();
+
+    if (!this.registerData.fullName) {
       this.errorMessage = 'Full name is required';
       return false;
     }
 
-    if (!this.registerData.email.trim()) {
+    // Validate name length
+    if (this.registerData.fullName.length < 2) {
+      this.errorMessage = 'Full name must be at least 2 characters';
+      return false;
+    }
+
+    if (!this.registerData.email) {
       this.errorMessage = 'Email is required';
+      return false;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.registerData.email)) {
+      this.errorMessage = 'Please enter a valid email address';
       return false;
     }
 
@@ -94,6 +112,16 @@ export class RegisterComponent {
 
     if (this.registerData.password.length < 8) {
       this.errorMessage = 'Password must be at least 8 characters long';
+      return false;
+    }
+
+    // Password strength validation
+    const hasUpperCase = /[A-Z]/.test(this.registerData.password);
+    const hasLowerCase = /[a-z]/.test(this.registerData.password);
+    const hasNumber = /[0-9]/.test(this.registerData.password);
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      this.errorMessage = 'Password must contain uppercase, lowercase, and numbers';
       return false;
     }
 
@@ -118,41 +146,6 @@ export class RegisterComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  // Social Login Methods
-  loginWithGoogle() {
-    this.authService.loginWithGoogle().subscribe({
-      next: (response) => {
-        if (response.success) {
-          console.log('Google registration successful');
-          this.router.navigate(['/']);
-        } else {
-          this.errorMessage = response.message || 'Google registration failed';
-        }
-      },
-      error: (error) => {
-        this.errorMessage = error.message || 'Google registration failed';
-        console.error('Google registration error:', error);
-      }
-    });
-  }
-
-  loginWithFacebook() {
-    this.authService.loginWithFacebook().subscribe({
-      next: (response) => {
-        if (response.success) {
-          console.log('Facebook registration successful');
-          this.router.navigate(['/']);
-        } else {
-          this.errorMessage = response.message || 'Facebook registration failed';
-        }
-      },
-      error: (error) => {
-        this.errorMessage = error.message || 'Facebook registration failed';
-        console.error('Facebook registration error:', error);
-      }
-    });
-  }
-
   goToLogin() {
     this.router.navigate(['/login']);
   }
@@ -164,10 +157,28 @@ export class RegisterComponent {
   nextStep() {
     // Validate step 1 before proceeding
     if (this.currentStep === 1) {
-      if (!this.registerData.fullName.trim() || !this.registerData.email.trim()) {
+      // Trim whitespace
+      this.registerData.fullName = this.registerData.fullName.trim();
+      this.registerData.email = this.registerData.email.trim();
+      
+      if (!this.registerData.fullName || !this.registerData.email) {
         this.errorMessage = 'Please fill in all required fields';
         return;
       }
+
+      // Validate name length
+      if (this.registerData.fullName.length < 2) {
+        this.errorMessage = 'Full name must be at least 2 characters';
+        return;
+      }
+
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.registerData.email)) {
+        this.errorMessage = 'Please enter a valid email address';
+        return;
+      }
+      
       this.errorMessage = '';
     }
 

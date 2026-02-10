@@ -1,99 +1,100 @@
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ContextService } from './core/services/context.service';
-import { ApiService } from './core/services/api.service';
-import { TestimonialsComponent } from './shared/components/testimonials/testimonials.component';
-import { StatsCounterComponent } from './shared/components/stats-counter/stats-counter.component';
-import { TrustBadgesComponent } from './shared/components/trust-badges/trust-badges.component';
-import { FaqComponent } from './shared/components/faq/faq.component';
-import { StickyCTAComponent } from './shared/components/sticky-cta/sticky-cta.component';
-import { MicroInteractionsDirective } from './shared/directives/micro-interactions.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule, 
-    RouterModule,
-    TestimonialsComponent,
-    StatsCounterComponent,
-    TrustBadgesComponent,
-    FaqComponent,
-    StickyCTAComponent,
-    MicroInteractionsDirective
-  ],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  private apiService = inject(ApiService);
-  
+export class AppComponent {
   title = 'Aries Ventures';
   activeSection = 'home';
   mobileMenuOpen = false;
   selectedTemplate: any = null;
   showTemplateModal = false;
-
-  // Authentication state
-  currentUser: any = null;
-  isAuthenticated = false;
+  hasMoreTemplates = false; // Set to true when you have more templates to load
+  showLoadMoreButton = true; // Always show button initially
+  allTemplates: any[] = []; // This will hold all templates
+  displayedTemplates: any[] = []; // This will hold currently displayed templates
 
   constructor(
     private router: Router,
     private contextService: ContextService
-  ) {}
-
-  ngOnInit() {
-    // Subscribe to authentication state
-    this.apiService.currentUser$.subscribe(user => {
-      const wasAuthenticated = this.isAuthenticated;
-      const previousUser = this.currentUser;
-      
-      this.currentUser = user;
-      this.isAuthenticated = !!user && this.apiService.isAuthenticated();
-      
-      // Show welcome message only when user actually logs in (not on page refresh)
-      if (!wasAuthenticated && this.isAuthenticated && user && !previousUser) {
-        // Check if this is a fresh login (not a page refresh)
-        const isPageRefresh = performance.navigation.type === 1;
-        if (!isPageRefresh) {
-          // Small delay to ensure the page has loaded
-          setTimeout(() => {
-            this.showWelcomeMessage(user.name || 'User');
-          }, 500);
-        }
-      }
-    });
+  ) {
+    this.initializeTemplates();
   }
 
-  private showWelcomeMessage(userName: string) {
-    // Create and show a welcome popup
-    const welcomeDiv = document.createElement('div');
-    welcomeDiv.className = 'fixed top-4 right-4 z-50 bg-blue-600 text-white px-6 py-4 rounded-xl shadow-lg animate-slide-in-right';
-    welcomeDiv.innerHTML = `
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-2xl">waving_hand</span>
-        <div>
-          <div class="font-bold">Welcome back, ${userName}!</div>
-          <div class="text-sm opacity-90">You're now logged in</div>
-        </div>
-        <button onclick="this.parentElement.parentElement.remove()" class="ml-2 opacity-70 hover:opacity-100">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-    `;
+  initializeTemplates() {
+    // Initialize all templates (you can expand this array with more templates)
+    this.allTemplates = [
+      {
+        name: 'Fairphone',
+        industry: 'Technology',
+        url: 'fairphone.com',
+        demoUrl: '', // Add demo URL here later
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCN_T8RjyUiYAVEDPHxVDcQTlA_l8NmtWi4fB7jPc6lovF1WF6WKryMUEkyo-scX79nFThIATt7jojBdmPzsJ3Ni977jX45KqUJbkH4PwsU4-NnN1wmBKNvTTB4zugpuUKlNC5wl9__DxCIfHMrKaBrC1jhSSYALG1APTXjrGO3CyeYB32KRY90gfV7DMR1p5JeXUPRGleEoZ5iMuf2w-yvVH6b7VP6MFU5MUGt5GxrNAP_LCySBrEjoOGdnkqXIbJOW3_7zlSqDAo',
+        description: 'A modern, sustainable technology website template featuring clean design, product showcases, and environmental impact metrics. Perfect for eco-conscious tech companies.',
+        badge: 'Popular'
+      },
+      {
+        name: 'Bonne Maman',
+        industry: 'Food & Beverage',
+        url: 'bonnemaman.com',
+        demoUrl: '', // Add demo URL here later
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9miYKakWMRhV7pkOlbCCHqaXCl8R6jAcxcnqoWcWLRevLmTAIyeGTLRuzNkhCMMgFO8T5Ek_eEqAL_9PySId_0_0gHiOkSdazG7bfGgKcwOiMkMChfkXLUY4ABUMlxRpZXkGdftBfbSbbzmZaJabygf06ZaZqb3QiMIZJAdBDk3jmPaaPfALD1ne4APqNm1PAbtKbVUTKwb2nYm6o3dJ7Ve9m1EwZQ3uVDtcYnuuohoUDo_u-bEg5nQbk_ZZ1-MFEOX4VBVZcBh0',
+        description: 'Warm and inviting food & beverage template with recipe integration, brand storytelling, and beautiful product catalogs. Ideal for artisanal food brands.',
+        badge: ''
+      },
+      {
+        name: 'Cytosurge',
+        industry: 'Biotechnology',
+        url: 'cytosurge.com',
+        demoUrl: '', // Add demo URL here later
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjbP5WHr5GN8HwXnnPm_6y6Q5P2ZrF3R54b6XSYmGLlP4i_BLEajfSjmUfNH0-0j--gplRqJNz71kqJr2iBQkJeSEjtb3YTMi34DWTfDV5emh3SY0Ea6QRkCEaPqBCYrKDI-8iZSqfiDPXzpqaffPgFPa2v0Rf8D85Wz3R_c-pHEym3PSch-XBZ00WyKt4IaEZ0hw1tODfN8EZVpcc5lb49y6EnrhL3NylzNUwacNaCunOgFo49yVQ5L2wG4i1-2FvqR2fZwUHtek',
+        description: 'Professional biotech template with scientific data visualization, research portfolios, and technical documentation. Built for cutting-edge research companies.',
+        badge: ''
+      },
+      {
+        name: 'Plugin',
+        industry: 'Software',
+        url: 'plugin.io',
+        demoUrl: '', // Add demo URL here later
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNFkEs9OhPwm7J9_tqSewPde-RObtieVzMPQL1k_pYR5k5XCfkpATOIHeIN7y_iUodpw8P1k17KKuY8OlcgOlW16e89FyjoPfqPqq0IR2JSyD_8wg4YV1hpKYzeEVtp_Sf-4Nb4_o-J0_47IyvjwhfMps-YtG7B8HUBx4-umlyuMB0SGep0rG4ZniSpLB4hydDzpeFQi8PhBxVPoHsn-h4RMg5JNDjj8jT1ADC_vDsKXqNBwlX2IPoUEDhSBnofIn8WpBzu38VgKo',
+        description: 'Developer-focused software template featuring comprehensive documentation, API integration guides, and interactive code examples. Perfect for SaaS products.',
+        badge: 'High Conversion'
+      },
+      {
+        name: 'Fondation Saint-Luc',
+        industry: 'Healthcare',
+        url: 'fondation-saint-luc.be',
+        demoUrl: '', // Add demo URL here later
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ',
+        description: 'Trusted healthcare template with medical services directory, appointment booking system, and comprehensive patient resources. Designed for medical institutions.',
+        badge: ''
+      },
+      {
+        name: 'Permafungi',
+        industry: 'Sustainability',
+        url: 'permafungi.be',
+        demoUrl: '', // Add demo URL here later
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ',
+        description: 'Eco-friendly sustainability template showcasing environmental metrics, educational content, and community features. Great for green initiatives and NGOs.',
+        badge: 'Popular'
+      },
+      // Add more templates here in the future
+      
+    ];
+
+    // Initially show first 6 templates
+    this.displayedTemplates = this.allTemplates.slice(0, 6);
     
-    document.body.appendChild(welcomeDiv);
-    
-    // Auto-remove after 4 seconds
-    setTimeout(() => {
-      if (welcomeDiv.parentElement) {
-        welcomeDiv.remove();
-      }
-    }, 4000);
+    // Check if there are more templates to load
+    this.hasMoreTemplates = this.allTemplates.length > this.displayedTemplates.length;
   }
 
   // Form data
@@ -207,32 +208,10 @@ export class AppComponent implements OnInit {
     { name: 'Professional', icon: 'business_center' }
   ];
 
-  templates = [
-    {
-      name: 'The Modern Groomer',
-      industry: 'Barbershops',
-      url: 'moderngroomer.com',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCN_T8RjyUiYAVEDPHxVDcQTlA_l8NmtWi4fB7jPc6lovF1WF6WKryMUEkyo-scX79nFThIATt7jojBdmPzsJ3Ni977jX45KqUJbkH4PwsU4-NnN1wmBKNvTTB4zugpuUKlNC5wl9__DxCIfHMrKaBrC1jhSSYALG1APTXjrGO3CyeYB32KRY90gfV7DMR1p5JeXUPRGleEoZ5iMuf2w-yvVH6b7VP6MFU5MUGt5GxrNAP_LCySBrEjoOGdnkqXIbJOW3_7zlSqDAo',
-      features: ['Integrated Online Booking System', 'Dynamic Service Menu & Pricing', 'Live Instagram Feed Integration'],
-      badge: 'Popular'
-    },
-    {
-      name: 'Artisan Roast',
-      industry: 'Cafes & Eateries',
-      url: 'artisanroast.coffee',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9miYKakWMRhV7pkOlbCCHqaXCl8R6jAcxcnqoWcWLRevLmTAIyeGTLRuzNkhCMMgFO8T5Ek_eEqAL_9PySId_0_0gHiOkSdazG7bfGgKcwOiMkMChfkXLUY4ABUMlxRpZXkGdftBfbSbbzmZaJabygf06ZaZqb3QiMIZJAdBDk3jmPaaPfALD1ne4APqNm1PAbtKbVUTKwb2nYm6o3dJ7Ve9m1EwZQ3uVDtcYnuuohoUDo_u-bEg5nQbk_ZZ1-MFEOX4VBVZcBh0',
-      features: ['QR Code Digital Menu Access', 'Real-time Table Reservations', 'Customer Loyalty Program Page'],
-      badge: ''
-    },
-    {
-      name: 'Master Pipe',
-      industry: 'Plumbers & HVAC',
-      url: 'masterplumbing.io',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNFkEs9OhPwm7J9_tqSewPde-RObtieVzMPQL1k_pYR5k5XCfkpATOIHeIN7y_iUodpw8P1k17KKuY8OlcgOlW16e89FyjoPfqPqq0IR2JSyD_8wg4YV1hpKYzeEVtp_Sf-4Nb4_o-J0_47IyvjwhfMps-YtG7B8HUBx4-umlyuMB0SGep0rG4ZniSpLB4hydDzpeFQi8PhBxVPoHsn-h4RMg5JNDjj8jT1ADC_vDsKXqNBwlX2IPoUEDhSBnofIn8WpBzu38VgKo',
-      features: ['24/7 Emergency Request Button', 'Trust Badges & Reviews Section', 'Service Area Map Integration'],
-      badge: 'High Conversion'
-    }
-  ];
+  // Use displayedTemplates instead of templates in the template
+  get templates() {
+    return this.displayedTemplates;
+  }
 
   teamMembers = [
     {
@@ -468,25 +447,38 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/contact']);
   }
 
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
+  viewLiveDemo(template: any) {
+    // This function will open the live demo of the template
+    // For now, it shows a placeholder message
+    // Later you can add the actual demo URLs to each template
+    console.log('Opening live demo for:', template.name);
+    
+    // Placeholder - you can replace this with actual demo URLs
+    if (template.demoUrl) {
+      window.open(template.demoUrl, '_blank');
+    } else {
+      // Temporary placeholder until demo URLs are added
+      alert(`Live demo for ${template.name} coming soon! Demo URL will be added here.`);
+    }
   }
 
-  goToProfile() {
-    this.router.navigate(['/profile']);
-  }
-
-  logout() {
-    this.apiService.logout().subscribe({
-      next: () => {
-        // User will be automatically updated via subscription
-        console.log('Logged out successfully');
-      },
-      error: (error) => {
-        console.error('Logout error:', error);
-        // Force logout even if API call fails
-        localStorage.removeItem('token');
+  loadMoreTemplates() {
+    // Load more templates if available
+    const currentCount = this.displayedTemplates.length;
+    const nextBatch = this.allTemplates.slice(currentCount, currentCount + 6);
+    
+    if (nextBatch.length > 0) {
+      // There are more templates to load
+      this.displayedTemplates = [...this.displayedTemplates, ...nextBatch];
+      
+      // Check if there are still more templates after this batch
+      if (this.displayedTemplates.length >= this.allTemplates.length) {
+        // No more templates, hide the button
+        this.showLoadMoreButton = false;
       }
-    });
+    } else {
+      // No more templates to load, hide the button
+      this.showLoadMoreButton = false;
+    }
   }
 }

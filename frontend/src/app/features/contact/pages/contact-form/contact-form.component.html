@@ -1,0 +1,87 @@
+<div class="contact-form-container min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    
+    <!-- Context Banner -->
+    @if (showContextBanner()) {
+      <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-blue-600 text-lg">check_circle</span>
+          <p class="text-sm font-medium text-blue-900">{{ contextBanner() }}</p>
+        </div>
+        <button (click)="dismissContextBanner()" 
+                class="text-blue-600 hover:text-blue-800">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+    }
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Project Inquiry</h1>
+      <p class="text-gray-600">Let's bring your vision to life. Tell us about your project.</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <app-progress-bar 
+      [steps]="steps"
+      [currentStep]="currentStep()"
+      (stepClicked)="goToStep($event)"
+      class="mb-8 block">
+    </app-progress-bar>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
+      
+      <!-- Step Content -->
+      <div class="step-content">
+        @switch (currentStep()) {
+          @case (1) {
+            <app-step-one (completed)="onStepComplete($event)"></app-step-one>
+          }
+          @case (2) {
+            <app-step-two (completed)="onStepComplete($event)"></app-step-two>
+          }
+          @case (3) {
+            <app-step-three (completed)="onStepComplete($event)"></app-step-three>
+          }
+          @case (4) {
+            <app-step-four (completed)="onStepComplete($event)"></app-step-four>
+          }
+        }
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="mt-8 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          @if (canGoBack()) {
+            <button
+              (click)="previousStep()"
+              class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <span class="material-symbols-outlined text-lg">arrow_back</span>
+              Back
+            </button>
+          }
+          
+          <button
+            (click)="goHome()"
+            class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <span class="material-symbols-outlined text-lg">home</span>
+            Home
+          </button>
+        </div>
+
+        <div class="text-xs text-gray-500">
+          Step {{ currentStep() }} of 4
+        </div>
+
+        <div class="w-20"></div>
+      </div>
+    </div>
+
+    <!-- Help Text -->
+    <div class="mt-6 text-center text-sm text-gray-600">
+      <p>Need help? <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">Chat with us</a></p>
+    </div>
+
+  </div>
+</div>

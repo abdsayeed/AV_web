@@ -1,0 +1,34 @@
+🚨 NEW PROJECT INQUIRY - {{ submission.business_name }}
+
+Reference: {{ submission.reference_number }}
+Priority: {{ priority }}
+Estimated Value: {{ submission.estimated_value }}
+
+BUSINESS INFORMATION:
+- Name: {{ submission.business_name }}
+- Contact: {{ submission.contact_name }}
+- Email: {{ submission.email }}
+- Phone: {{ submission.phone }}
+- Industry: {{ submission.industry }}
+
+PROJECT DETAILS:
+- Website Type: {{ submission.website_type }}
+- Current Website: {{ submission.current_website }}
+- Services Needed: {{ submission.services_needed }}
+- Budget Range: {{ submission.budget_range }}
+- Timeline: {{ submission.timeline }}
+- Target Date: {{ submission.target_date }}
+
+ADDITIONAL REQUIREMENTS:
+{{ submission.additional_requirements }}
+
+CONTACT PREFERENCES:
+- Preferred Method: {{ submission.preferred_contact }}
+- Best Time: {{ submission.best_time_to_reach }}
+
+View full details: {{ admin_url }}
+
+---
+Submitted: {{ submission.created_at }}
+IP Address: {{ submission.ip_address }}
+Source: {{ submission.source }}

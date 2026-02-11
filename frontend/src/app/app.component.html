@@ -1,13 +1,13 @@
 <!-- Navigation -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 backdrop-blur-md border-b border-blue-800/50 shadow-lg transition-colors">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 backdrop-blur-md border-b border-blue-800/50 shadow-lg transition-all duration-300">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
-      <div class="flex items-center gap-3 cursor-pointer" (click)="scrollToSection('home')">
+      <div class="flex items-center gap-3 cursor-pointer hover-lift" (click)="scrollToSection('home')">
         <img src="assets/logo.png" 
              (error)="$any($event.target).src='assets/logo-placeholder.svg'"
              alt="Aries Ventures" 
-             class="h-10 w-10 object-contain">
+             class="h-10 w-10 object-contain transition-transform duration-300 hover:scale-110">
         <span class="text-xl font-bold text-white hidden sm:block">Aries Ventures</span>
       </div>
 
@@ -18,43 +18,105 @@
                 [class.bg-blue-600]="activeSection === item.id"
                 [class.text-white]="activeSection === item.id"
                 [class.text-blue-200]="activeSection !== item.id"
-                class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-blue-800 hover:text-white">
+                class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-800 hover:text-white hover:scale-105 focus-ring">
           {{ item.label }}
         </button>
       </div>
 
       <!-- Right Side Actions -->
       <div class="flex items-center gap-3">
-        <button (click)="goToLogin()"
-                class="hidden sm:block text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-all">
-          Login
-        </button>
         
-        <button (click)="goToRegister()"
-                class="hidden sm:block bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/50">
-          Sign Up
-        </button>
+        <!-- Authenticated User Menu -->
+        <div *ngIf="isAuthenticated" class="hidden sm:flex items-center gap-3">
+          <button (click)="goToDashboard()"
+                  class="text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-all duration-300 hover:scale-105 focus-ring flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">dashboard</span>
+            Dashboard
+          </button>
+          <button (click)="goToProfile()"
+                  class="text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-all duration-300 hover:scale-105 focus-ring flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">person</span>
+            Profile
+          </button>
+          <button (click)="logout()"
+                  class="text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-all duration-300 hover:scale-105 focus-ring flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Logout
+          </button>
+        </div>
+
+        <!-- Guest User Menu -->
+        <div *ngIf="!isAuthenticated" class="hidden sm:flex items-center gap-3">
+          <button (click)="goToLogin()"
+                  class="text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-all duration-300 hover:scale-105 focus-ring">
+            Login
+          </button>
+          
+          <button (click)="goToRegister()"
+                  class="btn-primary">
+            Sign Up
+          </button>
+        </div>
 
         <!-- Mobile Menu Button -->
-        <button (click)="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-blue-200 hover:bg-blue-800 hover:text-white">
-          <span *ngIf="!mobileMenuOpen">☰</span>
-          <span *ngIf="mobileMenuOpen">✕</span>
+        <button (click)="toggleMobileMenu()" 
+                class="md:hidden p-2 rounded-lg text-blue-200 hover:bg-blue-800 hover:text-white transition-all duration-300 focus-ring">
+          <span *ngIf="!mobileMenuOpen" class="text-xl">☰</span>
+          <span *ngIf="mobileMenuOpen" class="text-xl">✕</span>
         </button>
       </div>
     </div>
   </div>
 
   <!-- Mobile Menu -->
-  <div *ngIf="mobileMenuOpen" class="md:hidden border-t border-blue-800/50 bg-slate-900/95 backdrop-blur-md">
+  <div *ngIf="mobileMenuOpen" 
+       class="md:hidden border-t border-blue-800/50 bg-slate-900/95 backdrop-blur-md animate-fade-in-up">
     <div class="px-4 py-3 space-y-1">
-      <button *ngFor="let item of navItems"
+      <button *ngFor="let item of navItems; let i = index"
               (click)="scrollToSection(item.id)"
               [class.bg-blue-600]="activeSection === item.id"
               [class.text-white]="activeSection === item.id"
               [class.text-blue-200]="activeSection !== item.id"
-              class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium hover:bg-blue-800 hover:text-white transition-colors">
+              class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium hover:bg-blue-800 hover:text-white transition-all duration-300 animate-fade-in-left"
+              [style.animation-delay.ms]="i * 100">
         {{ item.label }}
       </button>
+      
+      <!-- Mobile Authentication Menu -->
+      <div class="border-t border-blue-800/50 pt-3 mt-3">
+        
+        <!-- Authenticated User Options -->
+        <div *ngIf="isAuthenticated" class="space-y-1">
+          <button (click)="goToDashboard(); toggleMobileMenu()"
+                  class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-blue-200 hover:bg-blue-800 hover:text-white transition-all duration-300 flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">dashboard</span>
+            Dashboard
+          </button>
+          <button (click)="goToProfile(); toggleMobileMenu()"
+                  class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-blue-200 hover:bg-blue-800 hover:text-white transition-all duration-300 flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">person</span>
+            Profile
+          </button>
+          <button (click)="logout(); toggleMobileMenu()"
+                  class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-blue-200 hover:bg-blue-800 hover:text-white transition-all duration-300 flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Logout
+          </button>
+        </div>
+
+        <!-- Guest User Options -->
+        <div *ngIf="!isAuthenticated" class="space-y-1">
+          <button (click)="goToLogin(); toggleMobileMenu()"
+                  class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-blue-200 hover:bg-blue-800 hover:text-white transition-all duration-300">
+            Login
+          </button>
+          <button (click)="goToRegister(); toggleMobileMenu()"
+                  class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300">
+            Sign Up
+          </button>
+        </div>
+        
+      </div>
     </div>
   </div>
 </nav>
@@ -65,55 +127,123 @@
   
   <!-- Hero Section -->
   <section id="home" class="scroll-section min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+    
+    <!-- Background Image with Overlay -->
     <div class="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay" 
          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMf8lH5a1yGOVNfV2LWHFmOghvR4QlqTQudZgMsSvqXk5Nq_nWJ93_ads7--BM3UXyNRA-ZY9lK0ffkbG0mA9DUSoDWKsrc1twWLLM9CuLQ3bJnoV08OUbfXSiOhPMN3XxIPPQwbt4NTAqE7eSJ2MzoVWKqQ4NtwNgZCmgZGl-zt2Q_yddk9vn1Ks4NaThTN0x47gZmo0g0xJjH3HX7K17CUJ0cdHwY7m3i4CtNi54CBJPjYYOmxKUOAerd-EPe4pqrttvt2yAG_o');">
     </div>
+
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <!-- Floating Orbs Animation -->
+      <div class="floating-orb orb-1"></div>
+      <div class="floating-orb orb-2"></div>
+      <div class="floating-orb orb-3"></div>
+      <div class="floating-orb orb-4"></div>
+      <div class="floating-orb orb-5"></div>
+      <div class="floating-orb orb-6"></div>
+
+      <!-- Geometric Shapes -->
+      <div class="geometric-shape shape-1"></div>
+      <div class="geometric-shape shape-2"></div>
+      <div class="geometric-shape shape-3"></div>
+
+      <!-- Particle Network -->
+      <div class="particle-network">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+        <div class="particle particle-6"></div>
+        <div class="particle particle-7"></div>
+        <div class="particle particle-8"></div>
+      </div>
+
+      <!-- Animated Grid -->
+      <div class="animated-grid">
+        <div class="grid-line grid-line-1"></div>
+        <div class="grid-line grid-line-2"></div>
+        <div class="grid-line grid-line-3"></div>
+        <div class="grid-line grid-line-4"></div>
+      </div>
+
+      <!-- Floating Icons -->
+      <div class="floating-icons">
+        <div class="floating-icon icon-1">
+          <span class="material-symbols-outlined">code</span>
+        </div>
+        <div class="floating-icon icon-2">
+          <span class="material-symbols-outlined">design_services</span>
+        </div>
+        <div class="floating-icon icon-3">
+          <span class="material-symbols-outlined">rocket_launch</span>
+        </div>
+        <div class="floating-icon icon-4">
+          <span class="material-symbols-outlined">trending_up</span>
+        </div>
+        <div class="floating-icon icon-5">
+          <span class="material-symbols-outlined">devices</span>
+        </div>
+      </div>
+    </div>
     
     <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
-      <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 mb-6">
+      <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 mb-6 animate-fade-in-down">
         <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
         <span class="text-white text-xs font-bold uppercase tracking-widest">Now Booking for Q4</span>
       </div>
       
-      <h1 class="text-white text-5xl md:text-6xl font-black leading-tight mb-6">
+      <h1 class="text-white text-5xl md:text-6xl font-black leading-tight mb-6 animate-fade-in-up">
         Professional Websites<br>for Small Businesses
       </h1>
       
-      <p class="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+      <p class="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
         High-performance websites tailored to your budget. Flexible payment plans designed to scale with your business growth. Get online in under a week.
       </p>
       
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-400">
         <button (click)="scrollToSection('services')"
-                class="bg-blue-600 text-white px-8 py-4 rounded-full text-base font-bold shadow-lg hover:scale-105 transition-transform">
+                appMicroInteraction="click-ripple"
+                class="bg-blue-600 text-white px-8 py-4 rounded-full text-base font-bold shadow-lg hover:scale-105 transition-all duration-300 hover:shadow-blue-500/50">
           View Packages
         </button>
         <button (click)="scrollToSection('contact')"
-                class="bg-white/10 text-white px-8 py-4 rounded-full text-base font-bold backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all">
+                appMicroInteraction="hover-glow"
+                class="bg-white/10 text-white px-8 py-4 rounded-full text-base font-bold backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300">
           Book a Call
         </button>
       </div>
       
       <!-- Trust Bar -->
-      <div class="mt-12 bg-white/10 backdrop-blur-md rounded-full px-6 py-4 inline-flex flex-wrap items-center gap-6 border border-white/20">
+      <div class="mt-12 bg-white/10 backdrop-blur-md rounded-full px-6 py-4 inline-flex flex-wrap items-center gap-6 border border-white/20 animate-fade-in-up animation-delay-600">
         <div class="flex items-center gap-2">
-          <span class="text-green-400 text-lg">✅</span>
+          <span class="material-symbols-outlined text-green-400 text-lg">check_circle</span>
           <span class="text-xs font-bold text-white">50+ Businesses Online</span>
         </div>
         <div class="h-4 w-px bg-white/20"></div>
         <div class="flex items-center gap-2">
-          <span class="text-blue-400 text-lg">🌍</span>
+          <span class="material-symbols-outlined text-blue-400 text-lg">public</span>
           <span class="text-xs font-bold text-white">UK-Based Support</span>
         </div>
         <div class="h-4 w-px bg-white/20"></div>
         <div class="flex items-center gap-2">
-          <span class="text-yellow-400 text-lg">⭐</span>
+          <span class="material-symbols-outlined text-yellow-400 text-lg">star</span>
           <span class="text-xs font-bold text-white">5-Star Rated</span>
         </div>
       </div>
     </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center cursor-pointer hover:border-white transition-colors" (click)="scrollToSection('how-it-works')">
+        <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+      </div>
+    </div>
   </section>
 
+  <!-- Live Stats Counter -->
+  <app-stats-counter></app-stats-counter>
 
   <!-- How It Works Section -->
   <section id="how-it-works" class="scroll-section min-h-screen flex items-center py-20 bg-gray-50 dark:bg-gray-900">
@@ -135,7 +265,7 @@
         <div class="space-y-8">
           <div class="flex gap-6 items-start">
             <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
-              <span class="text-2xl">📅</span>
+              <span class="material-symbols-outlined text-2xl">event</span>
               <span class="text-[10px] font-bold mt-0.5">STEP 1</span>
             </div>
             <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
@@ -149,7 +279,7 @@
 
           <div class="flex gap-6 items-start">
             <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
-              <span class="text-2xl">💻</span>
+              <span class="material-symbols-outlined text-2xl">computer</span>
               <span class="text-[10px] font-bold mt-0.5">STEP 2</span>
             </div>
             <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
@@ -163,7 +293,7 @@
 
           <div class="flex gap-6 items-start">
             <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
-              <span class="text-2xl">🚀</span>
+              <span class="material-symbols-outlined text-2xl">rocket_launch</span>
               <span class="text-[10px] font-bold mt-0.5">STEP 3</span>
             </div>
             <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
@@ -177,7 +307,7 @@
 
           <div class="flex gap-6 items-start">
             <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-full flex flex-col items-center justify-center text-white z-10 shadow-lg">
-              <span class="text-2xl">🔧</span>
+              <span class="material-symbols-outlined text-2xl">settings</span>
               <span class="text-[10px] font-bold mt-0.5">STEP 4</span>
             </div>
             <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
@@ -204,7 +334,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let plan of pricingPlans" 
-             class="group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all hover:-translate-y-2">
+             class="group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all hover:-translate-y-2 flex flex-col">
           <div class="h-48 bg-cover bg-center relative" [style.background-image]="'url(' + plan.image + ')'">
             <div class="absolute top-4 left-4 px-4 py-1 rounded-full text-xs font-black uppercase"
                  [ngClass]="{
@@ -216,17 +346,10 @@
             </div>
           </div>
           
-          <div class="p-6">
+          <div class="p-6 flex flex-col flex-1">
             <div class="flex items-start justify-between mb-4">
-              <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ plan.name }}</h3>
-              <span class="text-3xl"
-                    [ngClass]="{
-                      'text-red-500': plan.color === 'primary',
-                      'text-blue-500': plan.color === 'blue',
-                      'text-green-500': plan.color === 'green'
-                    }">
-                {{ plan.icon === 'calendar_month' ? '📅' : plan.icon === 'payments' ? '💳' : '🛡️' }}
-              </span>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ plan.name }}</h3>
+              <span class="text-3xl">{{ plan.icon }}</span>
             </div>
             
             <p class="text-3xl font-black mb-1"
@@ -239,19 +362,28 @@
               <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ plan.priceLabel }}</span>
             </p>
             
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 min-h-[60px]">
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
               {{ plan.description }}
             </p>
             
-            <ul class="space-y-2 mb-6">
-              <li *ngFor="let feature of plan.features" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <span class="text-green-500 text-lg">✅</span>
-                {{ feature }}
-              </li>
-            </ul>
+            <div class="mb-4 flex-1">
+              <h4 class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase">What's Included:</h4>
+              <ul class="space-y-2">
+                <li *ngFor="let feature of plan.features" class="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                  <span class="text-green-500 text-sm mt-0.5">✅</span>
+                  <span>{{ feature }}</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                {{ plan.contractInfo }}
+              </p>
+            </div>
             
             <button (click)="selectPlan(plan)"
-                    class="w-full py-3 rounded-full font-bold text-sm transition-all hover:scale-105 shadow-lg"
+                    class="w-full py-3 rounded-full font-bold text-sm transition-all hover:scale-105 shadow-lg mt-auto"
                     [ngClass]="{
                       'bg-red-500 text-white hover:bg-red-600': plan.color === 'primary',
                       'bg-blue-500 text-white hover:bg-blue-600': plan.color === 'blue',
@@ -292,8 +424,8 @@
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-16">
         <div *ngFor="let industry of industries" 
              class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer">
-          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center text-2xl mb-4">
-            {{ industry.icon }}
+          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-2xl">{{ industry.icon }}</span>
           </div>
           <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ industry.name }}</h3>
         </div>
@@ -324,10 +456,10 @@
               <tr>
                 <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Professional Design</td>
                 <td class="px-6 py-4 text-center">
-                  <span class="text-red-500 text-xl">❌</span>
+                  <span class="material-symbols-outlined text-red-500 text-xl">cancel</span>
                 </td>
                 <td class="px-6 py-4 text-center bg-blue-50 dark:bg-blue-900/20">
-                  <span class="text-green-600 text-xl">✅</span>
+                  <span class="material-symbols-outlined text-green-600 text-xl">check_circle</span>
                 </td>
               </tr>
               <tr>
@@ -349,9 +481,9 @@
 
 
   <!-- Templates Section -->
-  <section id="templates" class="scroll-section min-h-screen flex items-center py-20 bg-white dark:bg-gray-800">
+  <section id="templates" class="scroll-section min-h-screen flex items-center py-20 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 w-full">
-      <div class="text-center mb-12">
+      <div class="text-center mb-16">
         <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
           Industry Templates Gallery
         </h2>
@@ -360,55 +492,67 @@
         </p>
       </div>
 
-      <div class="space-y-8">
+      <!-- Templates Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div *ngFor="let template of templates" 
-             class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all">
+             class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+             (click)="viewTemplate(template)">
           
-          <!-- Browser Frame Header -->
-          <div class="bg-gray-100 dark:bg-gray-800 px-4 py-3 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700">
-            <div class="w-3 h-3 rounded-full bg-red-400"></div>
-            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
-            <div class="w-3 h-3 rounded-full bg-green-400"></div>
-            <div class="ml-4 flex-1 h-6 bg-white dark:bg-gray-700 rounded-full flex items-center px-4 text-xs text-gray-400">
-              {{ template.url }}
+          <!-- Template Preview Image -->
+          <div class="relative overflow-hidden">
+            <div class="aspect-[4/3] bg-cover bg-center transform group-hover:scale-105 transition-transform duration-300" 
+                 [style.background-image]="'url(' + template.image + ')'">
+            </div>
+            
+            <!-- Badge Overlay -->
+            <div *ngIf="template.badge" 
+                 class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold uppercase shadow-lg"
+                 [ngClass]="{
+                   'bg-amber-500 text-white': template.badge === 'Popular',
+                   'bg-green-500 text-white': template.badge === 'High Conversion'
+                 }">
+              {{ template.badge }}
             </div>
           </div>
-
-          <!-- Template Image -->
-          <div class="aspect-video bg-cover bg-center" [style.background-image]="'url(' + template.image + ')'"></div>
 
           <!-- Template Info -->
           <div class="p-6">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ template.name }}</h3>
-                <p class="text-blue-600 dark:text-blue-400 text-sm font-medium">Industry: {{ template.industry }}</p>
-              </div>
-              <span *ngIf="template.badge" 
-                    class="px-3 py-1 rounded-full text-xs font-bold uppercase"
-                    [ngClass]="{
-                      'bg-amber-100 text-amber-700': template.badge === 'Popular',
-                      'bg-green-100 text-green-700': template.badge === 'High Conversion'
-                    }">
-                {{ template.badge }}
-              </span>
-            </div>
-
-            <div class="space-y-3 mb-6">
-              <div *ngFor="let feature of template.features" 
-                   class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
-                <span class="text-blue-600 text-lg">✅</span>
-                <span class="text-sm">{{ feature }}</span>
-              </div>
-            </div>
-
-            <button (click)="viewTemplate(template)"
-                    class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-lg">
-              <span class="text-xl">👁️</span>
-              <span>Preview Template</span>
-            </button>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
+              {{ template.name }}
+            </h3>
+            <p class="text-blue-600 dark:text-blue-400 text-sm font-medium mb-4">
+              {{ template.industry }}
+            </p>
+            
+            <!-- Template Description -->
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+              {{ template.description }}
+            </p>
           </div>
         </div>
+      </div>
+
+      <!-- Load More Button -->
+      <div class="text-center my-16">
+        <button *ngIf="showLoadMoreButton"
+                (click)="loadMoreTemplates()"
+                class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-8 py-3 rounded-full font-bold border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 hover:text-blue-600 transition-all shadow-lg hover:shadow-xl">
+          <span class="flex items-center gap-2">
+            <span>View All Templates</span>
+            <span class="text-lg">↓</span>
+          </span>
+        </button>
+      </div>
+
+      <!-- Custom Template CTA -->
+      <div class="text-center">
+        <button (click)="scrollToSection('contact')"
+                class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 hover:scale-105 transition-all shadow-lg">
+          Request Custom Template
+        </button>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-4">
+          Don't see your industry? We create custom templates for any business type.
+        </p>
       </div>
     </div>
   </section>
@@ -447,12 +591,16 @@
           </div>
 
           <div class="flex gap-3">
-            <button class="flex-1 h-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-bold text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors flex items-center justify-center gap-2">
-              <span class="text-lg">🔗</span>
+            <a [href]="member.linkedin" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="flex-1 h-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-bold text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors flex items-center justify-center gap-2 no-underline">
+              <span class="material-symbols-outlined text-lg">link</span>
               LinkedIn
-            </button>
-            <button class="flex-1 h-12 rounded-lg bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg">
-              <span class="text-lg">📧</span>
+            </a>
+            <button (click)="openEmail(member.email)"
+                    class="flex-1 h-12 rounded-lg bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg">
+              <span class="material-symbols-outlined text-lg">mail</span>
               Email
             </button>
           </div>
@@ -461,6 +609,11 @@
     </div>
   </section>
 
+  <!-- Customer Testimonials -->
+  <app-testimonials></app-testimonials>
+
+  <!-- FAQ Section -->
+  <app-faq></app-faq>
 
   <!-- Contact Section -->
   <section id="contact" class="scroll-section min-h-screen flex items-center py-20 bg-white dark:bg-gray-800">
@@ -479,146 +632,52 @@
       </div>
 
       <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div class="p-8">
-          <div class="flex items-center gap-3 mb-8">
-            <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-400">
-              <span class="material-symbols-outlined text-2xl">description</span>
+        <div class="p-8 md:p-12 text-center">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
+            <span class="material-symbols-outlined text-4xl text-blue-600">description</span>
+          </div>
+          
+          <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Ready to Get Started?
+          </h3>
+          
+          <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+            Fill out our quick project inquiry form and we'll get back to you within 24 hours with a custom quote tailored to your needs.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+              <div class="material-symbols-outlined text-3xl mb-2 text-blue-600">bolt</div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-1">Quick Process</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400">4 simple steps</p>
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Project Inquiry</h3>
+            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+              <div class="material-symbols-outlined text-3xl mb-2 text-blue-600">save</div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-1">Auto-Save</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Never lose progress</p>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+              <div class="material-symbols-outlined text-3xl mb-2 text-blue-600">call</div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-1">Fast Response</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Reply in 24 hours</p>
+            </div>
           </div>
 
-          <form (ngSubmit)="onSubmit()" class="space-y-6">
-            <!-- Business Name -->
-            <div>
-              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Business Name</label>
-              <div class="relative">
-                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">storefront</span>
-                <input type="text" 
-                       [(ngModel)]="formData.businessName"
-                       name="businessName"
-                       placeholder="Acme Corp"
-                       class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white">
-              </div>
-            </div>
+          <button (click)="goToContactForm()"
+                  class="inline-flex items-center gap-3 bg-blue-600 text-white rounded-xl px-8 py-4 font-bold text-lg shadow-lg hover:bg-blue-700 transition-all hover:scale-105">
+            <span>Start Your Project Inquiry</span>
+            <span class="material-symbols-outlined text-2xl">arrow_forward</span>
+          </button>
 
-            <!-- Website Type -->
-            <div>
-              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Website Type</label>
-              <div class="relative">
-                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">web</span>
-                <select [(ngModel)]="formData.websiteType"
-                        name="websiteType"
-                        class="w-full pl-12 pr-10 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white appearance-none">
-                  <option>E-commerce Store</option>
-                  <option>Business Portfolio</option>
-                  <option>Service Landing Page</option>
-                  <option>Custom Platform</option>
-                </select>
-                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">expand_more</span>
-              </div>
+          <div class="mt-6">
+            <div class="flex items-center justify-center gap-1 text-xs text-gray-400 mb-2">
+              <span class="material-symbols-outlined text-green-500">lock</span>
+              Your data is secure and encrypted
             </div>
-
-            <!-- Budget Range -->
-            <div>
-              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Budget Range (Monthly)</label>
-              <div class="grid grid-cols-3 gap-3">
-                <label class="cursor-pointer">
-                  <input type="radio" 
-                         [(ngModel)]="formData.budget"
-                         name="budget"
-                         value="basic"
-                         class="sr-only peer">
-                  <div class="p-4 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-xl peer-checked:border-blue-600 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all text-center">
-                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 peer-checked:text-blue-600 block">BASIC</span>
-                    <span class="text-lg font-bold text-gray-900 dark:text-white">$99+</span>
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" 
-                         [(ngModel)]="formData.budget"
-                         name="budget"
-                         value="pro"
-                         class="sr-only peer">
-                  <div class="p-4 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-xl peer-checked:border-blue-600 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all text-center relative overflow-hidden">
-                    <div class="absolute -top-1 -right-8 bg-yellow-400 text-gray-900 text-[8px] font-bold px-8 py-0.5 rotate-45">POPULAR</div>
-                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 peer-checked:text-blue-600 block">PRO</span>
-                    <span class="text-lg font-bold text-gray-900 dark:text-white">$249+</span>
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" 
-                         [(ngModel)]="formData.budget"
-                         name="budget"
-                         value="custom"
-                         class="sr-only peer">
-                  <div class="p-4 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-xl peer-checked:border-blue-600 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all text-center">
-                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 peer-checked:text-blue-600 block">CUSTOM</span>
-                    <span class="text-lg font-bold text-gray-900 dark:text-white">Flexible</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <!-- Services Needed -->
-            <div>
-              <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Services Needed</label>
-              <div class="flex flex-wrap gap-2">
-                <label class="cursor-pointer">
-                  <input type="checkbox" 
-                         [(ngModel)]="formData.services.seo"
-                         name="seo"
-                         class="sr-only peer">
-                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
-                    <span class="material-symbols-outlined text-base">search</span> SEO Optimization
-                  </span>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="checkbox" 
-                         [(ngModel)]="formData.services.design"
-                         name="design"
-                         class="sr-only peer">
-                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
-                    <span class="material-symbols-outlined text-base">brush</span> UI/UX Design
-                  </span>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="checkbox" 
-                         [(ngModel)]="formData.services.maintenance"
-                         name="maintenance"
-                         class="sr-only peer">
-                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
-                    <span class="material-symbols-outlined text-base">settings</span> Maintenance
-                  </span>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="checkbox" 
-                         [(ngModel)]="formData.services.content"
-                         name="content"
-                         class="sr-only peer">
-                  <span class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-xs font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-colors flex items-center gap-1">
-                    <span class="material-symbols-outlined text-base">ad_units</span> Content Creation
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit"
-                    class="w-full bg-blue-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg hover:bg-blue-700 transition-all hover:scale-105 flex items-center justify-center gap-2">
-              <span>Confirm Call & Send Details</span>
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </button>
-
-            <div class="text-center">
-              <div class="flex items-center justify-center gap-1 text-xs text-gray-400 mb-2">
-                <span class="material-symbols-outlined text-xs">lock</span>
-                Your data is secure and encrypted
-              </div>
-              <p class="text-xs text-gray-400">
-                By confirming, you agree to our <a href="#" class="underline hover:text-blue-600">Privacy Policy</a>
-              </p>
-            </div>
-          </form>
+            <p class="text-xs text-gray-400">
+              By continuing, you agree to our <a href="#" class="underline hover:text-blue-600">Privacy Policy</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -651,32 +710,33 @@
            [style.background-image]="'url(' + selectedTemplate?.image + ')'">
       </div>
 
-      <!-- Features -->
+      <!-- Template Description -->
       <div class="mb-6">
-        <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Key Features:</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div *ngFor="let feature of selectedTemplate?.features"
-               class="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">check_circle</span>
-            <span class="text-sm text-gray-700 dark:text-gray-300">{{ feature }}</span>
-          </div>
-        </div>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+          {{ selectedTemplate?.description }}
+        </p>
       </div>
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-3">
-        <button (click)="scrollToSection('contact'); closeTemplateModal()"
+        <button (click)="useTemplate(selectedTemplate)"
                 class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg">
           Use This Template
         </button>
-        <button (click)="closeTemplateModal()"
-                class="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-4 rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-          Close Preview
+        <button (click)="viewLiveDemo(selectedTemplate)"
+                class="flex-1 bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition-colors shadow-lg">
+          <span class="flex items-center justify-center gap-2">
+            <span>🌐</span>
+            <span>Live Demo</span>
+          </span>
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Trust Badges -->
+<app-trust-badges></app-trust-badges>
 
 <!-- Footer -->
 <footer class="bg-gray-900 text-white py-12">
@@ -738,3 +798,9 @@
     </div>
   </div>
 </footer>
+
+<!-- Live Activity Notifications -->
+<!-- <app-live-activity></app-live-activity> -->
+
+<!-- Sticky CTA Bar -->
+<app-sticky-cta></app-sticky-cta>

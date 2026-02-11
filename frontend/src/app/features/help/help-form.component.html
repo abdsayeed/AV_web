@@ -1,0 +1,265 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-8">
+  <div class="max-w-2xl mx-auto px-4">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <button (click)="goBack()" 
+                class="text-blue-300 hover:text-white transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined">arrow_back</span>
+          Back to Dashboard
+        </button>
+      </div>
+      
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600/20 rounded-full mb-6">
+        <span class="material-symbols-outlined text-3xl text-blue-400">help</span>
+      </div>
+      
+      <h1 class="text-3xl font-bold text-white mb-4">How Can We Help?</h1>
+      <p class="text-blue-200 text-lg">
+        Get in touch with our support team. We're here to help you succeed.
+      </p>
+    </div>
+
+    <!-- Help Form -->
+    <div class="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-8">
+      <form (ngSubmit)="submitHelpRequest()" class="space-y-6">
+        
+        <!-- Subject -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-white">Subject</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <span class="material-symbols-outlined text-blue-300 text-xl">subject</span>
+            </div>
+            <select [(ngModel)]="helpForm.subject" 
+                    name="subject"
+                    required
+                    class="w-full pl-12 pr-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white focus:border-blue-400 focus:bg-white/20 transition-all outline-none">
+              <option value="" disabled class="text-gray-900">Select a topic</option>
+              <option value="project-inquiry" class="text-gray-900">Project Inquiry</option>
+              <option value="technical-support" class="text-gray-900">Technical Support</option>
+              <option value="billing-question" class="text-gray-900">Billing Question</option>
+              <option value="template-help" class="text-gray-900">Template Help</option>
+              <option value="general-question" class="text-gray-900">General Question</option>
+              <option value="feedback" class="text-gray-900">Feedback</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Priority -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-white">Priority Level</label>
+          <div class="grid grid-cols-3 gap-3">
+            <label class="relative">
+              <input type="radio" 
+                     [(ngModel)]="helpForm.priority" 
+                     name="priority" 
+                     value="low"
+                     class="sr-only">
+              <div [ngClass]="{
+                     'bg-green-600 border-green-400': helpForm.priority === 'low',
+                     'bg-white/10 border-white/20': helpForm.priority !== 'low'
+                   }"
+                   class="p-3 border-2 rounded-xl cursor-pointer transition-all text-center">
+                <span class="material-symbols-outlined text-2xl mb-1" 
+                      [ngClass]="{
+                        'text-white': helpForm.priority === 'low',
+                        'text-green-400': helpForm.priority !== 'low'
+                      }">
+                  trending_down
+                </span>
+                <div class="text-sm font-medium"
+                     [ngClass]="{
+                       'text-white': helpForm.priority === 'low',
+                       'text-blue-200': helpForm.priority !== 'low'
+                     }">
+                  Low
+                </div>
+              </div>
+            </label>
+            
+            <label class="relative">
+              <input type="radio" 
+                     [(ngModel)]="helpForm.priority" 
+                     name="priority" 
+                     value="medium"
+                     class="sr-only">
+              <div [ngClass]="{
+                     'bg-yellow-600 border-yellow-400': helpForm.priority === 'medium',
+                     'bg-white/10 border-white/20': helpForm.priority !== 'medium'
+                   }"
+                   class="p-3 border-2 rounded-xl cursor-pointer transition-all text-center">
+                <span class="material-symbols-outlined text-2xl mb-1"
+                      [ngClass]="{
+                        'text-white': helpForm.priority === 'medium',
+                        'text-yellow-400': helpForm.priority !== 'medium'
+                      }">
+                  trending_flat
+                </span>
+                <div class="text-sm font-medium"
+                     [ngClass]="{
+                       'text-white': helpForm.priority === 'medium',
+                       'text-blue-200': helpForm.priority !== 'medium'
+                     }">
+                  Medium
+                </div>
+              </div>
+            </label>
+            
+            <label class="relative">
+              <input type="radio" 
+                     [(ngModel)]="helpForm.priority" 
+                     name="priority" 
+                     value="high"
+                     class="sr-only">
+              <div [ngClass]="{
+                     'bg-red-600 border-red-400': helpForm.priority === 'high',
+                     'bg-white/10 border-white/20': helpForm.priority !== 'high'
+                   }"
+                   class="p-3 border-2 rounded-xl cursor-pointer transition-all text-center">
+                <span class="material-symbols-outlined text-2xl mb-1"
+                      [ngClass]="{
+                        'text-white': helpForm.priority === 'high',
+                        'text-red-400': helpForm.priority !== 'high'
+                      }">
+                  trending_up
+                </span>
+                <div class="text-sm font-medium"
+                     [ngClass]="{
+                       'text-white': helpForm.priority === 'high',
+                       'text-blue-200': helpForm.priority !== 'high'
+                     }">
+                  High
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-white">Message</label>
+          <div class="relative">
+            <div class="absolute top-4 left-4 pointer-events-none">
+              <span class="material-symbols-outlined text-blue-300 text-xl">message</span>
+            </div>
+            <textarea [(ngModel)]="helpForm.message"
+                      name="message"
+                      required
+                      rows="6"
+                      placeholder="Please describe your question or issue in detail..."
+                      class="w-full pl-12 pr-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-blue-200/50 focus:border-blue-400 focus:bg-white/20 transition-all outline-none resize-none">
+            </textarea>
+          </div>
+        </div>
+
+        <!-- Contact Preference -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-white">Preferred Contact Method</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="relative">
+              <input type="radio" 
+                     [(ngModel)]="helpForm.contactMethod" 
+                     name="contactMethod" 
+                     value="email"
+                     class="sr-only">
+              <div [ngClass]="{
+                     'bg-blue-600 border-blue-400': helpForm.contactMethod === 'email',
+                     'bg-white/10 border-white/20': helpForm.contactMethod !== 'email'
+                   }"
+                   class="p-4 border-2 rounded-xl cursor-pointer transition-all flex items-center gap-3">
+                <span class="material-symbols-outlined text-xl"
+                      [ngClass]="{
+                        'text-white': helpForm.contactMethod === 'email',
+                        'text-blue-400': helpForm.contactMethod !== 'email'
+                      }">
+                  mail
+                </span>
+                <span class="font-medium"
+                      [ngClass]="{
+                        'text-white': helpForm.contactMethod === 'email',
+                        'text-blue-200': helpForm.contactMethod !== 'email'
+                      }">
+                  Email
+                </span>
+              </div>
+            </label>
+            
+            <label class="relative">
+              <input type="radio" 
+                     [(ngModel)]="helpForm.contactMethod" 
+                     name="contactMethod" 
+                     value="phone"
+                     class="sr-only">
+              <div [ngClass]="{
+                     'bg-blue-600 border-blue-400': helpForm.contactMethod === 'phone',
+                     'bg-white/10 border-white/20': helpForm.contactMethod !== 'phone'
+                   }"
+                   class="p-4 border-2 rounded-xl cursor-pointer transition-all flex items-center gap-3">
+                <span class="material-symbols-outlined text-xl"
+                      [ngClass]="{
+                        'text-white': helpForm.contactMethod === 'phone',
+                        'text-blue-400': helpForm.contactMethod !== 'phone'
+                      }">
+                  phone
+                </span>
+                <span class="font-medium"
+                      [ngClass]="{
+                        'text-white': helpForm.contactMethod === 'phone',
+                        'text-blue-200': helpForm.contactMethod !== 'phone'
+                      }">
+                  Phone
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Error/Success Messages -->
+        <div *ngIf="errorMessage" class="p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="successMessage" class="p-4 bg-green-500/20 border border-green-500/30 rounded-xl text-green-200">
+          {{ successMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+                [disabled]="isSubmitting"
+                class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-600/50 hover:shadow-blue-600/70 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <span *ngIf="!isSubmitting" class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-xl">send</span>
+            Send Help Request
+          </span>
+          <span *ngIf="isSubmitting" class="flex items-center gap-2">
+            <span class="material-symbols-outlined animate-spin text-xl">refresh</span>
+            Sending...
+          </span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="mt-8 text-center">
+      <p class="text-blue-200 text-sm mb-4">
+        Need immediate assistance? Contact us directly:
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="mailto:support@ariesventures.com" 
+           class="flex items-center gap-2 text-blue-300 hover:text-white transition-colors">
+          <span class="material-symbols-outlined">mail</span>
+          support&#64;ariesventures.com
+        </a>
+        <a href="tel:+442012345678" 
+           class="flex items-center gap-2 text-blue-300 hover:text-white transition-colors">
+          <span class="material-symbols-outlined">phone</span>
+          +44 20 1234 5678
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>

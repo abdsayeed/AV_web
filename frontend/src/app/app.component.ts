@@ -1,40 +1,40 @@
-import { Component, HostListener, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { ContextService } from './core/services/context.service';
-import { ApiService } from './core/services/api.service';
-import { AuthService } from './core/services/auth.service';
-import { TestimonialsComponent } from './shared/components/testimonials/testimonials.component';
-import { StatsCounterComponent } from './shared/components/stats-counter/stats-counter.component';
-import { TrustBadgesComponent } from './shared/components/trust-badges/trust-badges.component';
-import { FaqComponent } from './shared/components/faq/faq.component';
-import { StickyCTAComponent } from './shared/components/sticky-cta/sticky-cta.component';
-import { MicroInteractionsDirective } from './shared/directives/micro-interactions.directive';
+import { Component, HostListener, OnInit, inject } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { Router, RouterModule } from "@angular/router";
+import { ContextService } from "./core/services/context.service";
+import { ApiService } from "./core/services/api.service";
+import { AuthService } from "./core/services/auth.service";
+import { TestimonialsComponent } from "./shared/components/testimonials/testimonials.component";
+import { StatsCounterComponent } from "./shared/components/stats-counter/stats-counter.component";
+import { TrustBadgesComponent } from "./shared/components/trust-badges/trust-badges.component";
+import { FaqComponent } from "./shared/components/faq/faq.component";
+import { StickyCTAComponent } from "./shared/components/sticky-cta/sticky-cta.component";
+import { MicroInteractionsDirective } from "./shared/directives/micro-interactions.directive";
 
 @Component({
-  selector: 'app-home',
+  selector: "app-home",
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
+    CommonModule,
+    FormsModule,
     RouterModule,
     TestimonialsComponent,
     StatsCounterComponent,
     TrustBadgesComponent,
     FaqComponent,
     StickyCTAComponent,
-    MicroInteractionsDirective
+    MicroInteractionsDirective,
   ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
-  
-  title = 'Aries Ventures';
-  activeSection = 'home';
+
+  title = "Aries Ventures";
+  activeSection = "home";
   mobileMenuOpen = false;
   selectedTemplate: any = null;
   showTemplateModal = false;
@@ -49,28 +49,33 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private contextService: ContextService
+    private contextService: ContextService,
   ) {
     this.initializeTemplates();
   }
 
   ngOnInit() {
     // Subscribe to authentication state from AuthService
-    this.authService.authState$.subscribe(authState => {
+    this.authService.authState$.subscribe((authState) => {
       const wasAuthenticated = this.isAuthenticated;
       const previousUser = this.currentUser;
-      
+
       this.currentUser = authState.user;
       this.isAuthenticated = authState.isAuthenticated;
-      
+
       // Show welcome message only when user actually logs in (not on page refresh)
-      if (!wasAuthenticated && this.isAuthenticated && authState.user && !previousUser) {
+      if (
+        !wasAuthenticated &&
+        this.isAuthenticated &&
+        authState.user &&
+        !previousUser
+      ) {
         // Check if this is a fresh login (not a page refresh)
         const isPageRefresh = performance.navigation.type === 1;
         if (!isPageRefresh) {
           // Small delay to ensure the page has loaded
           setTimeout(() => {
-            this.showWelcomeMessage(authState.user!.name || 'User');
+            this.showWelcomeMessage(authState.user!.name || "User");
           }, 500);
         }
       }
@@ -79,8 +84,9 @@ export class AppComponent implements OnInit {
 
   private showWelcomeMessage(userName: string) {
     // Create and show a welcome popup
-    const welcomeDiv = document.createElement('div');
-    welcomeDiv.className = 'fixed top-4 right-4 z-50 bg-blue-600 text-white px-6 py-4 rounded-xl shadow-lg animate-slide-in-right';
+    const welcomeDiv = document.createElement("div");
+    welcomeDiv.className =
+      "fixed top-4 right-4 z-50 bg-blue-600 text-white px-6 py-4 rounded-xl shadow-lg animate-slide-in-right";
     welcomeDiv.innerHTML = `
       <div class="flex items-center gap-3">
         <span class="material-symbols-outlined text-2xl">waving_hand</span>
@@ -93,9 +99,9 @@ export class AppComponent implements OnInit {
         </button>
       </div>
     `;
-    
+
     document.body.appendChild(welcomeDiv);
-    
+
     // Auto-remove after 4 seconds
     setTimeout(() => {
       if (welcomeDiv.parentElement) {
@@ -105,182 +111,196 @@ export class AppComponent implements OnInit {
   }
 
   initializeTemplates() {
-    // Initialize all templates (you can expand this array with more templates)
+    // Initialize all templates
     this.allTemplates = [
       {
-        name: 'Fairphone',
-        industry: 'Technology',
-        url: 'fairphone.com',
-        demoUrl: '', // Add demo URL here later
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCN_T8RjyUiYAVEDPHxVDcQTlA_l8NmtWi4fB7jPc6lovF1WF6WKryMUEkyo-scX79nFThIATt7jojBdmPzsJ3Ni977jX45KqUJbkH4PwsU4-NnN1wmBKNvTTB4zugpuUKlNC5wl9__DxCIfHMrKaBrC1jhSSYALG1APTXjrGO3CyeYB32KRY90gfV7DMR1p5JeXUPRGleEoZ5iMuf2w-yvVH6b7VP6MFU5MUGt5GxrNAP_LCySBrEjoOGdnkqXIbJOW3_7zlSqDAo',
-        description: 'A modern, sustainable technology website template featuring clean design, product showcases, and environmental impact metrics. Perfect for eco-conscious tech companies.',
-        badge: 'Popular'
+        name: "Aries Grooming",
+        industry: "Barber Shop",
+        url: "",
+        demoUrl: "https://arfahad99.github.io/AVT1_BarberShop/",
+        image: "assets/templates/aries_grooming.png",
+        description:
+          "Aries Grooming is a modern barber shop offering professional haircuts and grooming services tailored to each client. Known for its clean environment and skilled barbers, it focuses on precision, style, and customer comfort. The shop provides a relaxed atmosphere where clients can enjoy quality service and attention to detail.",
+        badge: "Popular",
       },
       {
-        name: 'Bonne Maman',
-        industry: 'Food & Beverage',
-        url: 'bonnemaman.com',
-        demoUrl: '', // Add demo URL here later
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9miYKakWMRhV7pkOlbCCHqaXCl8R6jAcxcnqoWcWLRevLmTAIyeGTLRuzNkhCMMgFO8T5Ek_eEqAL_9PySId_0_0gHiOkSdazG7bfGgKcwOiMkMChfkXLUY4ABUMlxRpZXkGdftBfbSbbzmZaJabygf06ZaZqb3QiMIZJAdBDk3jmPaaPfALD1ne4APqNm1PAbtKbVUTKwb2nYm6o3dJ7Ve9m1EwZQ3uVDtcYnuuohoUDo_u-bEg5nQbk_ZZ1-MFEOX4VBVZcBh0',
-        description: 'Warm and inviting food & beverage template with recipe integration, brand storytelling, and beautiful product catalogs. Ideal for artisanal food brands.',
-        badge: ''
+        name: "AVT Restaurant",
+        industry: "Food & Beverage",
+        url: "",
+        demoUrl: "https://abdsayeed.github.io/AVT1-Restaurant/",
+        image: "assets/templates/avt_restaurant.png",
+        description:
+          "AVT Restaurant offers a welcoming dining experience with a focus on fresh ingredients and well-prepared dishes. The menu features a variety of options designed to suit different tastes, all served in a comfortable and friendly setting. It’s a great place to enjoy quality food with consistent service.",
+        badge: "Popular",
       },
       {
-        name: 'Cytosurge',
-        industry: 'Biotechnology',
-        url: 'cytosurge.com',
-        demoUrl: '', // Add demo URL here later
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjbP5WHr5GN8HwXnnPm_6y6Q5P2ZrF3R54b6XSYmGLlP4i_BLEajfSjmUfNH0-0j--gplRqJNz71kqJr2iBQkJeSEjtb3YTMi34DWTfDV5emh3SY0Ea6QRkCEaPqBCYrKDI-8iZSqfiDPXzpqaffPgFPa2v0Rf8D85Wz3R_c-pHEym3PSch-XBZ00WyKt4IaEZ0hw1tODfN8EZVpcc5lb49y6EnrhL3NylzNUwacNaCunOgFo49yVQ5L2wG4i1-2FvqR2fZwUHtek',
-        description: 'Professional biotech template with scientific data visualization, research portfolios, and technical documentation. Built for cutting-edge research companies.',
-        badge: ''
+        name: "Aries Ventures",
+        industry: "Barber Shop",
+        url: "",
+        demoUrl: "https://arfahad99.github.io/AVT2_BarberShop/", // Add demo URL here later
+        image: "assets/templates/aries_ventures_barber.png",
+        description:
+          "Aries Ventures Premium Barber is a high-end grooming destination offering expert haircuts and premium barbering services. With a focus on style, precision, and personalized care, it delivers a refined experience in a comfortable setting. The shop combines modern techniques with professional service to ensure every client leaves looking their best.",
+        badge: "Popular",
       },
       {
-        name: 'Plugin',
-        industry: 'Software',
-        url: 'plugin.io',
-        demoUrl: '', // Add demo URL here later
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNFkEs9OhPwm7J9_tqSewPde-RObtieVzMPQL1k_pYR5k5XCfkpATOIHeIN7y_iUodpw8P1k17KKuY8OlcgOlW16e89FyjoPfqPqq0IR2JSyD_8wg4YV1hpKYzeEVtp_Sf-4Nb4_o-J0_47IyvjwhfMps-YtG7B8HUBx4-umlyuMB0SGep0rG4ZniSpLB4hydDzpeFQi8PhBxVPoHsn-h4RMg5JNDjj8jT1ADC_vDsKXqNBwlX2IPoUEDhSBnofIn8WpBzu38VgKo',
-        description: 'Developer-focused software template featuring comprehensive documentation, API integration guides, and interactive code examples. Perfect for SaaS products.',
-        badge: 'High Conversion'
+        name: "AVT Restaurant",
+        industry: "Food & Beverage",
+        url: "",
+        demoUrl: "https://abdsayeed.github.io/AVT2/",
+        image: "assets/templates/avt_restaurant2.png",
+        description:
+          "AVT Restaurant offers traditional cuisine prepared with a strong focus on hygiene and cleanliness. The kitchen follows proper standards to ensure safe and fresh food for every guest. With its simple, welcoming setting, it provides a comfortable place to enjoy authentic flavors with peace of mind.",
+        badge: "High Conversion",
       },
       {
-        name: 'Fondation Saint-Luc',
-        industry: 'Healthcare',
-        url: 'fondation-saint-luc.be',
-        demoUrl: '', // Add demo URL here later
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ',
-        description: 'Trusted healthcare template with medical services directory, appointment booking system, and comprehensive patient resources. Designed for medical institutions.',
-        badge: ''
+        name: "AVT Restaurant",
+        industry: "Food & Beverage",
+        url: "",
+        demoUrl: "https://abdsayeed.github.io/AVT3/",
+        image: "assets/templates/avt_restaurant3.png",
+        description:
+          "AVT Restaurant is an authentic Newari restaurant offering traditional dishes rich in flavor and heritage. It brings the taste of Newari cuisine through carefully prepared recipes and fresh ingredients. With a warm and welcoming atmosphere, it provides a genuine cultural dining experience.",
+        badge: "",
       },
       {
-        name: 'Permafungi',
-        industry: 'Sustainability',
-        url: 'permafungi.be',
-        demoUrl: '', // Add demo URL here later
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ',
-        description: 'Eco-friendly sustainability template showcasing environmental metrics, educational content, and community features. Great for green initiatives and NGOs.',
-        badge: 'Popular'
+        name: "AVT Restaurant",
+        industry: "Food & Beverage",
+        url: "",
+        demoUrl: "https://abdsayeed.github.io/AVT4/",
+        image: "assets/templates/avt_restaurant4.png",
+        description:
+          "Aries Ventures offers an exquisite dining experience with a focus on refined flavors and elegant presentation. The menu is thoughtfully crafted using quality ingredients to deliver a memorable culinary journey. With its sophisticated ambiance and attentive service, it creates the perfect setting for special occasions.",
+        badge: "Popular",
       },
-      // Add more templates here in the future
-      
     ];
 
     // Initially show first 6 templates
     this.displayedTemplates = this.allTemplates.slice(0, 6);
-    
+
     // Check if there are more templates to load
-    this.hasMoreTemplates = this.allTemplates.length > this.displayedTemplates.length;
+    this.hasMoreTemplates =
+      this.allTemplates.length > this.displayedTemplates.length;
   }
 
   // Form data
   formData = {
-    businessName: '',
-    email: '',
-    phone: '',
-    websiteType: 'E-commerce Store',
-    budget: 'basic',
-    message: '',
+    businessName: "",
+    email: "",
+    phone: "",
+    websiteType: "E-commerce Store",
+    budget: "basic",
+    message: "",
     services: {
       seo: false,
       design: true,
       maintenance: false,
-      content: false
-    }
+      content: false,
+    },
   };
 
   // Professional loading states
   isSubmitting = false;
   submitSuccess = false;
-  submitError = '';
+  submitError = "";
 
   navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'how-it-works', label: 'How It Works' },
-    { id: 'services', label: 'Services' },
-    { id: 'ideal-clients', label: 'Clients' },
-    { id: 'templates', label: 'Templates' },
-    { id: 'team', label: 'Team' },
-    { id: 'contact', label: 'Contact' }
+    { id: "home", label: "Home" },
+    { id: "how-it-works", label: "How It Works" },
+    { id: "services", label: "Services" },
+    { id: "ideal-clients", label: "Clients" },
+    { id: "templates", label: "Templates" },
+    { id: "team", label: "Team" },
+    { id: "contact", label: "Contact" },
   ];
 
   pricingPlans = [
     {
-      name: 'Pay-As-You-Go Website',
-      icon: 'schedule',
-      price: '£59',
-      priceLabel: '/month',
-      description: 'Template-based website with ongoing support. Perfect for small businesses starting online with low upfront cost.',
-      color: 'primary',
-      badge: 'Most Accessible',
+      name: "Pay-As-You-Go Website",
+      icon: "schedule",
+      price: "£59",
+      priceLabel: "/month",
+      description:
+        "Template-based website with ongoing support. Perfect for small businesses starting online with low upfront cost.",
+      color: "primary",
+      badge: "Most Accessible",
       features: [
-        '5-page responsive website',
-        'Template-based design',
-        'Contact form & Google Maps',
-        'Basic SEO setup',
-        'Hosting, SSL & backups',
-        'Regular security updates',
-        'Small content changes',
-        'Performance monitoring'
+        "5-page responsive website",
+        "Template-based design",
+        "Contact form & Google Maps",
+        "Basic SEO setup",
+        "Hosting, SSL & backups",
+        "Regular security updates",
+        "Small content changes",
+        "Performance monitoring",
       ],
-      contractInfo: '6 or 12-month minimum • Website licensed, not owned • Buyout option available',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjbP5WHr5GN8HwXnnPm_6y6Q5P2ZrF3R54b6XSYmGLlP4i_BLEajfSjmUfNH0-0j--gplRqJNz71kqJr2iBQkJeSEjtb3YTMi34DWTfDV5emh3SY0Ea6QRkCEaPqBCYrKDI-8iZSqfiDPXzpqaffPgFPa2v0Rf8D85Wz3R_c-pHEym3PSch-XBZ00WyKt4IaEZ0hw1tODfN8EZVpcc5lb49y6EnrhL3NylzNUwacNaCunOgFo49yVQ5L2wG4i1-2FvqR2fZwUHtek'
+      contractInfo:
+        "6 or 12-month minimum • Website licensed, not owned • Buyout option available",
+      image:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBjbP5WHr5GN8HwXnnPm_6y6Q5P2ZrF3R54b6XSYmGLlP4i_BLEajfSjmUfNH0-0j--gplRqJNz71kqJr2iBQkJeSEjtb3YTMi34DWTfDV5emh3SY0Ea6QRkCEaPqBCYrKDI-8iZSqfiDPXzpqaffPgFPa2v0Rf8D85Wz3R_c-pHEym3PSch-XBZ00WyKt4IaEZ0hw1tODfN8EZVpcc5lb49y6EnrhL3NylzNUwacNaCunOgFo49yVQ5L2wG4i1-2FvqR2fZwUHtek",
     },
     {
-      name: 'Fully Managed Professional Website',
-      icon: 'diamond',
-      price: '£249',
-      priceLabel: '/month',
-      description: 'Full professional website with zero technical hassle. We own and manage everything for you.',
-      color: 'blue',
-      badge: 'Most Popular',
+      name: "Fully Managed Professional Website",
+      icon: "diamond",
+      price: "£249",
+      priceLabel: "/month",
+      description:
+        "Full professional website with zero technical hassle. We own and manage everything for you.",
+      color: "blue",
+      badge: "Most Popular",
       features: [
-        'Up to 12-15 pages',
-        'Custom brand-aligned design',
-        'Mobile-first & fully responsive',
-        'Advanced forms (quotes, bookings)',
-        'Blog / CMS included',
-        'Advanced SEO & analytics',
-        'Premium hosting & CDN',
-        'Daily backups & security',
-        'Unlimited content updates',
-        'Monthly reports',
-        'Priority support'
+        "Up to 12-15 pages",
+        "Custom brand-aligned design",
+        "Mobile-first & fully responsive",
+        "Advanced forms (quotes, bookings)",
+        "Blog / CMS included",
+        "Advanced SEO & analytics",
+        "Premium hosting & CDN",
+        "Daily backups & security",
+        "Unlimited content updates",
+        "Monthly reports",
+        "Priority support",
       ],
-      contractInfo: '6 or 12-month minimum • We own & manage • Buyout option available',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ'
+      contractInfo:
+        "6 or 12-month minimum • We own & manage • Buyout option available",
+      image:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuA9vM4wxIs7Ig9a-uxSMgH3r_RO1Lxw0lV1Teix-0yAsRqpLSKGCLaP2_InA2cA0f4WmdB_JGuynvO7Qrm900dMJTE-57FpMEEooZ4tsO5YqYxcX5suN1pouZVjmTSrEC4PoBBFA-LkLIJLC4FkEz1VkE4zn53EfDeMhd0bDFgD5Knrgprk73SMUek0fwzkxhDdeCo0bBiGqCXh6UCggdKklWoJyl7bMdK7lHu_ctFAJxK0r7EeCPnQwhranFYIP8mUlWNg8csWtDQ",
     },
     {
-      name: 'Full Professional Website',
-      icon: 'workspace_premium',
-      price: 'Custom',
-      priceLabel: 'One-time',
-      description: 'Fully custom professional website. You own everything with full control and no long-term contracts.',
-      color: 'green',
-      badge: 'Full Ownership',
+      name: "Full Professional Website",
+      icon: "workspace_premium",
+      price: "Custom",
+      priceLabel: "One-time",
+      description:
+        "Fully custom professional website. You own everything with full control and no long-term contracts.",
+      color: "green",
+      badge: "Full Ownership",
       features: [
-        'Fully custom design',
-        'Unlimited pages & features',
-        'Custom UI/UX design',
-        'Advanced integrations',
-        'Blog / CMS',
-        'SEO-ready structure',
-        'Speed optimized',
-        'Full source code included',
-        'You own the website',
-        'Optional maintenance plan'
+        "Fully custom design",
+        "Unlimited pages & features",
+        "Custom UI/UX design",
+        "Advanced integrations",
+        "Blog / CMS",
+        "SEO-ready structure",
+        "Speed optimized",
+        "Full source code included",
+        "You own the website",
+        "Optional maintenance plan",
       ],
-      contractInfo: 'One-time payment • You own everything • No long-term contract • Maintenance optional',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ'
-    }
+      contractInfo:
+        "One-time payment • You own everything • No long-term contract • Maintenance optional",
+      image:
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBzyD-l1502LRC-sfVKdfLlsOK7ON2gelcz0O75disd6NO6RJj67WTZZrsh5AkgdrX2FGjVeEgagiOAkA7lZoDbuTFyeCtiEBm4FwVTqRXFAGR0weFzsUkg0-dirUkWZwOqzKmr0Y5ugz9ha21YmcbccTx795lwBosFPKe0N3vTizX69GxDTKUgw3FvqJrqBujIK68T3RIXlDUIXelbF4xBDf3vm5YhJL_pHORuHrvBOgwCTZgl8C3buKbAwF4HCqwlyYeug4AsFxQ",
+    },
   ];
 
   industries = [
-    { name: 'Barbershops', icon: 'content_cut' },
-    { name: 'Cafes & Dining', icon: 'restaurant' },
-    { name: 'Home Services', icon: 'home_repair_service' },
-    { name: 'Landscapers', icon: 'park' },
-    { name: 'Boutique Retail', icon: 'storefront' },
-    { name: 'Professional', icon: 'business_center' }
+    { name: "Barbershops", icon: "content_cut" },
+    { name: "Cafes & Dining", icon: "restaurant" },
+    { name: "Home Services", icon: "home_repair_service" },
+    { name: "Landscapers", icon: "park" },
+    { name: "Boutique Retail", icon: "storefront" },
+    { name: "Professional", icon: "business_center" },
   ];
 
   // Use displayedTemplates instead of templates in the template
@@ -290,40 +310,40 @@ export class AppComponent implements OnInit {
 
   teamMembers = [
     {
-      name: 'Abdullah Al Sayeed',
-      role: 'Backend Developer',
-      bio: 'Back-end developer building APIs, handling data, and making systems work behind the scenes. Interested in scalability, security, and clean architecture.',
-      image: 'assets/Abdullah_sayed.png',
-      email: 'abdsayeedofficial@gmail.com',
-      linkedin: 'https://www.linkedin.com/in/abdullah-al-sayeed-50522a22b'
+      name: "Abdullah Al Sayeed",
+      role: "Backend Developer",
+      bio: "Back-end developer building APIs, handling data, and making systems work behind the scenes. Interested in scalability, security, and clean architecture.",
+      image: "assets/Abdullah_sayed.png",
+      email: "abdsayeedofficial@gmail.com",
+      linkedin: "https://www.linkedin.com/in/abdullah-al-sayeed-50522a22b",
     },
     {
-      name: 'MD Nasif',
-      role: 'Frontend Developer',
-      bio: 'Front-end engineer focused on building clean, responsive, and user-friendly interfaces. Working with HTML, CSS, JavaScript, and modern frameworks.',
-      image: 'assets/Md_Nasif.png',
-      email: 'Mdnasif17@gmail.com',
-      linkedin: 'https://www.linkedin.com/in/mdnasif17'
+      name: "MD Nasif",
+      role: "Frontend Developer",
+      bio: "Front-end engineer focused on building clean, responsive, and user-friendly interfaces. Working with HTML, CSS, JavaScript, and modern frameworks.",
+      image: "assets/Md_Nasif.png",
+      email: "Mdnasif17@gmail.com",
+      linkedin: "https://www.linkedin.com/in/mdnasif17",
     },
     {
-      name: 'AR Fahad',
-      role: 'DevOps Engineer',
-      bio: 'DevOps enthusiast who likes breaking things, fixing them, and automating the boring stuff. Working with Linux, Git, Docker, and CI/CD.',
-      image: 'assets/ar_fahad.png',
-      email: 'mdarfahad@gmail.com',
-      linkedin: 'https://www.linkedin.com/in/arfahad99/'
-    }
+      name: "AR Fahad",
+      role: "DevOps Engineer",
+      bio: "DevOps enthusiast who likes breaking things, fixing them, and automating the boring stuff. Working with Linux, Git, Docker, and CI/CD.",
+      image: "assets/ar_fahad.png",
+      email: "mdarfahad@gmail.com",
+      linkedin: "https://www.linkedin.com/in/arfahad99/",
+    },
   ];
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener("window:scroll", ["$event"])
   onScroll() {
-    const sections = document.querySelectorAll('.scroll-section');
-    let current = '';
+    const sections = document.querySelectorAll(".scroll-section");
+    let current = "";
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const sectionTop = (section as HTMLElement).offsetTop;
       if (window.pageYOffset >= sectionTop - 200) {
-        current = section.getAttribute('id') || '';
+        current = section.getAttribute("id") || "";
       }
     });
 
@@ -333,22 +353,25 @@ export class AppComponent implements OnInit {
 
   // Professional scroll animations
   addScrollAnimations() {
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fade-in-up');
-        }
-      });
-    }, { threshold: 0.1 });
+    const elements = document.querySelectorAll(".animate-on-scroll");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-fade-in-up");
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
 
-    elements.forEach(el => observer.observe(el));
+    elements.forEach((el) => observer.observe(el));
   }
 
   scrollToSection(sectionId: string) {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
       this.mobileMenuOpen = false;
     }
   }
@@ -359,47 +382,46 @@ export class AppComponent implements OnInit {
 
   async onSubmit() {
     if (this.isSubmitting) return;
-    
+
     if (!this.formData.businessName || !this.formData.email) {
-      this.submitError = 'Please fill in all required fields!';
+      this.submitError = "Please fill in all required fields!";
       return;
     }
 
     this.isSubmitting = true;
-    this.submitError = '';
-    
+    this.submitError = "";
+
     try {
       // Simulate API call with realistic delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      console.log('Form submitted:', this.formData);
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      console.log("Form submitted:", this.formData);
+
       // Success state
       this.submitSuccess = true;
-      
+
       // Reset form after success
       this.formData = {
-        businessName: '',
-        email: '',
-        phone: '',
-        websiteType: 'E-commerce Store',
-        budget: 'basic',
-        message: '',
+        businessName: "",
+        email: "",
+        phone: "",
+        websiteType: "E-commerce Store",
+        budget: "basic",
+        message: "",
         services: {
           seo: false,
           design: true,
           maintenance: false,
-          content: false
-        }
+          content: false,
+        },
       };
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         this.submitSuccess = false;
       }, 5000);
-      
     } catch (error) {
-      this.submitError = 'Something went wrong. Please try again.';
+      this.submitError = "Something went wrong. Please try again.";
     } finally {
       this.isSubmitting = false;
     }
@@ -408,24 +430,24 @@ export class AppComponent implements OnInit {
   // Smart email redirect function
   openEmail(email: string) {
     // Extract domain from email
-    const domain = email.split('@')[1].toLowerCase();
-    
+    const domain = email.split("@")[1].toLowerCase();
+
     // Define email provider URLs
     const emailProviders: { [key: string]: string } = {
-      'gmail.com': `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`,
-      'yahoo.com': `https://compose.mail.yahoo.com/?to=${email}`,
-      'yahoo.co.uk': `https://compose.mail.yahoo.com/?to=${email}`,
-      'hotmail.com': `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
-      'outlook.com': `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
-      'live.com': `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
-      'icloud.com': `https://www.icloud.com/mail/`,
-      'me.com': `https://www.icloud.com/mail/`,
-      'mac.com': `https://www.icloud.com/mail/`
+      "gmail.com": `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`,
+      "yahoo.com": `https://compose.mail.yahoo.com/?to=${email}`,
+      "yahoo.co.uk": `https://compose.mail.yahoo.com/?to=${email}`,
+      "hotmail.com": `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
+      "outlook.com": `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
+      "live.com": `https://outlook.live.com/mail/0/deeplink/compose?to=${email}`,
+      "icloud.com": `https://www.icloud.com/mail/`,
+      "me.com": `https://www.icloud.com/mail/`,
+      "mac.com": `https://www.icloud.com/mail/`,
     };
 
     // Check if we have a specific provider URL
     if (emailProviders[domain]) {
-      window.open(emailProviders[domain], '_blank');
+      window.open(emailProviders[domain], "_blank");
     } else {
       // For custom domains or unknown providers, show options
       this.showEmailOptions(email);
@@ -470,8 +492,8 @@ export class AppComponent implements OnInit {
         </div>
       </div>
     `;
-    
-    const modalElement = document.createElement('div');
+
+    const modalElement = document.createElement("div");
     modalElement.innerHTML = modalHtml;
     document.body.appendChild(modalElement);
   }
@@ -489,9 +511,9 @@ export class AppComponent implements OnInit {
   useTemplate(template: any) {
     // Navigate to contact form with template context
     this.contextService.navigateToContactWithTemplate(
-      template.name.toLowerCase().replace(/\s+/g, '-'),
+      template.name.toLowerCase().replace(/\s+/g, "-"),
       template.name,
-      template.industry
+      template.industry,
     );
     this.closeTemplateModal();
   }
@@ -499,41 +521,43 @@ export class AppComponent implements OnInit {
   selectPlan(plan: any) {
     // Navigate to contact form with pricing context
     const tierMap: Record<string, string> = {
-      'Pay-As-You-Go Website': 'basic',
-      'Fully Managed Professional Website': 'pro',
-      'Full Professional Website': 'custom'
+      "Pay-As-You-Go Website": "basic",
+      "Fully Managed Professional Website": "pro",
+      "Full Professional Website": "custom",
     };
-    
+
     this.contextService.navigateToContactWithPricing(
-      tierMap[plan.name] || 'basic',
-      plan.price
+      tierMap[plan.name] || "basic",
+      plan.price,
     );
   }
 
   goToLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
   }
 
   goToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate(["/register"]);
   }
 
   goToContactForm() {
-    this.router.navigate(['/contact']);
+    this.router.navigate(["/contact"]);
   }
 
   viewLiveDemo(template: any) {
     // This function will open the live demo of the template
     // For now, it shows a placeholder message
     // Later you can add the actual demo URLs to each template
-    console.log('Opening live demo for:', template.name);
-    
+    console.log("Opening live demo for:", template.name);
+
     // Placeholder - you can replace this with actual demo URLs
     if (template.demoUrl) {
-      window.open(template.demoUrl, '_blank');
+      window.open(template.demoUrl, "_blank");
     } else {
       // Temporary placeholder until demo URLs are added
-      alert(`Live demo for ${template.name} coming soon! Demo URL will be added here.`);
+      alert(
+        `Live demo for ${template.name} coming soon! Demo URL will be added here.`,
+      );
     }
   }
 
@@ -541,11 +565,11 @@ export class AppComponent implements OnInit {
     // Load more templates if available
     const currentCount = this.displayedTemplates.length;
     const nextBatch = this.allTemplates.slice(currentCount, currentCount + 6);
-    
+
     if (nextBatch.length > 0) {
       // There are more templates to load
       this.displayedTemplates = [...this.displayedTemplates, ...nextBatch];
-      
+
       // Check if there are still more templates after this batch
       if (this.displayedTemplates.length >= this.allTemplates.length) {
         // No more templates, hide the button
@@ -558,11 +582,11 @@ export class AppComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(["/dashboard"]);
   }
 
   goToProfile() {
-    this.router.navigate(['/profile']);
+    this.router.navigate(["/profile"]);
   }
 
   logout() {

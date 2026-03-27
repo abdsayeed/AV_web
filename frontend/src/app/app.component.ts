@@ -173,6 +173,16 @@ export class AppComponent implements OnInit {
           "Aries Ventures offers an exquisite dining experience with a focus on refined flavors and elegant presentation. The menu is thoughtfully crafted using quality ingredients to deliver a memorable culinary journey. With its sophisticated ambiance and attentive service, it creates the perfect setting for special occasions.",
         badge: "Popular",
       },
+      {
+        name: "AV Saloon",
+        industry: "Barber Shop",
+        url: "",
+        demoUrl: "https://arfahad99.github.io/AVT3_Salon-master/",
+        image: "assets/templates/aries_grooming2.png",
+        description:
+          "AV Salon offers professional hair and beauty services tailored to enhance your personal style. With experienced stylists and a focus on quality care, it ensures a comfortable and satisfying experience. The salon provides a clean, modern setting where clients can relax and enjoy expert grooming services.",
+        badge: "Popular",
+      },
     ];
 
     // Initially show first 6 templates

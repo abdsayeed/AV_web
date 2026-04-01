@@ -1,5 +1,5 @@
 # fly.toml - Fly.io configuration for Aries Ventures backend
-app = "aries-ventures-backend"
+app = "av-web"
 primary_region = "lhr"  # London - closest to your users
 
 [build]

@@ -11,7 +11,7 @@ FLY_APP_NAME = os.environ.get('FLY_APP_NAME', '')
 
 ALLOWED_HOSTS = [
     f'{FLY_APP_NAME}.fly.dev',
-    'aries-ventures-backend.fly.dev',
+    'av-web.fly.dev',
     'localhost',
     '127.0.0.1',
 ]

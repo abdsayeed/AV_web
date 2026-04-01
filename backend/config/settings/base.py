@@ -130,15 +130,8 @@ AUTH_USER_MODEL = 'users.User'
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
-    'apps.users.auth0_backend.Auth0Backend',  # Auth0 backend
-    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    'django.contrib.auth.backends.ModelBackend',
 ]
-
-# Auth0 Configuration
-AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN', 'your-auth0-domain.auth0.com')
-AUTH0_API_IDENTIFIER = os.getenv('AUTH0_API_IDENTIFIER', 'https://your-auth0-domain.auth0.com/api/v2/')
-AUTH0_CLIENT_ID = os.getenv('AUTH0_CLIENT_ID', 'your-auth0-client-id')
-AUTH0_CLIENT_SECRET = os.getenv('AUTH0_CLIENT_SECRET', 'your-auth0-client-secret')
 
 # REST Framework
 REST_FRAMEWORK = {
@@ -197,7 +190,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': config('CLOUDINARY_API_SECRET', default=''),
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 # Redis Settings
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')
@@ -232,31 +225,14 @@ SPECTACULAR_SETTINGS = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
-            'formatter': 'verbose',
-        },
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
         },
     },
     'root': {
-        'handlers': ['console', 'file'],
+        'handlers': ['console'],
         'level': 'INFO',
     },
 }

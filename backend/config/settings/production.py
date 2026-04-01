@@ -1,158 +1,117 @@
 """
-Production settings for Aries Ventures backend.
+Production settings for Aries Ventures backend (Fly.io).
 """
 from .base import *
 import os
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Allowed hosts - update with your actual domain
+# Fly.io sets FLY_APP_NAME automatically
+FLY_APP_NAME = os.environ.get('FLY_APP_NAME', '')
+
 ALLOWED_HOSTS = [
-    'api.ariesventures.co.uk',
-    'backend.ariesventures.co.uk',
-    'your-oracle-cloud-ip',  # Replace with actual IP
+    f'{FLY_APP_NAME}.fly.dev',
+    'aries-ventures-backend.fly.dev',
+    'localhost',
+    '127.0.0.1',
 ]
 
-# Database - PostgreSQL for production
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'aries_ventures'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': 'prefer',
-        },
-    }
-}
+# Add any custom domain here
+CUSTOM_DOMAIN = os.environ.get('CUSTOM_DOMAIN', '')
+if CUSTOM_DOMAIN:
+    ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
 
-# Redis Cache
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+# Database - use DATABASE_URL from fly.io postgres
+import dj_database_url
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'aries_ventures'),
+            'USER': os.environ.get('DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
         }
     }
-}
 
-# Celery Configuration for Production
-CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/0')
-CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/0')
+# CORS - allow Vercel frontend
+VERCEL_URL = os.environ.get('VERCEL_URL', '')
+CORS_ALLOWED_ORIGINS = [
+    "https://ariesventures.co.uk",
+    "https://www.ariesventures.co.uk",
+]
 
-# Email Configuration - Resend
+# Add Vercel deployment URLs dynamically
+EXTRA_CORS = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+if EXTRA_CORS:
+    CORS_ALLOWED_ORIGINS += [s.strip() for s in EXTRA_CORS.split(',')]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Static files - served by whitenoise
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Security
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+X_FRAME_OPTIONS = 'DENY'
+
+# Email - Resend via SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.resend.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'resend'
-EMAIL_HOST_PASSWORD = os.environ.get('RESEND_API_KEY')
+EMAIL_HOST_PASSWORD = os.environ.get('RESEND_API_KEY', '')
+DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@ariesventures.co.uk')
 
-# CORS settings for production
-CORS_ALLOWED_ORIGINS = [
-    "https://ariesventures.co.uk",
-    "https://www.ariesventures.co.uk",
-    "https://aries-ventures.vercel.app",
-]
+# Disable Redis/Celery in production if not configured (use dummy cache)
+REDIS_URL = os.environ.get('REDIS_URL', '')
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'OPTIONS': {'CLIENT_CLASS': 'django_redis.client.DefaultClient'},
+        }
+    }
+    CELERY_BROKER_URL = REDIS_URL
+    CELERY_RESULT_BACKEND = REDIS_URL
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
 
-# Security Settings
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-X_FRAME_OPTIONS = 'DENY'
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/aries-ventures/static/'
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = '/var/www/aries-ventures/media/'
-
-# Cloudinary for file storage (optional)
-if os.environ.get('CLOUDINARY_URL'):
-    import cloudinary
-    import cloudinary.uploader
-    import cloudinary.api
-    
-    cloudinary.config(
-        cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-        api_key=os.environ.get('CLOUDINARY_API_KEY'),
-        api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-        secure=True
-    )
-    
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Logging
+# Logging to stdout (fly.io captures stdout)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-    },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/aries-ventures/django.log',
-            'formatter': 'verbose',
-        },
         'console': {
-            'level': 'ERROR',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
         },
     },
     'root': {
-        'handlers': ['file', 'console'],
+        'handlers': ['console'],
         'level': 'INFO',
     },
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'apps': {
-            'handlers': ['file', 'console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-    },
 }
-
-# Performance optimizations
-CONN_MAX_AGE = 60
-
-# Admin URL (change for security)
-ADMIN_URL = os.environ.get('ADMIN_URL', 'admin/')
-
-# Sentry for error tracking (optional)
-if os.environ.get('SENTRY_DSN'):
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-    from sentry_sdk.integrations.celery import CeleryIntegration
-    
-    sentry_sdk.init(
-        dsn=os.environ.get('SENTRY_DSN'),
-        integrations=[
-            DjangoIntegration(auto_enabling=True),
-            CeleryIntegration(auto_enabling=True),
-        ],
-        traces_sample_rate=0.1,
-        send_default_pii=True,
-        environment='production',
-    )

@@ -1,22 +1,11 @@
-# Production requirements
 -r base.txt
 
 # Production server
 gunicorn==21.2.0
 whitenoise==6.6.0
 
-# Database
+# Database URL parsing (for fly.io DATABASE_URL)
+dj-database-url==2.1.0
+
+# Database driver
 psycopg2-binary==2.9.9
-
-# Monitoring and logging
-sentry-sdk[django]==1.38.0
-
-# Performance
-django-redis==5.4.0
-
-# Security
-django-cors-headers==4.3.1
-
-# File storage
-cloudinary==1.36.0
-django-cloudinary-storage==0.3.0

@@ -40,14 +40,13 @@ else:
         }
     }
 
-# CORS - allow Vercel frontend
-VERCEL_URL = os.environ.get('VERCEL_URL', '')
+# CORS - allow your live domain
 CORS_ALLOWED_ORIGINS = [
-    "https://ariesventures.co.uk",
-    "https://www.ariesventures.co.uk",
+    "https://aris-ventures.com",
+    "https://www.aris-ventures.com",
 ]
 
-# Add Vercel deployment URLs dynamically
+# Also allow any extra origins set via env var
 EXTRA_CORS = os.environ.get('CORS_ALLOWED_ORIGINS', '')
 if EXTRA_CORS:
     CORS_ALLOWED_ORIGINS += [s.strip() for s in EXTRA_CORS.split(',')]

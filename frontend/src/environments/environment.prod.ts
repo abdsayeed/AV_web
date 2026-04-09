@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://av-web.fly.dev/api',
+  apiUrl: 'http://193.123.178.104/api',
   frontendUrl: 'https://aris-ventures.com'
 };

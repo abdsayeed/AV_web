@@ -1,136 +1,150 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-  
-  <!-- Animated Background Logo -->
-  <div class="absolute inset-0 flex items-center justify-center opacity-5">
-    <img src="assets/logo.png" 
-         alt="Background Logo" 
-         class="w-[800px] h-[800px] object-contain animate-pulse-slow">
-  </div>
+<div class="min-h-screen bg-[#f8f9fa] flex" style="font-family: 'Inter', sans-serif;">
 
-  <!-- Floating Particles Animation -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="particle particle-1"></div>
-    <div class="particle particle-2"></div>
-    <div class="particle particle-3"></div>
-    <div class="particle particle-4"></div>
-    <div class="particle particle-5"></div>
-  </div>
+  <!-- Left Panel — Branding -->
+  <div class="hidden lg:flex lg:w-1/2 bg-[#1a1c1e] flex-col justify-between p-12 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 25% 25%, #0058be 0%, transparent 50%), radial-gradient(circle at 75% 75%, #3b82f6 0%, transparent 50%);"></div>
 
-  <!-- Login Card -->
-  <div class="relative z-10 w-full max-w-md animate-fade-in-up">
-    
-    <!-- Logo Header -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-2xl shadow-2xl shadow-blue-600/50 mb-4 animate-bounce-slow">
-        <img src="assets/logo.png" 
-             alt="Aries Ventures" 
-             class="w-16 h-16 object-contain">
-      </div>
-      <h1 class="text-3xl font-black text-white mb-2">Welcome Back</h1>
-      <p class="text-blue-200">Sign in to your Aries Ventures account</p>
+    <!-- Logo -->
+    <div class="relative z-10 flex items-center gap-3">
+      <img src="assets/logo.png" alt="Aries Ventures" class="w-10 h-10 object-contain">
+      <span class="text-white font-bold text-xl" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aries Ventures</span>
     </div>
 
-    <!-- Login Form Card -->
-    <div class="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 animate-slide-in">
-      
-      <form (ngSubmit)="onSubmit()" class="space-y-6">
-        
-        <!-- Error Message -->
-        <div *ngIf="errorMessage" class="bg-red-500/20 border border-red-500/50 rounded-xl p-4 mb-4">
-          <div class="flex items-center gap-2">
-            <span class="text-red-400 text-xl">⚠️</span>
-            <p class="text-red-200 text-sm">{{ errorMessage }}</p>
+    <!-- Center content -->
+    <div class="relative z-10">
+      <div class="inline-flex items-center gap-2 bg-[#0058be]/20 text-[#adc6ff] text-sm font-medium px-4 py-2 rounded-full mb-8">
+        <span class="material-symbols-outlined text-base">verified</span>
+        Trusted by 50+ businesses
+      </div>
+      <h2 class="text-5xl font-bold text-white leading-tight mb-6" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+        Welcome<br>
+        <span class="text-[#3b82f6]">back.</span>
+      </h2>
+      <p class="text-[#c6c6c9] text-lg leading-relaxed">
+        Sign in to manage your website, track performance, and connect with your customers.
+      </p>
+
+      <!-- Feature list -->
+      <div class="mt-12 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-[#0058be]/20 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-[#adc6ff] text-base">dashboard</span>
           </div>
+          <span class="text-[#c6c6c9] text-sm">Manage your website from one place</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-[#0058be]/20 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-[#adc6ff] text-base">analytics</span>
+          </div>
+          <span class="text-[#c6c6c9] text-sm">Track visitors and conversions</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-[#0058be]/20 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-[#adc6ff] text-base">support_agent</span>
+          </div>
+          <span class="text-[#c6c6c9] text-sm">24/7 support from our team</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom quote -->
+    <div class="relative z-10 bg-white/5 rounded-3xl p-6">
+      <p class="text-[#c6c6c9] text-sm leading-relaxed mb-4">"The dashboard makes it so easy to see how our website is performing. Best investment we've made."</p>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-[#0058be] rounded-full flex items-center justify-center text-white text-xs font-bold">SR</div>
+        <div>
+          <div class="text-white text-sm font-medium">Sarah Rahman</div>
+          <div class="text-[#75777a] text-xs">Artisan Roast Café</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel — Form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+    <div class="w-full max-w-md">
+
+      <!-- Mobile logo -->
+      <div class="lg:hidden flex items-center gap-3 mb-8">
+        <img src="assets/logo.png" alt="Aries Ventures" class="w-8 h-8 object-contain">
+        <span class="font-bold text-[#1a1c1e]" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aries Ventures</span>
+      </div>
+
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">Sign in</h1>
+        <p class="text-[#44474a]">Don't have an account? <button (click)="goToRegister()" class="text-[#0058be] font-semibold hover:underline">Create one</button></p>
+      </div>
+
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-50 rounded-2xl flex items-start gap-3">
+        <span class="material-symbols-outlined text-red-500 text-lg mt-0.5">error</span>
+        <p class="text-red-700 text-sm">{{ errorMessage }}</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="space-y-5">
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Email address</label>
+          <input type="email"
+                 [(ngModel)]="loginData.email"
+                 name="email"
+                 placeholder="you@example.com"
+                 class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
+                 style="box-shadow: 0 0 0 1.5px #e1e3e4;">
         </div>
 
-        <!-- Email Field -->
-        <div class="space-y-2">
-          <label class="block text-sm font-bold text-white">Email Address</label>
-          <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <span class="text-blue-300 text-xl">📧</span>
-            </div>
-            <input type="email" 
-                   [(ngModel)]="loginData.email"
-                   name="email"
-                   required
-                   placeholder="you@example.com"
-                   class="w-full pl-12 pr-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-blue-200/50 focus:border-blue-400 focus:bg-white/20 transition-all outline-none">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-sm font-semibold text-[#1a1c1e]">Password</label>
+            <button type="button" (click)="onForgotPassword()"
+                    class="text-sm text-[#0058be] font-medium hover:underline">
+              Forgot password?
+            </button>
           </div>
-        </div>
-
-        <!-- Password Field -->
-        <div class="space-y-2">
-          <label class="block text-sm font-bold text-white">Password</label>
-          <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <span class="text-blue-300 text-xl">🔒</span>
-            </div>
+          <div class="relative">
             <input [type]="showPassword ? 'text' : 'password'"
                    [(ngModel)]="loginData.password"
                    name="password"
-                   required
                    placeholder="Enter your password"
-                   class="w-full pl-12 pr-12 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-blue-200/50 focus:border-blue-400 focus:bg-white/20 transition-all outline-none">
-            <button type="button"
-                    (click)="togglePassword()"
-                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-white transition-colors">
-              <span class="text-xl">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
+                   class="w-full px-4 py-3.5 pr-12 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
+                   style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+            <button type="button" (click)="togglePassword()"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-[#75777a] hover:text-[#1a1c1e] transition-colors">
+              <span class="material-symbols-outlined text-lg">{{ showPassword ? 'visibility' : 'visibility_off' }}</span>
             </button>
           </div>
         </div>
 
-        <!-- Remember Me & Forgot Password -->
-        <div class="flex items-center justify-between">
-          <label class="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" 
-                   [(ngModel)]="loginData.rememberMe"
-                   name="rememberMe"
-                   class="w-4 h-4 rounded border-2 border-white/20 bg-white/10 text-blue-600 focus:ring-2 focus:ring-blue-400">
-            <span class="text-sm text-blue-200 group-hover:text-white transition-colors">Remember me</span>
-          </label>
-          <a href="#" 
-             (click)="onForgotPassword(); $event.preventDefault()"
-             class="text-sm text-blue-300 hover:text-white transition-colors font-medium">
-            Forgot password?
-          </a>
-        </div>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox"
+                 [(ngModel)]="loginData.rememberMe"
+                 name="rememberMe"
+                 class="w-4 h-4 rounded accent-[#0058be]">
+          <span class="text-sm text-[#44474a]">Remember me for 30 days</span>
+        </label>
 
-        <!-- Submit Button -->
         <button type="submit"
                 [disabled]="isLoading"
-                class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-600/50 hover:shadow-blue-600/70 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-          <span *ngIf="!isLoading">Sign In</span>
+                class="w-full bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2">
+          <span *ngIf="!isLoading">Sign in</span>
           <span *ngIf="isLoading" class="flex items-center gap-2">
-            <span class="animate-spin">⏳</span>
+            <span class="material-symbols-outlined animate-spin text-base">refresh</span>
             Signing in...
           </span>
         </button>
 
       </form>
 
-      <!-- Register Link -->
-      <div class="mt-6 text-center">
-        <p class="text-blue-200">
-          Don't have an account? 
-          <button (click)="goToRegister()"
-                  class="text-white font-bold hover:text-blue-300 transition-colors ml-1">
-            Sign up
-          </button>
-        </p>
-      </div>
-
-      <!-- Back to Home -->
-      <div class="mt-4 text-center">
-        <button (click)="goToHome()"
-                class="text-blue-300 hover:text-white transition-colors text-sm flex items-center justify-center gap-1 mx-auto">
-          <span>←</span>
-          <span>Back to Home</span>
+      <!-- Back to home -->
+      <div class="mt-8 text-center">
+        <button (click)="goToHome()" class="text-sm text-[#75777a] hover:text-[#1a1c1e] transition-colors flex items-center gap-1 mx-auto">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to home
         </button>
       </div>
 
     </div>
-
   </div>
 
 </div>

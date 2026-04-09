@@ -135,7 +135,7 @@ describe('AuthService', () => {
   });
 
   describe('Logout', () => {
-    it('should clear localStorage on logout', () => {
+    it('should clear localStorage on logout', (done) => {
       localStorage.setItem('token', 'test-token');
       localStorage.setItem('accessToken', 'test-token');
       localStorage.setItem('refreshToken', 'refresh-token');
@@ -154,10 +154,11 @@ describe('AuthService', () => {
         expect(localStorage.getItem('token')).toBeNull();
         expect(localStorage.getItem('accessToken')).toBeNull();
         expect(localStorage.getItem('refreshToken')).toBeNull();
+        done();
       }, 100);
     });
 
-    it('should navigate to home on logout', () => {
+    it('should navigate to home on logout', (done) => {
       apiServiceSpy.logout.and.returnValue(
         new Observable((observer) => {
           observer.next({ success: true });
@@ -169,6 +170,7 @@ describe('AuthService', () => {
 
       setTimeout(() => {
         expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+        done();
       }, 100);
     });
   });

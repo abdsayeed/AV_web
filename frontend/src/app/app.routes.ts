@@ -41,5 +41,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/help/help-form.component').then(m => m.HelpFormComponent),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'admin',
+    loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: '' }
 ];

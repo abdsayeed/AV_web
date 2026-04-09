@@ -20,6 +20,30 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Stitch "Structured Fluidity" Custom Classes */
+.cinematic-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: reveal 0.8s ease-out forwards;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid-overlay {
+  background-image: radial-gradient(var(--tw-colors-outline-variant, #c6c6cd) 0.5px, transparent 0.5px);
+  background-size: 32px 32px;
+}
+
+.glass-panel {
+  backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined', 'Material Icons', sans-serif;
   font-weight: normal;

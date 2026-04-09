@@ -108,4 +108,4 @@ frontend/dist/
 backend/dist/
 
 # Docker
-.dockerignore
+.dockerignore.kiro/settings/mcp.json

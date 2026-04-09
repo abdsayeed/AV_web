@@ -1,6 +1,6 @@
 # Aries Ventures - Professional Web Services
 
-A modern, full-stack web application with Angular frontend and Node.js backend.
+A modern, full-stack web application with an Angular frontend and a Django REST API backend.
 
 ## Project Structure
 
@@ -14,16 +14,13 @@ aries-ventures/
 │   ├── angular.json
 │   ├── package.json
 │   └── ...
-├── backend/                      # Node.js backend API
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   └── ...
-│   ├── package.json
+├── backend/                      # Django REST API backend
+│   ├── apps/
+│   ├── config/
+│   ├── requirements/
+│   ├── manage.py
 │   └── ...
 ├── Documentation/                # All documentation files
-│   ├── README.md
 │   ├── SETUP.md
 │   ├── DEPLOYMENT.md
 │   └── ...
@@ -34,75 +31,51 @@ aries-ventures/
 
 - Node.js (v18 or higher)
 - npm or yarn
-- MongoDB (for backend)
+- Python (v3.11 or higher)
+- PostgreSQL (for backend database)
+- Redis (for Celery worker and caching)
 
 ## Quick Start
 
-### Development (Both Frontend & Backend)
+### 1. Backend Setup (Django)
 
-1. **Clone and setup:**
 ```bash
-git clone <repository-url>
-cd aries-ventures
-```
-
-2. **Install dependencies for both frontend and backend:**
-```bash
-# Install frontend dependencies
-cd frontend
-npm install
-cd ..
-
-# Install backend dependencies
 cd backend
-npm install
-cd ..
+# Create virtual environment
+python3.11 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements/development.txt
+
+# Copy environment file
+cp .env.example .env
+# Edit .env with your settings (e.g. database credentials)
+
+# Run migrations
+python manage.py migrate
+
+# Start Django server
+python manage.py runserver
 ```
 
-3. **Start development servers:**
-```bash
-# Start both frontend and backend concurrently
-npm run dev
+### 2. Frontend Setup (Angular)
 
-# Or start them separately:
-npm run dev:frontend    # Starts Angular dev server on http://localhost:4200
-npm run dev:backend     # Starts Node.js API server on http://localhost:3000
-```
-
-### Frontend Only Development
-
+Open a new terminal window:
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Start development server
 npm start
 ```
 Navigate to `http://localhost:4200/`
 
-### Backend Only Development
+## Deployment
 
-```bash
-cd backend
-npm install
-npm run dev
-```
-API available at `http://localhost:3000/api`
-
-## Build Commands
-
-### Production Build
-
-```bash
-# Build both frontend and backend
-npm run build
-
-# Build frontend only
-npm run build:frontend
-
-# Build backend only
-npm run build:backend
-```
-
-### Docker Deployment
+### Docker Deployments
 
 ```bash
 # Build and run with Docker Compose
@@ -112,88 +85,26 @@ docker-compose up --build
 docker-compose up -d
 ```
 
-## Environment Setup
-
-### Frontend Environment
-Create `frontend/.env`:
-```
-NG_APP_API_URL=http://localhost:3000/api
-NG_APP_ENVIRONMENT=development
-```
-
-### Backend Environment
-Create `backend/.env`:
-```
-NODE_ENV=development
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/aries-ventures
-JWT_SECRET=your-jwt-secret-key
-```
-
-## Available Scripts
-
-### Root Level Commands
-- `npm run dev` - Start both frontend and backend in development mode
-- `npm run dev:frontend` - Start only frontend development server
-- `npm run dev:backend` - Start only backend development server
-- `npm run build` - Build both applications for production
-- `npm run build:frontend` - Build frontend for production
-- `npm run build:backend` - Build backend for production
-- `npm run test` - Run tests for both applications
-- `npm run lint` - Lint both applications
-
-### Frontend Commands (run from /frontend)
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm run test` - Run unit tests
-- `npm run e2e` - Run end-to-end tests
-- `npm run lint` - Lint TypeScript code
-
-### Backend Commands (run from /backend)
-- `npm run dev` - Start development server with nodemon
-- `npm run start` - Start production server
-- `npm run build` - Build TypeScript to JavaScript
-- `npm run test` - Run unit tests
-- `npm run test:watch` - Run tests in watch mode
-- `npm run lint` - Lint TypeScript code
+For production deployments, please refer to the `Documentation/DEPLOYMENT.md` guide.
 
 ## Features
 
 ### Frontend (Angular)
 - ✨ Single-page application with smooth scroll navigation
-- 🎨 Modern, professional design with dark mode support
+- 🎨 Modern, professional design with TailwindCSS support
 - 📱 Fully responsive (mobile, tablet, desktop)
 - 🚀 Fast and optimized
-- 🎯 7 main sections: Home, How It Works, Services, Clients, Templates, Team, Contact
 - 🌙 Dark/Light mode toggle
 - 📋 Contact form with validation
 
-### Backend (Node.js/Express)
+### Backend (Django REST Framework)
 - 🔐 JWT Authentication
-- 📊 RESTful API
-- 🗄️ MongoDB integration
-- 📧 Email service integration
-- 🛡️ Security middleware
-- 📝 Request logging
-- ✅ Input validation
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/profile` - Get user profile
-
-### Contact
-- `POST /api/contact` - Submit contact form
-- `GET /api/contact` - Get contact submissions (admin)
-
-### Services
-- `GET /api/services` - Get all services
-- `POST /api/services` - Create service (admin)
-- `PUT /api/services/:id` - Update service (admin)
-- `DELETE /api/services/:id` - Delete service (admin)
+- 📊 RESTful APIs
+- 🗄️ PostgreSQL database integration
+- 📧 Email notifications via Resend
+- 📝 Admin dashboard for easy management
+- ✅ Input validation and rate limiting
+- 📋 Celery task queue and Redis caching
 
 ## Documentation
 
@@ -202,6 +113,7 @@ For detailed setup and usage instructions, see the Documentation folder:
 - [Setup Guide](Documentation/SETUP.md) - Complete setup instructions
 - [API Documentation](Documentation/API.md) - API endpoints and usage
 - [Deployment Guide](Documentation/DEPLOYMENT.md) - Production deployment
+- Backend-specific notes are available in `backend/README.md`.
 
 ## Browser Support
 
@@ -212,7 +124,7 @@ For detailed setup and usage instructions, see the Documentation folder:
 
 ## License
 
-© 2024 Aries Ventures. All rights reserved.
+© 2024-2026 Aries Ventures. All rights reserved.
 
 ## Support
 

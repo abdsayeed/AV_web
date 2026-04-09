@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dashboard | Aries Ventures</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift-bg {
+            background-color: #f3f4f5;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d9dadb",
+                      "on-secondary-fixed-variant": "#004395",
+                      "outline": "#75777a",
+                      "on-primary-fixed-variant": "#454749",
+                      "primary": "#000101",
+                      "on-surface-variant": "#44474a",
+                      "surface-container-low": "#f3f4f5",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface": "#191c1d",
+                      "primary-container": "#1a1c1e",
+                      "tertiary-fixed": "#d3e4fe",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "on-tertiary-container": "#75859d",
+                      "surface-container": "#edeeef",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#5d5e61",
+                      "on-background": "#191c1d",
+                      "on-error": "#ffffff",
+                      "tertiary": "#000104",
+                      "secondary": "#0058be",
+                      "on-secondary-container": "#fefcff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#001a42",
+                      "on-primary-container": "#838486",
+                      "inverse-surface": "#2e3132",
+                      "secondary-container": "#2170e4",
+                      "primary-fixed-dim": "#c6c6c9",
+                      "inverse-primary": "#c6c6c9",
+                      "background": "#f8f9fa",
+                      "outline-variant": "#c5c6ca",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#0c1d30",
+                      "secondary-fixed": "#d8e2ff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#e2e2e5",
+                      "on-primary-fixed": "#1a1c1e",
+                      "secondary-fixed-dim": "#adc6ff",
+                      "surface-variant": "#e1e3e4",
+                      "surface-bright": "#f8f9fa",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Plus Jakarta Sans"],
+                      "body": ["Inter"],
+                      "label": ["Inter"],
+                      "mono": ["JetBrains Mono"]
+              }
+            },
+          }
+        }
+      </script>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-secondary/30">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="bg-slate-50 dark:bg-slate-950 h-screen w-64 border-r border-slate-200/20 fixed left-0 top-0 z-40 hidden md:flex flex-col p-4 gap-2">
+<div class="px-2 py-4 mb-6">
+<h1 class="text-lg font-black text-slate-900 dark:text-white font-headline">Aries Ventures</h1>
+<p class="text-xs font-mono uppercase tracking-widest text-slate-500">Client Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard Active State -->
+<a class="bg-white dark:bg-slate-900 text-blue-600 shadow-sm rounded-xl flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span>Projects</span>
+</a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span>Invoices</span>
+</a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Team</span>
+</a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span>Support</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-slate-200/10">
+<button class="w-full bg-primary text-on-primary rounded-full py-3 text-sm font-semibold mb-4 transition-all hover:bg-primary-container active:scale-95">
+                    New Project
+                </button>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-3 px-4 py-3 font-headline text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 p-8 min-h-screen">
+<!-- Header Section -->
+<header class="mb-12 flex justify-between items-end">
+<div>
+<h2 class="text-4xl font-headline font-extrabold tracking-tight text-on-surface">Admin Overview</h2>
+<p class="text-on-surface-variant mt-2 font-body max-w-lg">Managing internal assets, conversion funnels, and lead generation pipelines.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-3 rounded-full surface-container hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-slate-200 border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional male executive headshot in business attire with neutral grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdDDkufReWSivsYxk2WagH_qnnFvzvepPnihbDOQhX5Els6t9XrP8hlcjnWoI-nvF0Cn11x_QDdO-oAGhECwiMyFLxKnceJLOtjXb74CPtascuPciSzOjo6vzyFRyUpnz0lfQDn-UoH8cWGkbpElZbUlY_Lmk9o0BCbbjXjLpam5umkzhJ-vohVSbm84xI3m_eUJ4Mg7sVHzoRMJY2VKHBOdK86CwAjWiT16lIGJtGxkBEu3XTe02hgyxnq_mSGYzcGxBBsQI7rOc"/>
+</div>
+</div>
+</header>
+<!-- Analytics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-mono text-secondary uppercase tracking-widest">Leads</span>
+<span class="text-xs font-mono bg-secondary-fixed text-on-secondary-fixed px-2 py-1 rounded">Active</span>
+</div>
+<h3 class="text-4xl font-headline font-bold mt-4">1,429</h3>
+<p class="text-xs text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-500" data-icon="trending_up">trending_up</span>
+<span class="font-bold">+12.4%</span> since last month
+                        </p>
+</div>
+<div class="mt-6 h-12 w-full flex items-end gap-1">
+<div class="flex-1 bg-slate-100 h-1/2 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-2/3 rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-full rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-3/4 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-1/2 rounded-t-sm"></div>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-mono text-secondary uppercase tracking-widest">Conversions</span>
+<span class="text-xs font-mono bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded">Target: 8%</span>
+</div>
+<h3 class="text-4xl font-headline font-bold mt-4">11.2%</h3>
+<p class="text-xs text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-500" data-icon="trending_up">trending_up</span>
+<span class="font-bold">+2.1%</span> vs industry avg
+                        </p>
+</div>
+<div class="mt-6 h-12 w-full flex items-end gap-1">
+<div class="flex-1 bg-slate-100 h-1/3 rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-3/4 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-1/2 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-full rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-5/6 rounded-t-sm"></div>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-mono text-secondary uppercase tracking-widest">Traffic</span>
+<span class="text-xs font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">Global</span>
+</div>
+<h3 class="text-4xl font-headline font-bold mt-4">48.5K</h3>
+<p class="text-xs text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-error" data-icon="trending_down">trending_down</span>
+<span class="font-bold">-4.2%</span> weekly decline
+                        </p>
+</div>
+<div class="mt-6 h-12 w-full flex items-end gap-1">
+<div class="flex-1 bg-secondary h-full rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-1/2 rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-2/3 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-3/4 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-1/2 rounded-t-sm"></div>
+</div>
+</div>
+</section>
+<!-- Lead Management Table -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 overflow-hidden mb-12">
+<div class="p-6 border-b border-surface-container flex flex-wrap justify-between items-center gap-4">
+<h3 class="text-xl font-headline font-bold">Leads Management</h3>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-sm focus:ring-2 focus:ring-secondary/20" placeholder="Filter leads..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container text-sm font-medium rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                            Sort
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-mono text-sm border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant uppercase text-xs tracking-widest font-semibold">
+<th class="px-6 py-4">Business Name</th>
+<th class="px-6 py-4">Lead Date</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Plan</th>
+<th class="px-6 py-4">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="px-6 py-4 font-bold text-primary">Nexus Dynamics Inc.</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-12</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-blue-100 text-blue-700 font-medium text-xs">
+<span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
+                                        In Progress
+                                    </span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Enterprise</td>
+<td class="px-6 py-4">
+<button class="text-secondary hover:underline font-semibold">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="px-6 py-4 font-bold text-primary">Stellar Logistics</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-11</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-emerald-100 text-emerald-700 font-medium text-xs">
+<span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
+                                        Completed
+                                    </span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Standard</td>
+<td class="px-6 py-4">
+<button class="text-secondary hover:underline font-semibold">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="px-6 py-4 font-bold text-primary">Aetheria Cloud</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-11</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-amber-100 text-amber-700 font-medium text-xs">
+<span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
+                                        New
+                                    </span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Startup</td>
+<td class="px-6 py-4">
+<button class="text-secondary hover:underline font-semibold">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="px-6 py-4 font-bold text-primary">Global Vision Partners</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-10</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-blue-100 text-blue-700 font-medium text-xs">
+<span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
+                                        In Progress
+                                    </span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Enterprise</td>
+<td class="px-6 py-4">
+<button class="text-secondary hover:underline font-semibold">Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 border-t border-surface-container flex justify-between items-center">
+<p class="text-xs text-on-surface-variant font-mono">Showing 4 of 282 leads</p>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Template Management Grid -->
+<section class="mb-12">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="text-2xl font-headline font-bold">Template Assets</h3>
+<p class="text-on-surface-variant font-body">Current UI kits and landing page templates available for clients.</p>
+</div>
+<button class="flex items-center gap-2 text-secondary font-bold hover:gap-3 transition-all">
+                        View All
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Template Item 1 -->
+<div class="group relative bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="aspect-video bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="sleek modern web dashboard interface with minimalist charts and clean layout on a light grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnyAVdr4WzoCj2a-g7eDU5shwpRKuRK8wRn_8Toi8ZjOiPHa59L445Vkq3YArA-DyZvrVKnXm5k4zDarGuiXvBdAJTobrUHt89_YQT2CXzR8Ybfmzc9dHBOUMisVHAlnqIEv1Q8u-keXl4fK-aFSUbD8ZRnd4tFeTxdFOjxjYwlD14Jfn5H_gtwD3VWyd6HLDxgNa3wLo7qgMFbB837JzU3vf6cl7cAJ_JOwBKoNESIfkQaHl6ElhUHCxoz3JBdrvV-WxXU_cWSv0"/>
+</div>
+<div class="p-4">
+<h4 class="font-headline font-bold text-sm">Prism SaaS UI Kit</h4>
+<p class="text-xs text-on-surface-variant mt-1">v2.4 • Updated yesterday</p>
+</div>
+</div>
+<!-- Template Item 2 -->
+<div class="group relative bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="aspect-video bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="conceptual data visualization with glowing blue lines and abstract tech geometric shapes on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt-Te9GOg-afPdsdRrWYsxY8isXCofckFD1YyMI24TEN-32jJhxByjjTvwky_Lttzb7TJ7uZfGTZ3Noo_J4T79TDJ0LsFBDvXwWMtz8kMOYL15oapXpHl0TBEsXUG6DSWB_RFUf0PRvHH23e_Ik5TQrBh3V84YULss9gk7moyM5sIkpUu8C7BZ0j-f6tlLWJfF9nfh9V779Py6rBVM5Y6k8QfOYcQ7OHhA9_ZGevwIBvKMfx9cYCsw1rb4uEAgJeHOmpYHFkizwPs"/>
+</div>
+<div class="p-4">
+<h4 class="font-headline font-bold text-sm">Vortex Analytics v2</h4>
+<p class="text-xs text-on-surface-variant mt-1">v1.1 • Updated 3 days ago</p>
+</div>
+</div>
+<!-- Template Item 3 -->
+<div class="group relative bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden hover:shadow-lg transition-all duration-300">
+<div class="aspect-video bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="elegant mobile application interface mockup showing clean profile pages and messaging bubbles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANySnJ7tY0AU_mnV-jv7HdHvH0aAA3iUks2kFlxf4KBwWfXDFeDl41YWG_NdX7A6sB_BfW2njXWumkY23gciTHviZ-4oD7McgaHtXS6TLTzEj7Xt5gLVgC5T9nmSuoK-Xxmf2vnUftdu45TZ4d1smadXMu8LUvXz1fN9IfMSmMCJ0a1W7_2w2k54K_qVbBT9Te2_1XS4p3bTU7ECIGR8SHB0IWRxskXaY-o7S6AgjFG9RIOxrX_h6IYn3qfFOBVmI3MjDRdaMRmx8"/>
+</div>
+<div class="p-4">
+<h4 class="font-headline font-bold text-sm">Nova Mobile Core</h4>
+<p class="text-xs text-on-surface-variant mt-1">v4.0 • Updated 1 week ago</p>
+</div>
+</div>
+<!-- Template Item 4 -->
+<div class="group relative bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col items-center justify-center border-dashed border-2 border-outline-variant min-h-[160px] cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary text-3xl mb-2" data-icon="add_circle">add_circle</span>
+<span class="text-sm font-headline font-bold text-on-surface-variant">Create Template</span>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer Content (Internal System Footer) -->
+<footer class="md:ml-64 bg-slate-50 border-t border-slate-200/10 py-12 px-8">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="text-center md:text-left">
+<h4 class="text-xl font-bold font-headline mb-2">Aries Ventures</h4>
+<p class="text-slate-500 text-sm font-body">© 2024 Aries Ventures. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6 text-sm font-body">
+<a class="text-slate-500 hover:text-blue-500 transition-colors" href="#">Solutions</a>
+<a class="text-slate-500 hover:text-blue-500 transition-colors" href="#">Templates</a>
+<a class="text-slate-500 hover:text-blue-500 transition-colors" href="#">Privacy</a>
+<a class="text-slate-500 hover:text-blue-500 transition-colors" href="#">Terms</a>
+<div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider">
+<span class="h-1.5 w-1.5 bg-green-600 rounded-full animate-pulse"></span>
+                    System Status: Operational
+                </div>
+</div>
+</div>
+</footer>
+</body></html>

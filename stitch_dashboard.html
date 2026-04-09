@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aries Ventures | Client Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#fadfb8",
+                    "surface-container": "#eceef0",
+                    "inverse-surface": "#2d3133",
+                    "secondary-fixed": "#dbe1ff",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-surface-variant": "#45474c",
+                    "primary-fixed": "#d8e3fb",
+                    "background": "#f7f9fb",
+                    "primary-container": "#1e293b",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "surface-variant": "#e0e3e5",
+                    "outline-variant": "#c5c6cd",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "surface-bright": "#f7f9fb",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-fixed": "#271902",
+                    "secondary": "#0051d5",
+                    "on-secondary-fixed": "#00174b",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "tertiary-container": "#35260c",
+                    "on-primary-fixed": "#111c2d",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#bcc7de",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "on-secondary-container": "#fefcff",
+                    "surface-container-highest": "#e0e3e5",
+                    "tertiary-fixed-dim": "#ddc39d",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "on-tertiary-fixed-variant": "#564427",
+                    "surface-dim": "#d8dadc",
+                    "surface-tint": "#545f73",
+                    "on-background": "#191c1e",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#1e1200",
+                    "primary-fixed-dim": "#bcc7de",
+                    "secondary-container": "#316bf3",
+                    "primary": "#091426",
+                    "on-tertiary-container": "#a38c6a",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary-container": "#8590a6",
+                    "outline": "#75777d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-label { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Custom elevation for cards */
+        .premium-card {
+            box-shadow: 0 4px 24px -4px rgba(25, 28, 30, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar Component (Execution of JSON Commands) -->
+<aside class="hidden md:flex flex-col h-full p-4 fixed left-0 top-0 h-screen w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-['Inter'] text-sm font-medium z-40">
+<div class="mb-10 px-4">
+<h1 class="text-lg font-extrabold text-slate-900 dark:text-slate-50 tracking-tighter">Aries Ventures</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-label">Production System</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active Navigation: Dashboard -->
+<a class="flex items-center gap-3 bg-slate-200 dark:bg-slate-800 text-blue-600 dark:text-blue-400 rounded-xl px-4 py-3 shadow-inner transition-all duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all hover:translate-x-1 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all hover:translate-x-1 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Activity</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all hover:translate-x-1 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span>Profile</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all hover:translate-x-1 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Help</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-200 pt-4">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all hover:translate-x-1 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar (Execution of JSON Commands) -->
+<header class="docked full-width top-0 z-30 sticky flex justify-between items-center w-full px-8 py-4 max-w-full mx-auto bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm md:pl-72">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 hover:bg-slate-100 rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline font-bold text-slate-900 dark:text-slate-50 text-xl tracking-tight">Overview</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-4">
+<span class="font-label text-[11px] text-slate-500">SYSTEM: NORMAL</span>
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-slate-200">
+<img alt="User" data-alt="professional portrait of a male executive in a studio with soft overhead lighting and clean grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOroaLM8nDNm4H5166WLc85dK7Z2DHYwo2uJ3O6G-a0F9HG0HJoe5KrIDGbbaEL72FVUXKxhWH-KTflLtUaJs4Osj46dbC1qefRh98OFJU-wdNfH07ExaRjnf7h4l1pMGc7ydxZwUFf2XK_bZcvxtQpPDbOEgWDkdokwcEztSnuoOaOnro1dAPeW3clMwWvM3MjqFRdpblMo5TbVReA2w66fUae3OdUhh14xgumbelB0Cj3irZhJJ2uEUKDNKyekMSa668GzPhUUI"/>
+</div>
+<div class="hidden sm:block">
+<p class="text-sm font-semibold text-slate-900 dark:text-slate-50">Marcus Thorne</p>
+<p class="text-[10px] text-slate-500 font-label">Tier: Premium Partner</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-6 pb-20 px-8 max-w-full mx-auto min-h-screen">
+<div class="max-w-7xl mx-auto space-y-12">
+<!-- Welcome Hero -->
+<section class="flex flex-col md:flex-row justify-between items-end gap-6 pb-4">
+<div>
+<h1 class="font-headline text-4xl font-extrabold tracking-tight text-primary mb-2">Welcome back, Marcus.</h1>
+<p class="text-on-surface-variant max-w-lg leading-relaxed">Your venture production pipeline is operating at peak efficiency. You have <span class="text-secondary font-semibold">2 pending approvals</span> for the Neptune project.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-3 rounded-xl border border-outline-variant/30 text-sm font-semibold text-primary hover:bg-surface-container-low transition-all">Download Report</button>
+<button class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary text-sm font-semibold shadow-lg active:scale-95 transition-all">New Project</button>
+</div>
+</section>
+<!-- Stat Grid (Architectural Layering) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="premium-card bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 group hover:border-secondary/20 transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-secondary-fixed rounded-xl text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+</div>
+<span class="font-label text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-on-surface-variant text-xs font-label uppercase tracking-widest mb-1">Active Projects</p>
+<h3 class="font-headline text-3xl font-bold text-primary">08</h3>
+<div class="mt-4 w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-3/4"></div>
+</div>
+</div>
+<div class="premium-card bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 group hover:border-secondary/20 transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-tertiary-fixed rounded-xl text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
+</div>
+<span class="font-label text-[10px] bg-surface-container-high text-on-surface-variant px-2 py-1 rounded-full">Target: 95%</span>
+</div>
+<p class="text-on-surface-variant text-xs font-label uppercase tracking-widest mb-1">Completion Rate</p>
+<h3 class="font-headline text-3xl font-bold text-primary">92.4%</h3>
+<div class="mt-4 flex gap-1">
+<div class="h-1 flex-1 bg-secondary rounded-full"></div>
+<div class="h-1 flex-1 bg-secondary rounded-full"></div>
+<div class="h-1 flex-1 bg-secondary rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-high rounded-full"></div>
+</div>
+</div>
+<div class="premium-card bg-primary text-on-primary p-6 rounded-2xl shadow-xl transition-all duration-300 relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-secondary/20 blur-3xl rounded-full"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="p-3 bg-white/10 rounded-xl">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+</div>
+<p class="text-on-primary/60 text-xs font-label uppercase tracking-widest mb-1 relative z-10">Next Milestone</p>
+<h3 class="font-headline text-xl font-bold mb-1 relative z-10">Neptune SaaS MVP</h3>
+<p class="text-secondary-fixed text-sm relative z-10 font-medium">In 4 Days (Nov 24)</p>
+</div>
+</section>
+<!-- Projects & Activity (Bento Grid Style) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Project List (8 cols) -->
+<div class="lg:col-span-8 space-y-6">
+<div class="flex justify-between items-center">
+<h2 class="font-headline text-xl font-bold text-primary">Active Ventures</h2>
+<button class="text-secondary text-sm font-semibold hover:underline underline-offset-4 transition-all">View All</button>
+</div>
+<div class="space-y-4">
+<!-- Project Card 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/10 hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center gap-6 group">
+<div class="w-16 h-16 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img alt="Project A" data-alt="high-tech abstract interface with data visualization and deep blue neon highlights on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjLv4Y3YjfGq0gxL_yxc1MSCZ4vbgUErfRk4rAtkT2596HB-cS1WO5WzU1qAuaKcMKRnVltyjyg1Hmm6n-gIS9TIZVrMg9gfI0m_TxvaQJOCk06g7dBvj_GGjHkVw27b14w2hH2uPZTXJRlHArQD4vDml35SoUvzLO2vlymJO544FAoA22gKrVFg3x6EhvbXlp6SC5-VFocGoMuPzpMEiVVz6K9uzcRDGw6qyqkhBJAhIC7QenHWSfWxBWKHiyiApP1INjUkC-l6E"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-bold text-slate-900 group-hover:text-secondary transition-colors">Quantum Infrastructure</h4>
+<span class="font-label text-[10px] bg-secondary/10 text-secondary px-2 py-0.5 rounded">LIVE</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Scale-ready cloud infrastructure for financial services.</p>
+</div>
+<div class="flex flex-row md:flex-col items-start md:items-end gap-1 shrink-0">
+<span class="font-label text-[10px] text-on-surface-variant uppercase">Market Cap</span>
+<span class="font-bold text-primary">$4.2M</span>
+</div>
+<div class="shrink-0">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Project Card 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/10 hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center gap-6 group">
+<div class="w-16 h-16 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img alt="Project B" data-alt="modern minimalist office building exterior with glass facade reflecting a soft blue sky at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQOml17t3wN3NOnYH1hMYNChEh4P0-vKQyfrk1F8TrV9AhWRTW8x5TaseuAE2-6AhyJJstREgDTnRy-mqOaORmT3CaNU8wvYpxjBoONzfvB7Qy9ponVrlvXjdeLy6prdxQfkhJGUwX7MWpir55-zgW9HBdkLPZgHOsJ1wjKwLjULl543h1eGiXEy8_H_IJYCdkDd-62u7x4rLtFHb5jSAM9ga_gY7Kf2Vln7anPpTF98LX9DoQzv_5Z0MeNRwdLAi7b7jP383PbGU"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-bold text-slate-900 group-hover:text-secondary transition-colors">Aether Marketplace</h4>
+<span class="font-label text-[10px] bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded uppercase">In Progress</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Decentralized asset trading platform for creative IP.</p>
+</div>
+<div class="flex flex-row md:flex-col items-start md:items-end gap-1 shrink-0">
+<span class="font-label text-[10px] text-on-surface-variant uppercase">Phase</span>
+<span class="font-bold text-primary">BETA-2</span>
+</div>
+<div class="shrink-0">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Project Card 3 -->
+<div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/10 hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center gap-6 group">
+<div class="w-16 h-16 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img alt="Project C" data-alt="clean minimal data charts and graphs on a laptop screen with warm afternoon sunlight casting long shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPycV8OOjbQ1AhUgUiTebgjSEbEra8ZPdIUmRbF7_r3I6X5mXlNRYxf9FJQch1tL5JmW9E0dQPL4UpC59g5fhvl8615PkndE0zRcG_TuiJD35Rs8QFerW6-2ku4wQUInj_my2cicgp66wTIIy52fFBqCQsQFNAvTRN7TFBEj0ZYlXnqj8rIruwdYCGAKu8LqFIfLIOoO39aGUdHkoH78GjXTTt2_2Mj9bPkC4EGK6-bo3pXOhzZB9B5U04h6R2tMV82UQaDkfVgVk"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-bold text-slate-900 group-hover:text-secondary transition-colors">Nexus Analytics</h4>
+<span class="font-label text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded">STAGING</span>
+</div>
+<p class="text-sm text-on-surface-variant line-clamp-1">Real-time behavior tracking for enterprise e-commerce.</p>
+</div>
+<div class="flex flex-row md:flex-col items-start md:items-end gap-1 shrink-0">
+<span class="font-label text-[10px] text-on-surface-variant uppercase">Deployment</span>
+<span class="font-bold text-primary">78% Done</span>
+</div>
+<div class="shrink-0">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Feed (4 cols) -->
+<div class="lg:col-span-4 bg-surface-container-low p-8 rounded-2xl">
+<h2 class="font-headline text-xl font-bold text-primary mb-8">System Activity</h2>
+<div class="relative space-y-8">
+<div class="absolute left-3 top-2 bottom-2 w-px bg-outline-variant/30"></div>
+<!-- Timeline Item 1 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary flex items-center justify-center border-4 border-surface-container-low">
+<span class="material-symbols-outlined text-[12px] text-white" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<p class="text-xs font-label text-on-surface-variant uppercase mb-1">2 hours ago</p>
+<h5 class="font-semibold text-sm text-primary">Deployment Successful</h5>
+<p class="text-xs text-on-surface-variant">Quantum Infrastructure v2.4.1 is now live across all nodes.</p>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center border-4 border-surface-container-low">
+<span class="material-symbols-outlined text-[12px] text-white">edit</span>
+</div>
+<p class="text-xs font-label text-on-surface-variant uppercase mb-1">5 hours ago</p>
+<h5 class="font-semibold text-sm text-primary">Contract Signed</h5>
+<p class="text-xs text-on-surface-variant">Partner agreement for Aether Marketplace finalized by legal team.</p>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center border-4 border-surface-container-low">
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">comment</span>
+</div>
+<p class="text-xs font-label text-on-surface-variant uppercase mb-1">Yesterday</p>
+<h5 class="font-semibold text-sm text-primary">New Comment</h5>
+<p class="text-xs text-on-surface-variant">Sarah Jenkins left 4 notes on the Nexus UI design specs.</p>
+</div>
+<!-- Timeline Item 4 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center border-4 border-surface-container-low">
+<span class="material-symbols-outlined text-[12px] text-white" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<p class="text-xs font-label text-on-surface-variant uppercase mb-1">Nov 21, 2024</p>
+<h5 class="font-semibold text-sm text-primary">Funds Released</h5>
+<p class="text-xs text-on-surface-variant">Seed series tranche A released for Quantum Infrastructure.</p>
+</div>
+</div>
+<button class="w-full mt-10 py-3 rounded-xl border border-outline-variant text-[11px] font-label uppercase tracking-widest text-on-surface-variant hover:bg-surface transition-all">View Complete Logs</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Component (Execution of JSON Commands) -->
+<footer class="w-full border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 md:pl-64">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-16 w-full max-w-7xl mx-auto font-['JetBrains_Mono'] text-[10px] uppercase tracking-widest text-slate-500">
+<div>
+<p class="font-bold text-slate-900 dark:text-slate-50 mb-6">Aries Ventures</p>
+<p class="normal-case tracking-normal text-sm font-['Inter'] leading-relaxed">The architectural standard for venture production and institutional growth management.</p>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-50 font-bold mb-6">Links</p>
+<ul class="space-y-4">
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">Home</a></li>
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">How It Works</a></li>
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">Services</a></li>
+</ul>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-50 font-bold mb-6">Contact</p>
+<ul class="space-y-4">
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">Support Center</a></li>
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">System Status</a></li>
+<li class="text-emerald-500">System Status: Operational</li>
+</ul>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-50 font-bold mb-6">Legal</p>
+<ul class="space-y-4">
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-slate-800 dark:hover:text-slate-200 underline underline-offset-4 transition-opacity duration-200" href="#">Terms of Service</a></li>
+<li>© 2024 Aries Ventures. All rights reserved.</li>
+</ul>
+</div>
+</div>
+</footer>
+</body></html>

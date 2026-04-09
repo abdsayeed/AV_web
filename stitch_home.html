@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aries Ventures | Digital Architects</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#131b2e",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "on-primary-container": "#7c839b",
+                    "tertiary-container": "#271901",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-variant": "#e0e3e5",
+                    "on-tertiary-container": "#98805d",
+                    "on-secondary-fixed": "#00174b",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#000000",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "surface-tint": "#565e74",
+                    "surface-container-high": "#e6e8ea",
+                    "on-background": "#191c1e",
+                    "background": "#f7f9fb",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface-container": "#eceef0",
+                    "surface-dim": "#d8dadc",
+                    "surface-container-low": "#f2f4f6",
+                    "on-secondary-container": "#fefcff",
+                    "secondary-container": "#316bf3",
+                    "outline": "#76777d",
+                    "surface": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "on-surface-variant": "#45464d",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#191c1e",
+                    "tertiary-fixed": "#fcdeb5",
+                    "surface-bright": "#f7f9fb",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "on-tertiary-fixed": "#271901",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "inverse-primary": "#bec6e0",
+                    "primary-container": "#131b2e",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary": "#0051d5",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "primary": "#000000",
+                    "secondary-fixed": "#dbe1ff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "primary-fixed-dim": "#bec6e0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .cinematic-reveal { opacity: 0; transform: translateY(20px); animation: reveal 0.8s ease-out forwards; }
+        @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+        .grid-overlay { background-image: radial-gradient(#c6c6cd 0.5px, transparent 0.5px); background-size: 32px 32px; }
+        .glass-panel { backdrop-filter: blur(24px); background: rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top Navigation Shell -->
+<nav class="fixed top-0 w-full z-50 bg-transparent backdrop-blur-xl transition-all duration-500 px-8 py-4">
+<div class="flex justify-between items-center w-full max-w-screen-2xl mx-auto">
+<div class="text-xl font-bold text-slate-900 dark:text-white tracking-tighter Plus Jakarta Sans font-medium tracking-tight">
+                Aries Ventures
+            </div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-600 transition-colors duration-300" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors duration-300" href="#how-it-works">How It Works</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors duration-300" href="#services">Services</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors duration-300" href="#clients">Clients</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors duration-300" href="#templates">Templates</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors duration-300" href="#team">Team</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900">Login</button>
+<button class="px-6 py-2.5 bg-gradient-to-r from-secondary to-secondary-container text-white rounded-full text-sm font-bold shadow-lg shadow-secondary/20 active:scale-95 transition-transform">Register</button>
+</div>
+</div>
+</nav>
+<main class="relative overflow-hidden">
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-20 grid-overlay">
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-secondary-fixed/30 blur-[120px]"></div>
+<div class="absolute bottom-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary-fixed/20 blur-[120px]"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="cinematic-reveal" style="animation-delay: 0.1s;">
+<h1 class="text-6xl md:text-8xl font-extrabold leading-[1.05] tracking-tighter text-on-surface mb-8">
+                        Websites that grow <br/> <span class="text-secondary">local businesses.</span>
+</h1>
+<p class="text-xl text-on-surface-variant max-w-lg mb-12 leading-relaxed">
+                        We don't just build sites; we architect digital revenue engines. High-converting frameworks designed specifically for the modern local economy.
+                    </p>
+<div class="flex flex-wrap gap-6">
+<button class="px-10 py-5 bg-gradient-to-r from-secondary to-secondary-container text-white rounded-xl text-lg font-bold shadow-2xl shadow-secondary/30 hover:scale-105 active:scale-95 transition-all">
+                            Get Your Website
+                        </button>
+<button class="px-10 py-5 bg-transparent border-2 border-outline-variant/20 hover:border-secondary/50 text-on-surface rounded-xl text-lg font-bold transition-all">
+                            View Templates
+                        </button>
+</div>
+</div>
+<div class="relative h-[600px] hidden lg:block cinematic-reveal" style="animation-delay: 0.3s;">
+<div class="absolute top-0 right-0 w-[400px] h-[500px] rounded-xl overflow-hidden shadow-2xl rotate-3 translate-x-12 hover:rotate-0 transition-all duration-700">
+<img class="w-full h-full object-cover" data-alt="clean minimal web dashboard UI with dark navy accents and vibrant data charts on a soft grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCehMVLpch9afBnKMZwC4xkGWalQlRueenGvVY8zSJad93xl43yll-crG109SkGeTrzKVHwzIIM9GfNAnTMVl7G7-oQwzVNwEf2YqgmFlnZ6_3jl1Kkt6xY8PQeF0aNV8JK8zWJmWvQeboCdsZezZtGdD5r37Vufziyl_CWT1ess_Y_WXEgxv1_afd9euhFWFv_i3UNTsWInWDg179J1AC9i5V3kgsQv8smKaDXItlVvMRvzfEvK4Yh1LHvF51IwnoCZMEJ2gDvc8s"/>
+</div>
+<div class="absolute bottom-10 left-0 w-[350px] h-[450px] rounded-xl overflow-hidden shadow-2xl -rotate-6 -translate-x-12 hover:rotate-0 transition-all duration-700 z-20">
+<img class="w-full h-full object-cover" data-alt="high-end editorial style mobile app mockup showing sleek typography and layered glassmorphism components" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfYDLCdbgg3vgODgKMREH2xrdigaDH2cX0QQgcqD7fDKD9-8aOWshCDqSici0Xg7HvBjv343JarysaHg3dxYL2sgHurkdWuEy0IMnAIti7gyEixbs9FALtXRP_iCEALuN49qqt8EdtGt8yZm9GEPAbwszn9nk7FultlYcvZWeQyxwcEnGTQkToaW-GD5qqJPm6u54m7LRa2Ify33EC6wyCm3mLiUhK7PrEFy_l8rTw7BZE7HdRv9yUpURb1GT7SDDSgT6b5QCD70E"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Strip -->
+<section class="py-12 bg-surface-container-low border-y border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-8 flex flex-wrap justify-between gap-8">
+<div class="flex flex-col">
+<span class="text-4xl font-extrabold text-secondary">450+</span>
+<span class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Sites Built</span>
+</div>
+<div class="flex flex-col">
+<span class="text-4xl font-extrabold text-secondary">2.4x</span>
+<span class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Avg. ROI Lift</span>
+</div>
+<div class="flex flex-col">
+<span class="text-4xl font-extrabold text-secondary">15ms</span>
+<span class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Load Speed</span>
+</div>
+<div class="flex flex-col">
+<span class="text-4xl font-extrabold text-secondary">99.9%</span>
+<span class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Uptime Rate</span>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-32 bg-surface" id="how-it-works">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-24">
+<span class="text-secondary font-bold tracking-widest text-sm uppercase">The Blueprint</span>
+<h2 class="text-5xl font-bold mt-4">How It Works</h2>
+</div>
+<div class="relative flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="hidden md:block absolute top-[50px] left-0 w-full h-[2px] bg-outline-variant/20 z-0"></div>
+<div class="relative z-10 flex-1 group">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center mb-8 border-4 border-surface shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500">
+<span class="material-symbols-outlined text-4xl">search</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Discovery</h3>
+<p class="text-on-surface-variant leading-relaxed">We analyze your local market, competitors, and growth opportunities.</p>
+</div>
+<div class="relative z-10 flex-1 group">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center mb-8 border-4 border-surface shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500">
+<span class="material-symbols-outlined text-4xl">architecture</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Design</h3>
+<p class="text-on-surface-variant leading-relaxed">Art-directed templates customized to your brand's unique personality.</p>
+</div>
+<div class="relative z-10 flex-1 group">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center mb-8 border-4 border-surface shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500">
+<span class="material-symbols-outlined text-4xl">rocket_launch</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Launch</h3>
+<p class="text-on-surface-variant leading-relaxed">Performance-optimized deployment with local SEO baked in from day one.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Services -->
+<section class="py-32 bg-surface-container-low" id="services">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+<div class="max-w-2xl">
+<span class="text-secondary font-bold tracking-widest text-sm uppercase">Specializations</span>
+<h2 class="text-5xl font-bold mt-4">Industry Focused Design</h2>
+</div>
+<button class="text-secondary font-bold flex items-center gap-2 hover:underline">
+                        Explore all sectors <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Service Cards -->
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6">content_cut</span>
+<h3 class="text-2xl font-bold mb-4">Barbershops</h3>
+<p class="text-on-surface-variant">Seamless booking integrations and stylist galleries that convert visitors into regulars.</p>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6">local_cafe</span>
+<h3 class="text-2xl font-bold mb-4">Cafes</h3>
+<p class="text-on-surface-variant">Menu-first designs with local delivery integration and stunning food photography.</p>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6">home_repair_service</span>
+<h3 class="text-2xl font-bold mb-4">Home Services</h3>
+<p class="text-on-surface-variant">Focus on trust signals, lead capture forms, and before/after project showcases.</p>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6">nature_people</span>
+<h3 class="text-2xl font-bold mb-4">Landscapers</h3>
+<p class="text-on-surface-variant">Visual-heavy portfolios highlighting seasonal transformations and estimate requests.</p>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6">shopping_bag</span>
+<h3 class="text-2xl font-bold mb-4">Retail</h3>
+<p class="text-on-surface-variant">Boutique e-commerce experiences that feel as premium as your physical store.</p>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6">badge</span>
+<h3 class="text-202 text-2xl font-bold mb-4">Professional Services</h3>
+<p class="text-on-surface-variant">Clean, authoritative layouts for lawyers, accountants, and consultants.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Template Gallery -->
+<section class="py-32 bg-surface" id="templates">
+<div class="max-w-7xl mx-auto px-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
+<div>
+<span class="text-secondary font-bold tracking-widest text-sm uppercase">The Collection</span>
+<h2 class="text-6xl font-bold mt-4 leading-tight">Masterpieces <br/> in every pixel.</h2>
+<p class="text-xl text-on-surface-variant mt-8 max-w-lg">Our templates are not off-the-shelf. They are bespoke foundations designed to be extended and evolved.</p>
+</div>
+<div class="grid grid-cols-1 gap-12">
+<!-- Template Card 1 -->
+<div class="relative group rounded-xl overflow-hidden h-[500px] shadow-2xl">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" data-alt="luxury interior architecture website template with smooth scrolling and high contrast serif typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOsdAXE97Aswy7vyvrKd2eCyZ8tnWiZkU2oJAzwuSKqEGutUdrBd6Q_i5HSGlxc2n1HY7f_424EGrHJTBIOZaATssGQzCRftK6mb0-HT9roQ52dbK3OJxmMP-jeQmHAVnt3y5d0t6kRxLqn45sjUUfis57_3pSIG2geBAt9LGY-mK1AQegFB_NoxUUROxFc_2bKvoWyIVd5bVcexaC0JHgeQWHT10ISWh4j8JKWI_Br_5AUrSWcjgPA4TOv1NmKkCp6jBvAf1LcBc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-tertiary/90 via-tertiary/20 to-transparent p-12 flex flex-col justify-end">
+<span class="bg-secondary text-white px-4 py-1 rounded-full text-xs font-bold w-fit mb-4">POPULAR</span>
+<h3 class="text-white text-3xl font-bold">The Obsidian Framework</h3>
+</div>
+</div>
+<!-- Template Card 2 -->
+<div class="relative group rounded-xl overflow-hidden h-[500px] shadow-2xl">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" data-alt="minimalist organic cafe website template with soft earth tones and hand-drawn UI elements" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1n-_1-1A_t9_zzEOm2qCr_L3fKOjtS_XoD_lkMqVoTxQ6i8T7-ylw4rdVt1_ud_dfphmRqu465HntGc6I8VsVC8SAVlB61oLzFz3PQegShGCD2uUj0touCRt0vExxXdP9jNA9EhmoRqj9TUNvJQQEw4w1blNe6jDMCyRoxyBPxlky-1BF8g8WyBpQ4YjlFQfMlH5Wh9BMMVf-Q2H2-jLesSlXH0WeN4cQyk1k_vzKPxotkNaroeuTXLg_NXXAndgq6408YgFjlro"/>
+<div class="absolute inset-0 bg-gradient-to-t from-tertiary/90 via-tertiary/20 to-transparent p-12 flex flex-col justify-end">
+<span class="bg-primary-fixed text-on-primary-fixed px-4 py-1 rounded-full text-xs font-bold w-fit mb-4">NEW</span>
+<h3 class="text-white text-3xl font-bold">Ethereal Bloom</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Team -->
+<section class="py-32 bg-surface-container-low" id="team">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-24">
+<span class="text-secondary font-bold tracking-widest text-sm uppercase">The Architects</span>
+<h2 class="text-5xl font-bold mt-4">Meet the Team</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Team Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl hover:-translate-y-4 transition-all duration-500">
+<div class="h-80 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional male founder portrait with confident smile, soft natural office lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU8Q2ZJDpc9OKzfyp_R4Yezd_QwJo_NRY-0EdJmN2KCCBfLbUamO7R4YnY09Hg2oUqwZ4mk8dxs6eojjWkVyg_KzHcdIuPlCmHpULV1JUiarqB72bcwtmmx76xeci0d-SIlKFAQWc5EZ6OdPlLcHf76fLzNIwkDTyX3RyfKyhm-mQwX4jpLGDLFqUQGBzfAjJs0ceeauNeCquotCmByBukWsUxBq-MUS1_kPBeMrmRDnJ5bq8xDBCUFa9T3WIyhUM5ELqYQfrkJ1s"/>
+</div>
+<div class="p-8">
+<h3 class="text-2xl font-bold mb-1">Alex Aries</h3>
+<p class="text-secondary font-semibold mb-4">Founder &amp; Lead Architect</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Visionary focused on the intersection of commerce and digital craftsmanship.</p>
+</div>
+</div>
+<!-- Team Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl hover:-translate-y-4 transition-all duration-500">
+<div class="h-80 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="female creative director with stylish glasses, focused and professional studio portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB37wo2gZjJL-1V34bL9CNcouOxi9otgfqa7SGncs6jSM5IdkvVfEtOLMapgDV_0i6IGOZ5pHbpMolwTtF2KnvKzg71MnDflhL1p_ibAqckhLhCJ7Y8k779tVTpHOMr_eA_BVE7zBX3OnqnD7EW8FAY_3bxNKQpYD4ptjpsh5xIZ5gdKXgkKmLSFcOOmyOg1Fq8AfKotgM4RHdPf8RMZlOF5NFjLKLLN-UoPI2STj1KZrkmiSjTeOg-VP3YiUe-axwA1i3hC7VEClg"/>
+</div>
+<div class="p-8">
+<h3 class="text-2xl font-bold mb-1">Sarah Thorne</h3>
+<p class="text-secondary font-semibold mb-4">Creative Director</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Award-winning designer ensuring every project meets editorial standards.</p>
+</div>
+</div>
+<!-- Team Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl hover:-translate-y-4 transition-all duration-500">
+<div class="h-80 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="male technical director portrait in casual attire, blurred tech office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-oHknAatm6hTd8D7aju8RNoZNQvWFhQggcHI7yBBzbozTtS1w8r-27MktIf31v-7iTPn-VbY5leAax2oF6dAue__nqLq5G_ddMc5OZsAEEwWo7C4mQh81ORuJ6JB26MZ7H0WVmHgZ3kdy071gLmqD7fTCERPXX2XPXuK-PN0lhp5XNldHlNnHmyW8SVz8T652Li1dNwkYLikG3iEJcy4roGv0-jXATZzE5BC7BlL-icyB8wWmFT_cKINkS_SCA5Ih2hA-7Ccpwtw"/>
+</div>
+<div class="p-8">
+<h3 class="text-2xl font-bold mb-1">Marcus Chen</h3>
+<p class="text-secondary font-semibold mb-4">Technical Lead</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Performance wizard obsessing over load speeds and technical SEO.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-32 bg-surface" id="clients">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col items-center text-center mb-20">
+<div class="flex gap-1 mb-6 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<h2 class="text-4xl font-bold">Trusted by 400+ local legends.</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-12 rounded-xl italic text-xl text-on-surface-variant relative">
+                        "Aries Ventures didn't just build us a website; they built us a digital storefront that actually rings the register. Our bookings are up 40%."
+                        <div class="mt-8 not-italic flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-slate-300"></div>
+<div>
+<p class="font-bold text-on-surface text-base">James Miller</p>
+<p class="text-sm">Owner, The Sharp Blade Barbers</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-12 rounded-xl italic text-xl text-on-surface-variant relative">
+                        "The speed and elegance of our new site reflect exactly what we offer in our cafe. It's been a game changer for our online orders."
+                        <div class="mt-8 not-italic flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-slate-300"></div>
+<div>
+<p class="font-bold text-on-surface text-base">Elena Rossi</p>
+<p class="text-sm">Founder, Bloom &amp; Brew</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact / Final Conversion -->
+<section class="py-32 bg-surface grid-overlay">
+<div class="max-w-5xl mx-auto px-8">
+<div class="bg-white rounded-xl shadow-2xl p-12 lg:p-20 relative overflow-hidden">
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="text-center mb-16">
+<h2 class="text-5xl font-bold mb-6 tracking-tighter">Let's Build Something</h2>
+<p class="text-on-surface-variant text-lg">Ready to transform your local presence? Complete the briefing below.</p>
+</div>
+<form class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Full Name</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary focus:bg-white transition-all outline-none" placeholder="John Doe" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Business Name</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary focus:bg-white transition-all outline-none" placeholder="The Local Shop" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Service Area</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary focus:bg-white transition-all outline-none">
+<option>Barbershop</option>
+<option>Cafe / Restaurant</option>
+<option>Home Services</option>
+<option>Professional Services</option>
+<option>Other</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Project Brief</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-secondary focus:bg-white transition-all outline-none" placeholder="Tell us about your goals..." rows="4"></textarea>
+</div>
+<button class="w-full py-6 bg-gradient-to-r from-secondary to-secondary-container text-white rounded-xl text-xl font-bold shadow-2xl shadow-secondary/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                Send Brief
+                            </button>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-slate-50 dark:bg-slate-900 full-width py-12 px-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-7xl mx-auto Plus Jakarta Sans text-sm">
+<div class="col-span-2">
+<div class="text-lg font-bold text-slate-900 dark:text-white mb-6">Aries Ventures</div>
+<p class="text-slate-500 dark:text-slate-400 max-w-sm mb-8 leading-relaxed">
+                    A cinematic approach to local business websites. High performance. Editorial design. Revenue driven.
+                </p>
+<div class="text-slate-500 dark:text-slate-400">© 2024 Aries Ventures. Operational.</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-slate-900 dark:text-white">Platform</h4>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Cookie Policy</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-slate-900 dark:text-white">Support</h4>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" href="#">System Status</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Contact Support</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Documentation</a>
+</div>
+</div>
+</footer>
+</body></html>

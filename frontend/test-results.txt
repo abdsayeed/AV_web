@@ -1,0 +1,169 @@
+
+> aries-ventures@1.0.0 test
+> ng test --watch=false --browsers=ChromeHeadless
+
+09 04 2026 20:48:23.260:INFO [karma-server]: Karma v6.4.4 server started at http://localhost:9876/
+09 04 2026 20:48:23.260:INFO [launcher]: Launching browsers ChromeHeadless with concurrency unlimited
+09 04 2026 20:48:23.261:INFO [launcher]: Starting browser ChromeHeadless
+09 04 2026 20:48:24.431:INFO [Chrome Headless 146.0.0.0 (Mac OS 10.15.7)]: Connected on socket UOpEp5tFKkTOcyDTAAAB with id 33590926
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 0 of 109 SUCCESS (0 secs / 0 secs)
+[1A[2KERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 0, statusText: 'Unknown Error', url: 'http://localhost:8000/api/auth/login/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/login/: 0 ', error: ErrorEvent{isTrusted: false}}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 0 of 109 SUCCESS (0 secs / 0 secs)
+ERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 0, statusText: 'Unknown Error', url: 'http://localhost:8000/api/auth/login/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/login/: 0 ', error: ErrorEvent{isTrusted: false}}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 1 of 109 SUCCESS (0 secs / 0.008 secs)
+[1A[2KERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 400, statusText: 'Bad Request', url: 'http://localhost:8000/api/auth/register/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/register/: 400 Bad Request', error: Object{errors: Object{email: ..., password: ...}}}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 1 of 109 SUCCESS (0 secs / 0.008 secs)
+ERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 400, statusText: 'Bad Request', url: 'http://localhost:8000/api/auth/register/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/register/: 400 Bad Request', error: Object{errors: Object{email: ..., password: ...}}}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 2 of 109 SUCCESS (0 secs / 0.009 secs)
+[1A[2KERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 500, statusText: 'Internal Server Error', url: 'http://localhost:8000/api/auth/login/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/login/: 500 Internal Server Error', error: Object{message: 'Server error'}}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 2 of 109 SUCCESS (0 secs / 0.009 secs)
+ERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 500, statusText: 'Internal Server Error', url: 'http://localhost:8000/api/auth/login/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/login/: 500 Internal Server Error', error: Object{message: 'Server error'}}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 3 of 109 SUCCESS (0 secs / 0.01 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 4 of 109 SUCCESS (0 secs / 0.011 secs)
+[1A[2KERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 401, statusText: 'Unauthorized', url: 'http://localhost:8000/api/auth/login/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/login/: 401 Unauthorized', error: Object{message: 'Invalid credentials'}}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 4 of 109 SUCCESS (0 secs / 0.011 secs)
+ERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 401, statusText: 'Unauthorized', url: 'http://localhost:8000/api/auth/login/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/login/: 401 Unauthorized', error: Object{message: 'Invalid credentials'}}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 5 of 109 SUCCESS (0 secs / 0.012 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 6 of 109 SUCCESS (0 secs / 0.013 secs)
+[1A[2KERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 400, statusText: 'Bad Request', url: 'http://localhost:8000/api/auth/register/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/register/: 400 Bad Request', error: Object{message: 'Email already exists'}}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 6 of 109 SUCCESS (0 secs / 0.013 secs)
+ERROR: 'API Error:', HttpErrorResponse{headers: HttpHeaders{normalizedNames: Map{}, lazyUpdate: null, headers: Map{}}, status: 400, statusText: 'Bad Request', url: 'http://localhost:8000/api/auth/register/', ok: false, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8000/api/auth/register/: 400 Bad Request', error: Object{message: 'Email already exists'}}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 7 of 109 SUCCESS (0 secs / 0.013 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 8 of 109 SUCCESS (0 secs / 0.014 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 9 of 109 SUCCESS (0 secs / 0.015 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 10 of 109 SUCCESS (0 secs / 0.015 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 11 of 109 SUCCESS (0 secs / 0.015 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 12 of 109 SUCCESS (0 secs / 0.016 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 13 of 109 SUCCESS (0 secs / 0.318 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 14 of 109 SUCCESS (0 secs / 0.621 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 15 of 109 SUCCESS (0 secs / 0.929 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 16 of 109 SUCCESS (0 secs / 0.93 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 17 of 109 SUCCESS (0 secs / 0.931 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 18 of 109 SUCCESS (0 secs / 0.932 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 19 of 109 SUCCESS (0 secs / 0.933 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 20 of 109 SUCCESS (0 secs / 0.933 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 21 of 109 SUCCESS (0 secs / 0.934 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 22 of 109 SUCCESS (0 secs / 0.935 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 23 of 109 SUCCESS (0 secs / 0.936 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 24 of 109 SUCCESS (0 secs / 0.936 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 25 of 109 SUCCESS (0 secs / 0.937 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 26 of 109 SUCCESS (0 secs / 0.937 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 27 of 109 SUCCESS (0 secs / 0.938 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 28 of 109 SUCCESS (0 secs / 0.938 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 29 of 109 SUCCESS (0 secs / 0.939 secs)
+[1A[2KWARN: 'Spec 'AuthService Logout should navigate to home on logout' has no expectations.'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 29 of 109 SUCCESS (0 secs / 0.939 secs)
+WARN: 'Spec 'AuthService Logout should navigate to home on logout' has no expectations.'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 30 of 109 SUCCESS (0 secs / 0.939 secs)
+[1A[2KLOG: 'API logout successful'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 30 of 109 SUCCESS (0 secs / 0.939 secs)
+LOG: 'API logout successful'
+[1A[2KWARN: 'Spec 'AuthService Logout should clear localStorage on logout' has no expectations.'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 30 of 109 SUCCESS (0 secs / 0.939 secs)
+WARN: 'Spec 'AuthService Logout should clear localStorage on logout' has no expectations.'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 31 of 109 SUCCESS (0 secs / 0.94 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 32 of 109 SUCCESS (0 secs / 0.941 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 33 of 109 SUCCESS (0 secs / 0.941 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 34 of 109 SUCCESS (0 secs / 0.942 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 35 of 109 SUCCESS (0 secs / 0.942 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 36 of 109 SUCCESS (0 secs / 0.988 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 37 of 109 SUCCESS (0 secs / 0.99 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 38 of 109 SUCCESS (0 secs / 0.992 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 39 of 109 SUCCESS (0 secs / 0.994 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 40 of 109 SUCCESS (0 secs / 0.995 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 41 of 109 SUCCESS (0 secs / 0.996 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 42 of 109 SUCCESS (0 secs / 0.998 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 43 of 109 SUCCESS (0 secs / 1 sec)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 44 of 109 SUCCESS (0 secs / 1.002 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 45 of 109 SUCCESS (0 secs / 1.003 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 46 of 109 SUCCESS (0 secs / 1.004 secs)
+[1A[2KLOG: 'Registration successful'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 46 of 109 SUCCESS (0 secs / 1.004 secs)
+LOG: 'Registration successful'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 47 of 109 SUCCESS (0 secs / 1.005 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 48 of 109 SUCCESS (0 secs / 1.007 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 49 of 109 SUCCESS (0 secs / 1.008 secs)
+[1A[2KLOG: 'Registration successful'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 49 of 109 SUCCESS (0 secs / 1.008 secs)
+LOG: 'Registration successful'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 50 of 109 SUCCESS (0 secs / 1.01 secs)
+[1A[2KLOG: 'Registration successful'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 50 of 109 SUCCESS (0 secs / 1.01 secs)
+LOG: 'Registration successful'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 51 of 109 SUCCESS (0 secs / 1.011 secs)
+[1A[2KERROR: 'Registration error:', Object{message: 'Email already exists'}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 51 of 109 SUCCESS (0 secs / 1.011 secs)
+ERROR: 'Registration error:', Object{message: 'Email already exists'}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 52 of 109 SUCCESS (0 secs / 1.013 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 53 of 109 SUCCESS (0 secs / 1.014 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 54 of 109 SUCCESS (0 secs / 1.015 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 55 of 109 SUCCESS (0 secs / 1.016 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 56 of 109 SUCCESS (0 secs / 1.017 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 57 of 109 SUCCESS (0 secs / 1.018 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 58 of 109 SUCCESS (0 secs / 1.02 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 59 of 109 SUCCESS (0 secs / 1.021 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 60 of 109 SUCCESS (0 secs / 1.023 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 61 of 109 SUCCESS (0 secs / 1.024 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 62 of 109 SUCCESS (0 secs / 1.025 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 63 of 109 SUCCESS (0 secs / 1.026 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 64 of 109 SUCCESS (0 secs / 1.027 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 65 of 109 SUCCESS (0 secs / 1.027 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 66 of 109 SUCCESS (0 secs / 1.027 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 67 of 109 SUCCESS (0 secs / 1.027 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 68 of 109 SUCCESS (0 secs / 1.027 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 69 of 109 SUCCESS (0 secs / 1.027 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 70 of 109 SUCCESS (0 secs / 1.028 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 71 of 109 SUCCESS (0 secs / 1.028 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 72 of 109 SUCCESS (0 secs / 1.028 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 73 of 109 SUCCESS (0 secs / 1.028 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 74 of 109 SUCCESS (0 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 75 of 109 SUCCESS (0 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 76 of 109 SUCCESS (0 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7) ERROR
+  An error was thrown in afterAll
+  Expected spy Router.navigate to have been called with:
+    [ [ '/' ] ]
+  but it was never called.
+      at <Jasmine>
+      at apply (http://localhost:9876/_karma_webpack_/webpack:/src/app/core/services/auth.service.spec.ts:171:36)
+      at apply (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:1809:37)
+      at _ZoneDelegate.invokeTask (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:402:33)
+      at ProxyZoneSpec.onInvokeTask (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2112:39)
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 76 of 109 ERROR (0 secs / 1.029 secs)
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7) ERROR
+  An error was thrown in afterAll
+  Expected spy Router.navigate to have been called with:
+    [ [ '/' ] ]
+  but it was never called.
+      at <Jasmine>
+      at apply (http://localhost:9876/_karma_webpack_/webpack:/src/app/core/services/auth.service.spec.ts:171:36)
+      at apply (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:1809:37)
+      at _ZoneDelegate.invokeTask (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:402:33)
+      at ProxyZoneSpec.onInvokeTask (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2112:39)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 76 of 109 ERROR (1.05 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 77 of 109 ERROR (1.05 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 78 of 109 ERROR (1.05 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 79 of 109 ERROR (1.05 secs / 1.029 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 80 of 109 ERROR (1.05 secs / 1.03 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 81 of 109 ERROR (1.05 secs / 1.041 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 82 of 109 ERROR (1.05 secs / 1.042 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 83 of 109 ERROR (1.05 secs / 1.044 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 84 of 109 ERROR (1.05 secs / 1.045 secs)
+[1A[2KLOG: 'Login successful'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 84 of 109 ERROR (1.05 secs / 1.045 secs)
+LOG: 'Login successful'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 85 of 109 ERROR (1.05 secs / 1.047 secs)
+[1A[2KERROR: 'Login error:', Object{message: 'Invalid credentials'}
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 85 of 109 ERROR (1.05 secs / 1.047 secs)
+ERROR: 'Login error:', Object{message: 'Invalid credentials'}
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 86 of 109 ERROR (1.05 secs / 1.048 secs)
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 87 of 109 ERROR (1.05 secs / 1.049 secs)
+[1A[2KLOG: 'Login successful'
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 87 of 109 ERROR (1.05 secs / 1.049 secs)
+LOG: 'Login successful'
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7) ERROR
+  Disconnected , because no message in 30000 ms.
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 87 of 109 DISCONNECTED (31.074 secs / 1.049 secs)
+Chrome Headless 146.0.0.0 (Mac OS 10.15.7) ERROR
+  Disconnected , because no message in 30000 ms.
+[1A[2KChrome Headless 146.0.0.0 (Mac OS 10.15.7): Executed 87 of 109 DISCONNECTED (31.074 secs / 1.049 secs)

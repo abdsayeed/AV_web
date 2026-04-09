@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://193.123.178.104/api',
+  apiUrl: 'https://api.aris-ventures.com/api',
   frontendUrl: 'https://aris-ventures.com'
 };

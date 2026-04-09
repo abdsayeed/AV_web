@@ -9,17 +9,10 @@ DEBUG = False
 # Fly.io sets FLY_APP_NAME automatically
 FLY_APP_NAME = os.environ.get('FLY_APP_NAME', '')
 
-ALLOWED_HOSTS = [
-    f'{FLY_APP_NAME}.fly.dev',
-    'av-web.fly.dev',
-    'localhost',
-    '127.0.0.1',
-]
-
-# Add any custom domain here
-CUSTOM_DOMAIN = os.environ.get('CUSTOM_DOMAIN', '')
-if CUSTOM_DOMAIN:
-    ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS',
+    f'{FLY_APP_NAME}.fly.dev,av-web.fly.dev,localhost,127.0.0.1'
+).split(',')
 
 # Database - use DATABASE_URL from fly.io postgres
 import dj_database_url

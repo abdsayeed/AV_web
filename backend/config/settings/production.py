@@ -14,7 +14,7 @@ ALLOWED_HOSTS = os.environ.get(
     f'{FLY_APP_NAME}.fly.dev,av-web.fly.dev,localhost,127.0.0.1'
 ).split(',')
 
-# Database - use DATABASE_URL from fly.io postgres
+# Database - always PostgreSQL in production
 import dj_database_url
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
@@ -26,8 +26,8 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('DB_NAME', 'aries_ventures'),
-            'USER': os.environ.get('DB_USER', 'postgres'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'USER': os.environ.get('DB_USER', 'aries_user'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', 'AV_Secure2024!'),
             'HOST': os.environ.get('DB_HOST', 'localhost'),
             'PORT': os.environ.get('DB_PORT', '5432'),
         }

@@ -111,7 +111,7 @@ export class DashboardComponent implements OnInit {
   }
 
   startNewProject() {
-    this.router.navigate(['/contact']);
+    this.router.navigate(['/onboarding']);
   }
 
   viewTemplates() {

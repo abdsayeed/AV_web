@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-[#f8f9fa]" style="font-family: 'Inter', sans-serif;">
+
+  <!-- Top bar -->
+  <div class="bg-white border-b border-[#e7e8e9] px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="assets/logo.png" alt="Aries Ventures" class="w-7 h-7 object-contain">
+      <span class="font-bold text-[#1a1c1e] text-sm" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aries Ventures</span>
+    </div>
+    <button (click)="skip()" class="text-sm text-[#75777a] hover:text-[#1a1c1e] transition-colors">
+      Skip for now
+    </button>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="h-1 bg-[#e1e3e4]">
+    <div class="h-full bg-[#1a1c1e] transition-all duration-500" [style.width.%]="progress"></div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-6 py-12">
+
+    <!-- Step indicator -->
+    <div class="flex items-center gap-2 mb-8">
+      <span class="text-sm text-[#75777a]">Step {{ currentStep }} of {{ totalSteps }}</span>
+      <div class="flex gap-1.5 ml-2">
+        <div *ngFor="let s of [1,2,3,4]"
+             class="h-1.5 w-8 rounded-full transition-all"
+             [class]="s <= currentStep ? 'bg-[#1a1c1e]' : 'bg-[#e1e3e4]'"></div>
+      </div>
+    </div>
+
+    <!-- STEP 1: Business type -->
+    <div *ngIf="currentStep === 1">
+      <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+        What type of business do you run?
+      </h1>
+      <p class="text-[#75777a] mb-8">We'll tailor your website recommendations to your industry.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+        <button *ngFor="let type of businessTypes"
+                (click)="selectBusinessType(type.id)"
+                class="flex flex-col items-center gap-3 p-5 rounded-3xl border-2 transition-all text-left"
+                [class]="data.businessType === type.id
+                  ? 'border-[#1a1c1e] bg-[#1a1c1e] text-white'
+                  : 'border-[#e1e3e4] bg-white text-[#1a1c1e] hover:border-[#c5c6ca]'">
+          <span class="material-symbols-outlined text-2xl">{{ type.icon }}</span>
+          <span class="text-sm font-semibold text-center">{{ type.label }}</span>
+        </button>
+      </div>
+
+      <button (click)="next()" [disabled]="!data.businessType"
+              class="w-full bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+        Continue
+      </button>
+    </div>
+
+    <!-- STEP 2: Goal -->
+    <div *ngIf="currentStep === 2">
+      <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+        What's your main goal?
+      </h1>
+      <p class="text-[#75777a] mb-8">This helps us focus on what matters most for your website.</p>
+
+      <div class="space-y-3 mb-8">
+        <button *ngFor="let goal of goals"
+                (click)="selectGoal(goal.id)"
+                class="w-full flex items-center gap-4 p-5 rounded-3xl border-2 transition-all"
+                [class]="data.goal === goal.id
+                  ? 'border-[#1a1c1e] bg-[#1a1c1e] text-white'
+                  : 'border-[#e1e3e4] bg-white text-[#1a1c1e] hover:border-[#c5c6ca]'">
+          <div class="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
+               [class]="data.goal === goal.id ? 'bg-white/20' : 'bg-[#f3f4f5]'">
+            <span class="material-symbols-outlined text-lg"
+                  [class]="data.goal === goal.id ? 'text-white' : 'text-[#44474a]'">{{ goal.icon }}</span>
+          </div>
+          <span class="font-semibold text-sm">{{ goal.label }}</span>
+          <span class="material-symbols-outlined ml-auto text-lg"
+                *ngIf="data.goal === goal.id">check_circle</span>
+        </button>
+      </div>
+
+      <div class="flex gap-3">
+        <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+        <button (click)="next()" [disabled]="!data.goal"
+                class="flex-2 flex-grow bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all disabled:opacity-40 disabled:cursor-not-allowed">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Features -->
+    <div *ngIf="currentStep === 3">
+      <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+        What features do you need?
+      </h1>
+      <p class="text-[#75777a] mb-8">Select everything that applies. You can always add more later.</p>
+
+      <div class="grid grid-cols-2 gap-3 mb-8">
+        <button *ngFor="let feature of featureOptions"
+                (click)="toggleFeature(feature.id)"
+                class="flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-left"
+                [class]="hasFeature(feature.id)
+                  ? 'border-[#1a1c1e] bg-[#1a1c1e] text-white'
+                  : 'border-[#e1e3e4] bg-white text-[#1a1c1e] hover:border-[#c5c6ca]'">
+          <div class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all"
+               [class]="hasFeature(feature.id) ? 'border-white bg-white' : 'border-[#c5c6ca]'">
+            <span *ngIf="hasFeature(feature.id)" class="material-symbols-outlined text-[#1a1c1e] text-sm">check</span>
+          </div>
+          <span class="text-sm font-medium">{{ feature.label }}</span>
+        </button>
+      </div>
+
+      <div class="flex gap-3">
+        <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+        <button (click)="next()"
+                class="flex-2 flex-grow bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Budget + Summary -->
+    <div *ngIf="currentStep === 4">
+      <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+        What's your budget?
+      </h1>
+      <p class="text-[#75777a] mb-8">Choose the plan that works best for your business.</p>
+
+      <div class="space-y-3 mb-8">
+        <button *ngFor="let b of budgets"
+                (click)="selectBudget(b.id)"
+                class="w-full flex items-center justify-between p-5 rounded-3xl border-2 transition-all"
+                [class]="data.budget === b.id
+                  ? 'border-[#1a1c1e] bg-[#1a1c1e] text-white'
+                  : 'border-[#e1e3e4] bg-white text-[#1a1c1e] hover:border-[#c5c6ca]'">
+          <div class="text-left">
+            <div class="font-bold text-base">{{ b.label }}</div>
+            <div class="text-sm mt-0.5" [class]="data.budget === b.id ? 'text-[#c6c6c9]' : 'text-[#75777a]'">{{ b.desc }}</div>
+          </div>
+          <span class="material-symbols-outlined text-lg" *ngIf="data.budget === b.id">check_circle</span>
+        </button>
+      </div>
+
+      <!-- Summary card -->
+      <div *ngIf="data.businessType && data.goal && data.budget" class="bg-[#f3f4f5] rounded-3xl p-6 mb-8">
+        <h3 class="font-bold text-[#1a1c1e] mb-4 text-sm" style="font-family: 'Plus Jakarta Sans', sans-serif;">Your summary</h3>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-[#75777a]">Business type</span>
+            <span class="font-medium text-[#1a1c1e] capitalize">{{ data.businessType }}</span>
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-[#75777a]">Main goal</span>
+            <span class="font-medium text-[#1a1c1e] capitalize">{{ data.goal }}</span>
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-[#75777a]">Features selected</span>
+            <span class="font-medium text-[#1a1c1e]">{{ data.features.length }}</span>
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-[#75777a]">Budget</span>
+            <span class="font-medium text-[#1a1c1e] capitalize">{{ data.budget }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+        <button (click)="finish()" [disabled]="!data.budget"
+                class="flex-2 flex-grow bg-[#0058be] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#004395] transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-base">rocket_launch</span>
+          Submit my request
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

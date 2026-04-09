@@ -108,4 +108,7 @@ frontend/dist/
 backend/dist/
 
 # Docker
-.dockerignore.kiro/settings/mcp.json
+.dockerignore
+
+# Kiro MCP config (contains API keys)
+.kiro/settings/mcp.json

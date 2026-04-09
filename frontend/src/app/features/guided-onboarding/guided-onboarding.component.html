@@ -1,0 +1,379 @@
+<div class="min-h-screen bg-[#f8f9fa] flex flex-col" style="font-family: 'Inter', sans-serif;">
+
+  <!-- Header -->
+  <div class="bg-white border-b border-[#e7e8e9] px-6 py-4 flex items-center justify-between flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <img src="assets/logo.png" alt="Aries Ventures" class="w-7 h-7 object-contain">
+      <span class="font-bold text-[#1a1c1e] text-sm" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aries Ventures</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-1">
+      <ng-container *ngFor="let label of stepLabels; let i = index">
+        <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+               [class]="(i + 1) === currentStep ? 'bg-[#1a1c1e] text-white' :
+                        (i + 1) < currentStep ? 'text-[#0058be]' : 'text-[#75777a]'">
+            <span *ngIf="(i + 1) < currentStep" class="material-symbols-outlined text-xs">check</span>
+            <span>{{ label }}</span>
+          </div>
+          <span *ngIf="i < stepLabels.length - 1" class="text-[#e1e3e4] text-xs">›</span>
+        </div>
+      </ng-container>
+    </div>
+    <button (click)="skip()" class="text-sm text-[#75777a] hover:text-[#1a1c1e] transition-colors">Skip</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="h-0.5 bg-[#e1e3e4]">
+    <div class="h-full bg-[#0058be] transition-all duration-500" [style.width.%]="progress"></div>
+  </div>
+
+  <!-- Main layout: sidebar + content -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- Left sidebar — preview -->
+    <div class="hidden lg:flex w-80 bg-[#1a1c1e] flex-col p-8 flex-shrink-0">
+      <h3 class="text-white font-bold mb-1" style="font-family: 'Plus Jakarta Sans', sans-serif;">Your website</h3>
+      <p class="text-[#75777a] text-xs mb-8">Live preview of your selections</p>
+
+      <!-- Mock browser -->
+      <div class="bg-[#2e3132] rounded-2xl overflow-hidden flex-1 flex flex-col">
+        <!-- Browser chrome -->
+        <div class="flex items-center gap-1.5 px-3 py-2.5 border-b border-white/10">
+          <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-green-500/60"></div>
+          <div class="flex-1 mx-3 bg-white/10 rounded-md px-2 py-1 text-[10px] text-[#75777a] truncate">
+            {{ data.businessName ? data.businessName.toLowerCase().replace(' ', '') + '.com' : 'yourbusiness.com' }}
+          </div>
+        </div>
+
+        <!-- Preview content -->
+        <div class="flex-1 p-4 overflow-hidden">
+          <!-- Nav bar preview -->
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-white text-xs font-bold" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+              {{ data.businessName || 'Your Business' }}
+            </div>
+            <div class="flex gap-2">
+              <div class="h-1.5 w-6 rounded-full bg-white/20"></div>
+              <div class="h-1.5 w-6 rounded-full bg-white/20"></div>
+              <div class="h-1.5 w-6 rounded-full bg-white/20"></div>
+            </div>
+          </div>
+
+          <!-- Hero preview -->
+          <div class="rounded-xl p-4 mb-3" [style.background-color]="data.primaryColor + '20'">
+            <div class="h-2 rounded-full w-3/4 mb-2" [style.background-color]="data.primaryColor + '60'"></div>
+            <div class="h-1.5 rounded-full w-1/2 mb-3 bg-white/20"></div>
+            <div class="h-6 w-20 rounded-full" [style.background-color]="data.primaryColor"></div>
+          </div>
+
+          <!-- Template preview -->
+          <div *ngIf="data.templateId" class="rounded-xl overflow-hidden mb-3">
+            <img [src]="templates[0].image" alt="Template" class="w-full h-16 object-cover opacity-60">
+          </div>
+
+          <!-- Pages preview -->
+          <div class="space-y-1.5">
+            <div *ngFor="let page of data.pages" class="flex items-center gap-2">
+              <div class="w-1.5 h-1.5 rounded-full" [style.background-color]="data.primaryColor"></div>
+              <div class="h-1.5 rounded-full bg-white/20 flex-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary pills -->
+      <div class="mt-6 space-y-2">
+        <div *ngIf="data.industry" class="flex items-center gap-2 text-xs text-[#c6c6c9]">
+          <span class="material-symbols-outlined text-sm text-[#0058be]">business_center</span>
+          {{ data.industry }}
+        </div>
+        <div *ngIf="data.pages.length" class="flex items-center gap-2 text-xs text-[#c6c6c9]">
+          <span class="material-symbols-outlined text-sm text-[#0058be]">pages</span>
+          {{ data.pages.length }} pages selected
+        </div>
+        <div *ngIf="data.extras.length" class="flex items-center gap-2 text-xs text-[#c6c6c9]">
+          <span class="material-symbols-outlined text-sm text-[#0058be]">add_circle</span>
+          {{ data.extras.length }} extras added
+        </div>
+      </div>
+    </div>
+
+    <!-- Right content -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="max-w-xl mx-auto px-6 py-10">
+
+        <!-- STEP 1: Business details -->
+        <div *ngIf="currentStep === 1">
+          <div class="inline-flex items-center gap-2 bg-[#0058be]/10 text-[#0058be] text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+            Step 1 of 5
+          </div>
+          <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+            Tell us about your business
+          </h1>
+          <p class="text-[#75777a] mb-8">This information will appear on your website.</p>
+
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Business name <span class="text-red-500">*</span></label>
+              <input type="text" [(ngModel)]="data.businessName" name="businessName"
+                     placeholder="e.g. The Modern Groomer"
+                     class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] text-sm outline-none transition-all"
+                     style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Industry <span class="text-red-500">*</span></label>
+              <select [(ngModel)]="data.industry" name="industry"
+                      class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] text-sm outline-none appearance-none cursor-pointer"
+                      style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+                <option value="" disabled>Select your industry</option>
+                <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Short description</label>
+              <textarea [(ngModel)]="data.description" name="description" rows="3"
+                        placeholder="What makes your business special?"
+                        class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] text-sm outline-none resize-none"
+                        style="box-shadow: 0 0 0 1.5px #e1e3e4;"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-3">Brand colour</label>
+              <div class="flex gap-3">
+                <button *ngFor="let c of colors"
+                        (click)="selectColor(c)"
+                        class="w-9 h-9 rounded-full transition-all flex items-center justify-center"
+                        [style.background-color]="c"
+                        [class]="data.primaryColor === c ? 'ring-2 ring-offset-2 ring-[#1a1c1e]' : ''">
+                  <span *ngIf="data.primaryColor === c" class="material-symbols-outlined text-white text-sm">check</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button (click)="next()" [disabled]="!canProceed()"
+                  class="w-full mt-8 bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            Continue
+          </button>
+        </div>
+
+        <!-- STEP 2: Template -->
+        <div *ngIf="currentStep === 2">
+          <div class="inline-flex items-center gap-2 bg-[#0058be]/10 text-[#0058be] text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+            Step 2 of 5
+          </div>
+          <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+            Choose a starting template
+          </h1>
+          <p class="text-[#75777a] mb-8">We'll customise it to match your brand perfectly.</p>
+
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <button *ngFor="let t of templates"
+                    (click)="selectTemplate(t.id)"
+                    class="rounded-3xl overflow-hidden border-2 transition-all text-left"
+                    [class]="data.templateId === t.id ? 'border-[#1a1c1e]' : 'border-[#e1e3e4] hover:border-[#c5c6ca]'">
+              <div class="relative">
+                <img [src]="t.image" [alt]="t.name" class="w-full h-32 object-cover">
+                <div *ngIf="data.templateId === t.id"
+                     class="absolute top-2 right-2 w-6 h-6 bg-[#1a1c1e] rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-xs">check</span>
+                </div>
+              </div>
+              <div class="p-3">
+                <div class="font-semibold text-[#1a1c1e] text-sm">{{ t.name }}</div>
+                <div class="text-[#75777a] text-xs mt-0.5">{{ t.industry }}</div>
+              </div>
+            </button>
+          </div>
+
+          <div class="flex gap-3">
+            <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+            <button (click)="next()" [disabled]="!canProceed()"
+                    class="flex-2 flex-grow bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all disabled:opacity-40 disabled:cursor-not-allowed">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Pages -->
+        <div *ngIf="currentStep === 3">
+          <div class="inline-flex items-center gap-2 bg-[#0058be]/10 text-[#0058be] text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+            Step 3 of 5
+          </div>
+          <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+            Which pages do you need?
+          </h1>
+          <p class="text-[#75777a] mb-8">Home and Contact are always included.</p>
+
+          <div class="space-y-2 mb-6">
+            <button *ngFor="let page of pageOptions"
+                    (click)="togglePage(page.id, page.required)"
+                    class="w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all"
+                    [class]="hasPage(page.id)
+                      ? 'border-[#1a1c1e] bg-[#1a1c1e] text-white'
+                      : page.required ? 'border-[#e1e3e4] bg-[#f3f4f5] text-[#44474a] cursor-default'
+                      : 'border-[#e1e3e4] bg-white text-[#1a1c1e] hover:border-[#c5c6ca] cursor-pointer'">
+              <div class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0"
+                   [class]="hasPage(page.id) ? 'border-white bg-white' : 'border-[#c5c6ca]'">
+                <span *ngIf="hasPage(page.id)" class="material-symbols-outlined text-[#1a1c1e] text-sm">check</span>
+              </div>
+              <span class="font-medium text-sm flex-1">{{ page.label }}</span>
+              <span *ngIf="page.required" class="text-xs px-2 py-0.5 rounded-full"
+                    [class]="hasPage(page.id) ? 'bg-white/20 text-white' : 'bg-[#e1e3e4] text-[#75777a]'">Required</span>
+            </button>
+          </div>
+
+          <h3 class="font-bold text-[#1a1c1e] text-sm mb-3" style="font-family: 'Plus Jakarta Sans', sans-serif;">Add-ons</h3>
+          <div class="grid grid-cols-2 gap-3 mb-8">
+            <button *ngFor="let extra of extraOptions"
+                    (click)="toggleExtra(extra.id)"
+                    class="flex flex-col gap-1 p-4 rounded-2xl border-2 transition-all text-left"
+                    [class]="hasExtra(extra.id)
+                      ? 'border-[#0058be] bg-[#0058be]/5'
+                      : 'border-[#e1e3e4] bg-white hover:border-[#c5c6ca]'">
+              <span class="font-semibold text-sm" [class]="hasExtra(extra.id) ? 'text-[#0058be]' : 'text-[#1a1c1e]'">{{ extra.label }}</span>
+              <span class="text-xs text-[#75777a]">{{ extra.desc }}</span>
+            </button>
+          </div>
+
+          <div class="flex gap-3">
+            <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+            <button (click)="next()"
+                    class="flex-2 flex-grow bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Contact details -->
+        <div *ngIf="currentStep === 4">
+          <div class="inline-flex items-center gap-2 bg-[#0058be]/10 text-[#0058be] text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+            Step 4 of 5
+          </div>
+          <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+            How can we reach you?
+          </h1>
+          <p class="text-[#75777a] mb-8">We'll use this to send you updates on your project.</p>
+
+          <div class="space-y-5 mb-8">
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Email address <span class="text-red-500">*</span></label>
+              <input type="email" [(ngModel)]="data.email" name="email"
+                     placeholder="you@example.com"
+                     class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] text-sm outline-none"
+                     style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Phone number</label>
+              <input type="tel" [(ngModel)]="data.phone" name="phone"
+                     placeholder="+44 7700 000000"
+                     class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] text-sm outline-none"
+                     style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Business address</label>
+              <input type="text" [(ngModel)]="data.address" name="address"
+                     placeholder="123 High Street, London"
+                     class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] text-sm outline-none"
+                     style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+            <button (click)="next()" [disabled]="!canProceed()"
+                    class="flex-2 flex-grow bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all disabled:opacity-40 disabled:cursor-not-allowed">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: Review & Submit -->
+        <div *ngIf="currentStep === 5">
+          <div class="inline-flex items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+            <span class="material-symbols-outlined text-sm">check_circle</span>
+            Almost done!
+          </div>
+          <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
+            Review your request
+          </h1>
+          <p class="text-[#75777a] mb-8">Everything look good? Submit and we'll get started.</p>
+
+          <!-- Summary card -->
+          <div class="bg-white rounded-3xl p-6 mb-6" style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+            <h3 class="font-bold text-[#1a1c1e] mb-4 text-sm" style="font-family: 'Plus Jakarta Sans', sans-serif;">Project summary</h3>
+            <div class="space-y-3">
+              <div class="flex items-start justify-between gap-4">
+                <span class="text-sm text-[#75777a] flex-shrink-0">Business</span>
+                <span class="text-sm font-semibold text-[#1a1c1e] text-right">{{ data.businessName || '—' }}</span>
+              </div>
+              <div class="h-px bg-[#f3f4f5]"></div>
+              <div class="flex items-start justify-between gap-4">
+                <span class="text-sm text-[#75777a] flex-shrink-0">Industry</span>
+                <span class="text-sm font-semibold text-[#1a1c1e] text-right">{{ data.industry || '—' }}</span>
+              </div>
+              <div class="h-px bg-[#f3f4f5]"></div>
+              <div class="flex items-start justify-between gap-4">
+                <span class="text-sm text-[#75777a] flex-shrink-0">Template</span>
+                <span class="text-sm font-semibold text-[#1a1c1e] text-right capitalize">{{ data.templateId || '—' }}</span>
+              </div>
+              <div class="h-px bg-[#f3f4f5]"></div>
+              <div class="flex items-start justify-between gap-4">
+                <span class="text-sm text-[#75777a] flex-shrink-0">Pages</span>
+                <span class="text-sm font-semibold text-[#1a1c1e] text-right">{{ data.pages.join(', ') || '—' }}</span>
+              </div>
+              <div *ngIf="data.extras.length" class="h-px bg-[#f3f4f5]"></div>
+              <div *ngIf="data.extras.length" class="flex items-start justify-between gap-4">
+                <span class="text-sm text-[#75777a] flex-shrink-0">Add-ons</span>
+                <span class="text-sm font-semibold text-[#1a1c1e] text-right">{{ data.extras.join(', ') }}</span>
+              </div>
+              <div class="h-px bg-[#f3f4f5]"></div>
+              <div class="flex items-start justify-between gap-4">
+                <span class="text-sm text-[#75777a] flex-shrink-0">Contact</span>
+                <span class="text-sm font-semibold text-[#1a1c1e] text-right">{{ data.email || '—' }}</span>
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="text-xs text-[#75777a]">Brand colour</span>
+                <div class="w-5 h-5 rounded-full ml-auto" [style.background-color]="data.primaryColor"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What happens next -->
+          <div class="bg-[#f3f4f5] rounded-3xl p-5 mb-8">
+            <h4 class="font-bold text-[#1a1c1e] text-sm mb-3" style="font-family: 'Plus Jakarta Sans', sans-serif;">What happens next?</h4>
+            <div class="space-y-3">
+              <div class="flex items-start gap-3">
+                <div class="w-6 h-6 bg-[#0058be] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span class="text-white text-xs font-bold">1</span>
+                </div>
+                <p class="text-sm text-[#44474a]">We review your request within 24 hours</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-6 h-6 bg-[#0058be] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span class="text-white text-xs font-bold">2</span>
+                </div>
+                <p class="text-sm text-[#44474a]">Our team starts building your website</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-6 h-6 bg-[#0058be] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span class="text-white text-xs font-bold">3</span>
+                </div>
+                <p class="text-sm text-[#44474a]">You review and approve before we go live</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button (click)="back()" class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">Back</button>
+            <button (click)="submit()"
+                    class="flex-2 flex-grow bg-[#0058be] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#004395] transition-all flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-base">rocket_launch</span>
+              Submit request
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

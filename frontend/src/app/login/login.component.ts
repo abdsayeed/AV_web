@@ -111,18 +111,11 @@ export class LoginComponent implements AfterViewInit {
     this.authService.resetPassword(email).subscribe({
       next: (response) => {
         this.isLoading = false;
-        
-        if (response.success) {
-          // Show success message
-          this.errorMessage = '';
-          alert('Password reset email sent! Please check your inbox.');
-        } else {
-          this.errorMessage = response.message || 'Failed to send reset email';
-        }
+        this.errorMessage = '';
+        alert('If that email exists, a reset link has been sent. Please check your inbox.');
       },
       error: (error) => {
         this.isLoading = false;
-        
         if (error.message) {
           this.errorMessage = error.message;
         } else if (!navigator.onLine) {

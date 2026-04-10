@@ -60,7 +60,10 @@ def _send_direct(template_name: str, to_email: str, context: dict):
         logger.error(f"Email send failed: {e}")
 
 
-def _render_template(template_name: str, context: dict) -> tuple[str, str]:
+from typing import Tuple
+
+
+def _render_template(template_name: str, context: dict) -> Tuple[str, str]:
     """Render Django HTML email template."""
     from django.template.loader import render_to_string
 

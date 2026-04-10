@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 interface FAQ {
   id: string;
@@ -14,150 +13,67 @@ interface FAQ {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="faq-section py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl font-bold text-gray-900 mb-4">
-            Frequently Asked Questions
-          </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            Got questions? We've got answers. Find everything you need to know about our services.
-          </p>
+    <section class="py-32 bg-surface">
+      <div class="max-w-4xl mx-auto px-8">
+        <div class="text-center mb-20">
+          <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">Got Questions?</span>
+          <h2 class="text-5xl font-headline font-bold mt-4 text-on-surface">Frequently Asked</h2>
+          <p class="text-on-surface-variant text-lg mt-6 max-w-2xl mx-auto">Everything you need to know about working with us.</p>
         </div>
 
         <!-- Category Filter -->
-        <div class="category-filter flex flex-wrap justify-center gap-4 mb-12">
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
           <button *ngFor="let category of categories"
-                  [class.active]="selectedCategory === category.key"
                   (click)="filterByCategory(category.key)"
-                  class="category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 flex items-center gap-2">
-            <span class="material-symbols-outlined text-lg">{{ category.icon }}</span>
+                  class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300"
+                  [class]="selectedCategory === category.key
+                    ? 'bg-primary-container text-on-primary'
+                    : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'">
             {{ category.label }}
           </button>
         </div>
 
         <!-- FAQ Accordion -->
-        <div class="faq-accordion max-w-4xl mx-auto">
+        <div class="space-y-3">
           <div *ngFor="let faq of filteredFaqs; let i = index"
-               class="faq-item mb-4 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-               [class.active]="activeIndex === i">
-            
-            <button class="faq-question w-full text-left p-6 flex items-center justify-between hover:bg-gray-50 rounded-2xl transition-colors duration-300"
+               class="bg-surface-container-lowest rounded-3xl overflow-hidden border border-outline-variant/10 transition-all duration-300"
+               [class.shadow-lg]="activeIndex === i">
+
+            <button class="w-full text-left px-8 py-6 flex items-center justify-between gap-4 hover:bg-surface-container-low transition-colors"
                     (click)="toggle(i)">
-              <span class="text-lg font-semibold text-gray-900 pr-4">
-                {{ faq.question }}
-              </span>
-              <span class="faq-icon text-2xl text-blue-600 flex-shrink-0 transform transition-transform duration-300"
-                    [class.rotate-45]="activeIndex === i">
-                {{ activeIndex === i ? '−' : '+' }}
-              </span>
+              <span class="text-base font-semibold text-on-surface font-headline">{{ faq.question }}</span>
+              <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-300"
+                    [class.rotate-45]="activeIndex === i">add</span>
             </button>
-            
-            <div class="faq-answer overflow-hidden transition-all duration-300 ease-in-out"
-                 [class.expanded]="activeIndex === i"
-                 [@slideDown]="activeIndex === i ? 'expanded' : 'collapsed'">
-              <div class="p-6 pt-0 text-gray-700 leading-relaxed">
-                <p [innerHTML]="faq.answer"></p>
-              </div>
+
+            <div class="overflow-hidden transition-all duration-300 ease-in-out"
+                 [style.max-height]="activeIndex === i ? '400px' : '0px'">
+              <div class="px-8 pb-6 text-on-surface-variant leading-relaxed" [innerHTML]="faq.answer"></div>
             </div>
           </div>
         </div>
 
-        <!-- CTA Section -->
-        <div class="faq-cta mt-16 text-center">
-          <div class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">
-            <div class="mb-4">
-              <span class="material-symbols-outlined text-4xl text-blue-600">help</span>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">
-              Still have questions?
-            </h3>
-            <p class="text-gray-600 mb-6">
-              Can't find the answer you're looking for? Our friendly team is here to help.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                Contact Us
-              </button>
-              <button class="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition-all duration-300">
-                Schedule a Call
-              </button>
-            </div>
+        <!-- CTA -->
+        <div class="mt-16 text-center bg-surface-container-lowest rounded-3xl p-12 border border-outline-variant/10">
+          <h3 class="text-2xl font-headline font-bold text-on-surface mb-3">Still have questions?</h3>
+          <p class="text-on-surface-variant mb-8">Our team is happy to help. Reach out anytime.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contact" class="bg-primary-container text-on-primary px-8 py-4 rounded-full font-bold hover:bg-primary transition-all">
+              Contact Us
+            </a>
+            <a href="/contact" class="border-2 border-outline-variant/30 text-on-surface px-8 py-4 rounded-full font-bold hover:border-secondary transition-all">
+              Schedule a Call
+            </a>
           </div>
         </div>
       </div>
     </section>
   `,
   styles: [`
-    .category-btn {
-      background: white;
-      color: #6B7280;
-      border: 2px solid #E5E7EB;
-    }
-
-    .category-btn:hover {
-      border-color: #3B82F6;
-      color: #3B82F6;
-      transform: translateY(-2px);
-    }
-
-    .category-btn.active {
-      background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-      color: white;
-      border-color: transparent;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-
-    .faq-item {
-      border: 1px solid #E5E7EB;
-    }
-
-    .faq-item.active {
-      border-color: #3B82F6;
-      box-shadow: 0 0 0 1px #3B82F6;
-    }
-
-    .faq-answer {
-      max-height: 0;
-    }
-
-    .faq-answer.expanded {
-      max-height: 500px;
-    }
-
-    .faq-icon.rotate-45 {
-      transform: rotate(45deg);
-    }
-
-    .faq-question:hover .faq-icon {
-      transform: scale(1.1);
-    }
-
-    .faq-item:hover {
-      transform: translateY(-2px);
-    }
-
-    /* Animation for smooth expand/collapse */
-    .faq-answer {
-      transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-    }
+    :host { display: block; }
+    .rotate-45 { transform: rotate(45deg); }
   `],
-  animations: [
-    trigger('slideDown', [
-      state('collapsed', style({
-        height: '0px',
-        overflow: 'hidden'
-      })),
-      state('expanded', style({
-        height: '*',
-        overflow: 'visible'
-      })),
-      transition('collapsed <=> expanded', [
-        animate('300ms ease-in-out')
-      ])
-    ])
-  ]
+  animations: []
 })
 export class FaqComponent {
   activeIndex: number | null = null;
@@ -175,61 +91,61 @@ export class FaqComponent {
     {
       id: '1',
       question: 'How much does a website cost?',
-      answer: 'Our website packages start from £59/month for a basic business website. The final cost depends on your specific requirements, features needed, and complexity. We offer three main packages: <strong>Starter (£59/month)</strong>, <strong>Professional (£99/month)</strong>, and <strong>Enterprise (£199/month)</strong>. All packages include hosting, maintenance, and support.',
+      answer: 'We have three plans. <strong>Pay-As-You-Go at £59/month</strong> — a template-based site with hosting, SSL, and support included, on a 6 or 12-month minimum. <strong>Fully Managed Professional at £249/month</strong> — a fully custom design with unlimited content updates and priority support. <strong>Full Professional Website</strong> — a one-time custom build where you own everything outright, priced based on scope. We\'ll give you an exact quote after a free consultation.',
       category: 'pricing'
     },
     {
       id: '2',
-      question: 'How long does it take to build a website?',
-      answer: 'We pride ourselves on fast delivery! Most websites are completed within <strong>14 days</strong> from the start of the project. This includes design, development, content integration, and testing. Complex e-commerce sites or custom applications may take 3-4 weeks. We\'ll give you an exact timeline during your consultation.',
+      question: 'How long does it take to build my website?',
+      answer: 'Most websites are live within <strong>3–5 working days</strong> from the point we have your content and sign-off. More complex builds with custom integrations (booking systems, e-commerce, etc.) typically take 7–10 days. We\'ll give you a firm timeline before we start.',
       category: 'process'
     },
     {
       id: '3',
-      question: 'Do you provide ongoing support and maintenance?',
-      answer: 'Absolutely! All our packages include ongoing support and maintenance. This covers security updates, backups, performance monitoring, content updates, and technical support. You\'ll have direct access to our support team via email, phone, or live chat.',
-      category: 'support'
+      question: 'Do I own my website?',
+      answer: 'It depends on the plan. With the <strong>Pay-As-You-Go</strong> and <strong>Fully Managed</strong> plans, we own and host the site on your behalf — you have a buyout option at any time if you want to take full ownership. With the <strong>Full Professional Website</strong> (one-time build), you own everything outright from day one including the source code.',
+      category: 'pricing'
     },
     {
       id: '4',
-      question: 'Will my website be mobile-friendly?',
-      answer: 'Yes, every website we create is fully responsive and mobile-optimized. With over 60% of web traffic coming from mobile devices, we ensure your site looks and works perfectly on all screen sizes - from smartphones to tablets to desktop computers.',
-      category: 'technical'
+      question: 'What\'s included in the monthly fee?',
+      answer: 'Your monthly fee covers: web hosting, SSL certificate, daily backups, security monitoring, software updates, and our support team. The Fully Managed plan also includes unlimited content updates and monthly performance reports. There are no hidden fees.',
+      category: 'pricing'
     },
     {
       id: '5',
-      question: 'Can I update the website content myself?',
-      answer: 'Yes! We build all websites with user-friendly content management systems. You\'ll receive training on how to update text, images, and basic content. For more complex changes, our support team is always available to help.',
+      question: 'Will my website work on mobile?',
+      answer: 'Yes — every site we build is mobile-first. We test across iOS and Android on multiple screen sizes before handover. Given that most local business traffic comes from phones, this is non-negotiable for us.',
       category: 'technical'
     },
     {
       id: '6',
-      question: 'What if I\'m not happy with the website?',
-      answer: 'We offer a <strong>100% satisfaction guarantee</strong>. If you\'re not completely happy with your website, we\'ll work with you to make it right. If we still can\'t meet your expectations, we\'ll provide a full refund within the first 30 days.',
-      category: 'support'
+      question: 'Can I make changes to the website myself?',
+      answer: 'On the Pay-As-You-Go and Fully Managed plans, you send us change requests and we handle them — no technical knowledge needed. On the one-time build, we can set up a CMS (like WordPress or a headless option) so you can manage content yourself, or you can use our optional maintenance plan.',
+      category: 'technical'
     },
     {
       id: '7',
-      question: 'Do you help with SEO and Google rankings?',
-      answer: 'Yes! All our websites are built with SEO best practices from the ground up. This includes optimized page structure, fast loading speeds, mobile optimization, and basic on-page SEO. We also offer advanced SEO services to help improve your Google rankings.',
+      question: 'Do you handle SEO?',
+      answer: 'Every site we build includes foundational SEO: clean URL structure, meta tags, fast load times, mobile optimisation, and Google Search Console setup. We don\'t promise specific rankings — anyone who does is misleading you — but we make sure your site is technically sound and ready to rank.',
       category: 'technical'
     },
     {
       id: '8',
-      question: 'What\'s included in the monthly fee?',
-      answer: 'Your monthly fee includes: web hosting, SSL certificate, regular backups, security monitoring, software updates, basic content updates, technical support, and performance optimization. Essentially, everything you need to keep your website running smoothly.',
-      category: 'pricing'
+      question: 'What happens if I\'m not happy with the result?',
+      answer: 'We do unlimited revisions during the build phase until you\'re satisfied before we go live. If after launch something isn\'t right, we fix it. We\'ve never had a client leave unhappy — but if for any reason we genuinely can\'t deliver what was agreed, we\'ll refund you.',
+      category: 'support'
     },
     {
       id: '9',
-      question: 'Can you help migrate my existing website?',
-      answer: 'Absolutely! We can migrate your existing website content, including text, images, and basic functionality. We\'ll ensure no content is lost and that your SEO rankings are preserved during the migration process.',
+      question: 'How do I get started?',
+      answer: 'Fill in our <a href="/contact" class="text-secondary font-semibold hover:underline">project inquiry form</a> — it takes about 3 minutes. We\'ll review your details and get back to you within 24 hours with a plan recommendation and next steps. No sales pressure, no obligation.',
       category: 'process'
     },
     {
       id: '10',
       question: 'Do you work with businesses outside the UK?',
-      answer: 'While we\'re based in the UK, we work with businesses worldwide. We\'ve successfully delivered projects for clients in Europe, North America, and Australia. All communication is handled in English, and we accommodate different time zones.',
+      answer: 'Our pricing is in GBP and we\'re UK-based, but we work with clients internationally. We\'ve delivered projects for businesses in Europe and the Middle East. All communication is in English and we work across time zones.',
       category: 'support'
     }
   ];

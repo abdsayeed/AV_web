@@ -11,7 +11,11 @@ import { TrustBadgesComponent } from "./shared/components/trust-badges/trust-bad
 import { FaqComponent } from "./shared/components/faq/faq.component";
 import { StickyCTAComponent } from "./shared/components/sticky-cta/sticky-cta.component";
 import { MicroInteractionsDirective } from "./shared/directives/micro-interactions.directive";
-
+import { NavComponent } from "./shared/components/nav/nav.component";
+import { PricingCardsComponent } from "./shared/components/pricing-cards/pricing-cards.component";
+import { TemplatesGalleryComponent } from "./shared/components/templates-gallery/templates-gallery.component";
+import { ContactCtaComponent } from "./shared/components/contact-cta/contact-cta.component";
+import { FooterComponent } from "./shared/components/footer/footer.component";
 @Component({
   selector: "app-home",
   standalone: true,
@@ -25,6 +29,11 @@ import { MicroInteractionsDirective } from "./shared/directives/micro-interactio
     FaqComponent,
     StickyCTAComponent,
     MicroInteractionsDirective,
+    NavComponent,
+    PricingCardsComponent,
+    TemplatesGalleryComponent,
+    ContactCtaComponent,
+    FooterComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
@@ -311,6 +320,13 @@ export class AppComponent implements OnInit {
     { name: "Landscapers", icon: "park" },
     { name: "Boutique Retail", icon: "storefront" },
     { name: "Professional", icon: "business_center" },
+  ];
+
+  processSteps = [
+    { icon: "event", badge: "STEP 1 · 15 MINS", title: "Book Consultation", description: "Schedule a free discovery call to discuss your business goals and specific needs." },
+    { icon: "computer", badge: "STEP 2 · 3–5 DAYS", title: "We Build", description: "Our expert team designs and develops your high-performance custom website from scratch." },
+    { icon: "rocket_launch", badge: "STEP 3", title: "Review & Launch", description: "Go through the final build, request tweaks, and once you're happy, we hit the launch button." },
+    { icon: "settings", badge: "STEP 4 · ONGOING", title: "Maintenance", description: "We manage hosting, security, and updates. Our flexible monthly plans keep your site fresh." },
   ];
 
   // Use displayedTemplates instead of templates in the template
@@ -601,5 +617,12 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  onTeamImgError(event: Event, name: string) {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
+    const fallback = img.parentElement?.querySelector('.team-fallback') as HTMLElement;
+    if (fallback) fallback.style.display = 'flex';
   }
 }

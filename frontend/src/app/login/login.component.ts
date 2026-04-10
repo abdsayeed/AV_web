@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,10 +9,9 @@ import { AuthService } from '../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   loginData = {
     email: '',
     password: '',
@@ -139,6 +138,16 @@ export class LoginComponent {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const elements = document.querySelectorAll('.cinematic-reveal');
+      elements.forEach(el => {
+        el.classList.add('opacity-100', 'translate-y-0');
+        el.classList.remove('opacity-0', 'translate-y-6');
+      });
+    }, 100);
   }
 
   goToRegister() {

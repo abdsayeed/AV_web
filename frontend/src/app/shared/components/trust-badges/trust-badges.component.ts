@@ -14,179 +14,36 @@ interface TrustBadge {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="trust-badges-section py-12 bg-white border-t border-gray-100">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-8">
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">
-            Your Security & Satisfaction is Our Priority
-          </h3>
-          <p class="text-gray-600">
-            We're committed to providing secure, reliable, and professional services
-          </p>
-        </div>
-
-        <div class="trust-badges-grid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 items-center justify-items-center">
-          <div *ngFor="let badge of trustBadges" 
-               class="trust-badge group cursor-pointer"
+    <section class="py-16 bg-surface-container-lowest">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center mb-12">
+          <div *ngFor="let badge of trustBadges"
+               class="flex flex-col items-center gap-2 p-4 rounded-3xl bg-surface-container hover:bg-surface-container-high transition-all duration-300 group cursor-default"
                [title]="badge.description">
-            
-            <div class="badge-container bg-gray-50 hover:bg-blue-50 rounded-xl p-4 transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-gray-200 hover:border-blue-200">
-              <div class="badge-icon mb-2 text-center group-hover:scale-110 transition-transform duration-300">
-                <span class="material-symbols-outlined text-3xl text-gray-600 group-hover:text-blue-600">{{ badge.icon }}</span>
-              </div>
-              <div class="badge-name text-sm font-medium text-gray-700 text-center group-hover:text-blue-600 transition-colors duration-300">
-                {{ badge.name }}
-              </div>
-            </div>
+            <span class="material-symbols-outlined text-2xl text-on-surface-variant group-hover:text-secondary transition-colors">{{ badge.icon }}</span>
+            <span class="text-xs font-semibold text-on-surface-variant text-center font-label">{{ badge.name }}</span>
           </div>
         </div>
 
-        <!-- Guarantee Section -->
-        <div class="guarantee-section mt-12 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
-          <div class="flex flex-col md:flex-row items-center justify-center gap-6">
-            <div class="guarantee-icon">
-              <span class="material-symbols-outlined text-6xl text-green-600">verified</span>
-            </div>
-            <div class="text-center md:text-left">
-              <h4 class="text-2xl font-bold text-gray-900 mb-2">
-                100% Satisfaction Guarantee
-              </h4>
-              <p class="text-gray-600 text-lg">
-                Not happy with your website? We'll work until you love it, or your money back.
-              </p>
-            </div>
-            <div class="guarantee-badge bg-green-100 text-green-800 px-6 py-3 rounded-full font-bold text-lg whitespace-nowrap flex items-center gap-2">
-              <span class="material-symbols-outlined">check_circle</span>
-              <span>Money Back Guarantee</span>
+        <!-- Guarantee bar -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 bg-surface-container rounded-3xl px-10 py-8">
+          <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-3xl text-secondary">verified</span>
+            <div>
+              <div class="font-headline font-bold text-on-surface text-lg">100% Satisfaction Guarantee</div>
+              <div class="text-on-surface-variant text-sm">Not happy? We'll work until you love it, or your money back.</div>
             </div>
           </div>
-        </div>
-
-        <!-- Security Features -->
-        <div class="security-features mt-8 grid md:grid-cols-3 gap-6">
-          <div class="feature-item text-center p-6 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors duration-300">
-            <div class="feature-icon mb-3">
-              <span class="material-symbols-outlined text-4xl text-blue-600">lock</span>
-            </div>
-            <h5 class="font-bold text-gray-900 mb-2">SSL Encrypted</h5>
-            <p class="text-gray-600 text-sm">All data transmission is secured with 256-bit SSL encryption</p>
-          </div>
-          
-          <div class="feature-item text-center p-6 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors duration-300">
-            <div class="feature-icon mb-3">
-              <span class="material-symbols-outlined text-4xl text-blue-600">account_balance</span>
-            </div>
-            <h5 class="font-bold text-gray-900 mb-2">GDPR Compliant</h5>
-            <p class="text-gray-600 text-sm">Full compliance with data protection regulations</p>
-          </div>
-          
-          <div class="feature-item text-center p-6 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors duration-300">
-            <div class="feature-icon mb-3">
-              <span class="material-symbols-outlined text-4xl text-blue-600">speed</span>
-            </div>
-            <h5 class="font-bold text-gray-900 mb-2">99.9% Uptime</h5>
-            <p class="text-gray-600 text-sm">Reliable hosting with guaranteed uptime performance</p>
-          </div>
-        </div>
-
-        <!-- Payment Security -->
-        <div class="payment-security mt-8 text-center">
-          <p class="text-gray-600 mb-4">Secure payments powered by</p>
-          <div class="payment-logos flex justify-center items-center gap-8 flex-wrap">
-            <div class="payment-logo bg-white rounded-lg p-3 shadow-sm border">
-              <span class="material-symbols-outlined text-2xl text-blue-600">credit_card</span>
-              <span class="ml-2 font-medium text-gray-700">Stripe</span>
-            </div>
-            <div class="payment-logo bg-white rounded-lg p-3 shadow-sm border">
-              <span class="material-symbols-outlined text-2xl text-gray-600">account_balance</span>
-              <span class="ml-2 font-medium text-gray-700">Bank Transfer</span>
-            </div>
-            <div class="payment-logo bg-white rounded-lg p-3 shadow-sm border">
-              <span class="material-symbols-outlined text-2xl text-blue-500">payments</span>
-              <span class="ml-2 font-medium text-gray-700">PayPal</span>
-            </div>
+          <div class="flex items-center gap-6 text-sm text-on-surface-variant">
+            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-secondary">lock</span> SSL Encrypted</div>
+            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-secondary">shield</span> GDPR Compliant</div>
+            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-secondary">speed</span> 99.9% Uptime</div>
           </div>
         </div>
       </div>
     </section>
   `,
-  styles: [`
-    .trust-badge {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .trust-badge:hover {
-      transform: translateY(-2px);
-    }
-
-    .badge-container {
-      min-height: 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 140px;
-    }
-
-    .guarantee-section {
-      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
-      border: 1px solid #e5e7eb;
-    }
-
-    .feature-item {
-      transition: all 0.3s ease;
-    }
-
-    .feature-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .payment-logo {
-      transition: all 0.3s ease;
-    }
-
-    .payment-logo:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.8;
-      }
-    }
-
-    .guarantee-badge {
-      animation: pulse 2s infinite;
-    }
-
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      .trust-badges-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-      
-      .badge-container {
-        max-width: none;
-        padding: 1rem;
-      }
-      
-      .guarantee-section {
-        padding: 1.5rem;
-      }
-      
-      .guarantee-section .flex {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-  `]
+  styles: [`:host { display: block; }`]
 })
 export class TrustBadgesComponent {
   trustBadges: TrustBadge[] = [

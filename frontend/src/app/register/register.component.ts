@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,10 +9,9 @@ import { AuthService } from '../core/services/auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  templateUrl: './register.component.html'
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewInit {
   registerData = {
     fullName: '',
     email: '',
@@ -28,16 +27,64 @@ export class RegisterComponent {
   currentStep = 1;
   errorMessage = '';
 
+  passwordReqs = {
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false
+  };
+  strengthColors = ['w-0', 'w-0', 'w-0', 'w-0'];
+
   constructor(
     private router: Router,
     private apiService: ApiService,
     private authService: AuthService
   ) {}
 
+  ngAfterViewInit() {
+    this.initCinematicReveal();
+  }
+
+  private initCinematicReveal() {
+    setTimeout(() => {
+      const elements = document.querySelectorAll('.cinematic-reveal');
+      elements.forEach(el => {
+        el.classList.add('opacity-100', 'translate-y-0');
+        el.classList.remove('opacity-0', 'translate-y-6');
+      });
+    }, 100);
+  }
+
+  checkPasswordStrength() {
+    const pw = this.registerData.password;
+    this.passwordReqs.length = pw.length >= 8;
+    this.passwordReqs.uppercase = /[A-Z]/.test(pw);
+    this.passwordReqs.lowercase = /[a-z]/.test(pw);
+    this.passwordReqs.number = /[0-9]/.test(pw);
+
+    const score = Object.values(this.passwordReqs).filter(Boolean).length;
+    
+    // reset colors
+    this.strengthColors = ['w-0', 'w-0', 'w-0', 'w-0'];
+    
+    if (score > 0) {
+      const baseClass = score <= 2 ? 'w-1/4 bg-error' : (score === 3 ? 'w-1/4 bg-yellow-500' : 'w-1/4 bg-secondary');
+      for (let i = 0; i < score; i++) {
+        this.strengthColors[i] = baseClass;
+      }
+    }
+  }
+
+  isPasswordValid(): boolean {
+    return this.passwordReqs.length && 
+           this.passwordReqs.uppercase && 
+           this.passwordReqs.lowercase && 
+           this.passwordReqs.number;
+  }
+
   onSubmit() {
     if (this.isLoading) return;
 
-    // Validation
     if (!this.validateForm()) {
       return;
     }
@@ -61,9 +108,7 @@ export class RegisterComponent {
         
         if (response.success) {
           console.log('Registration successful');
-          
-          // Redirect to home page instead of dashboard
-          this.router.navigate(['/']);
+          this.router.navigate(['/onboarding']);
         } else {
           this.errorMessage = response.message || 'Registration failed';
         }
@@ -77,64 +122,10 @@ export class RegisterComponent {
   }
 
   private validateForm(): boolean {
-    // Trim whitespace
-    this.registerData.fullName = this.registerData.fullName.trim();
-    this.registerData.email = this.registerData.email.trim();
-    this.registerData.businessName = this.registerData.businessName.trim();
-
-    if (!this.registerData.fullName) {
-      this.errorMessage = 'Full name is required';
-      return false;
-    }
-
-    // Validate name length
-    if (this.registerData.fullName.length < 2) {
-      this.errorMessage = 'Full name must be at least 2 characters';
-      return false;
-    }
-
-    if (!this.registerData.email) {
-      this.errorMessage = 'Email is required';
-      return false;
-    }
-
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.registerData.email)) {
-      this.errorMessage = 'Please enter a valid email address';
-      return false;
-    }
-
-    if (!this.registerData.password) {
-      this.errorMessage = 'Password is required';
-      return false;
-    }
-
-    if (this.registerData.password.length < 8) {
-      this.errorMessage = 'Password must be at least 8 characters long';
-      return false;
-    }
-
-    // Password strength validation
-    const hasUpperCase = /[A-Z]/.test(this.registerData.password);
-    const hasLowerCase = /[a-z]/.test(this.registerData.password);
-    const hasNumber = /[0-9]/.test(this.registerData.password);
-    
-    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
-      this.errorMessage = 'Password must contain uppercase, lowercase, and numbers';
-      return false;
-    }
-
     if (this.registerData.password !== this.registerData.confirmPassword) {
       this.errorMessage = 'Passwords do not match';
       return false;
     }
-
-    if (!this.registerData.agreeToTerms) {
-      this.errorMessage = 'Please agree to the terms and conditions';
-      return false;
-    }
-
     return true;
   }
 

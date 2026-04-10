@@ -1,116 +1,87 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormStorageService } from '../../../../core/services/form-storage.service';
 import { FormStateService } from '../../../../core/services/form-state.service';
-import { ContactFormData } from '../../../../core/models/contact-form.model';
+import { NavComponent } from '../../../../shared/components/nav/nav.component';
 
 @Component({
   selector: 'app-thank-you',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NavComponent],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
-      <div class="max-w-2xl w-full">
-        <div class="bg-white rounded-2xl shadow-xl p-8 sm:p-12 text-center">
+    <div class="min-h-screen bg-surface font-body overflow-hidden flex flex-col">
+      <app-nav [navItems]="[]" [activeSection]="''" (linkClick)="goHome()"></app-nav>
+      
+      <main class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
+        <!-- Ambient Background glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div class="max-w-xl w-full text-center relative z-10 cinematic-reveal">
           
-          <!-- Success Icon -->
-          <div class="mb-6 flex justify-center">
-            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-              <span class="material-symbols-outlined text-green-600 text-5xl">check_circle</span>
-            </div>
+          <!-- Animated Checkmark -->
+          <div class="w-32 h-32 mx-auto mb-8 bg-surface-container-lowest rounded-full flex items-center justify-center border-4 border-secondary/20 shadow-2xl shadow-secondary/10 relative">
+            <svg class="w-16 h-16 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path class="animate-[draw_0.5s_ease-out_forwards]" stroke-dasharray="30" stroke-dashoffset="30" d="M20 6L9 17l-5-5"></path>
+            </svg>
+            <div class="absolute inset-0 rounded-full border-4 border-secondary animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite] opacity-20"></div>
           </div>
 
-          <!-- Thank You Message -->
-          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined text-4xl">celebration</span>
-            Thank You{{ contactName ? ', ' + contactName : '' }}!
+          <h1 class="text-4xl lg:text-5xl font-headline font-bold text-on-surface mb-6">
+            Project Received
           </h1>
-          
-          <p class="text-lg text-gray-600 mb-6">
-            Your project inquiry has been received successfully.
+          <p class="text-xl text-on-surface-variant font-medium mb-12">
+            Thank you {{ contactName }}. We've got all the details and are reviewing your inquiry right now.
           </p>
 
-          @if (referenceNumber) {
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <p class="text-sm text-gray-600 mb-1">Reference Number</p>
-              <p class="text-2xl font-bold text-blue-600">{{ referenceNumber }}</p>
-            </div>
-          }
+          <!-- Vertical Timeline Strip -->
+          <div class="max-w-sm mx-auto text-left relative pl-10 mb-12">
+             <div class="absolute left-3 top-2 bottom-2 w-0.5 bg-outline-variant/30 hidden md:block"></div>
+             
+             <div class="relative mb-8 cinematic-reveal" style="transition-delay: 200ms">
+                <div class="absolute -left-[35px] w-6 h-6 rounded-full bg-secondary text-on-primary flex items-center justify-center shadow-lg">
+                   <span class="material-symbols-outlined text-[12px]">done</span>
+                </div>
+                <h3 class="font-bold text-on-surface">Details received</h3>
+                <p class="text-sm text-on-surface-variant mt-1">Your answers have reached our desk safely.</p>
+             </div>
 
-          <!-- What's Next -->
-          <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-xl">assignment</span>
-              What happens next?
-            </h2>
-            <div class="space-y-3">
-              <div class="flex items-start gap-3">
-                <span class="material-symbols-outlined text-green-600 text-2xl">check_circle</span>
-                <div>
-                  <p class="font-medium text-gray-900">We'll review your requirements</p>
-                  <p class="text-sm text-gray-600">Our team will carefully analyze your project needs</p>
+             <div class="relative mb-8 cinematic-reveal" style="transition-delay: 300ms">
+                <div class="absolute -left-[35px] w-6 h-6 rounded-full bg-surface-container border-2 border-secondary text-secondary flex items-center justify-center animate-pulse">
+                   <span class="w-2 h-2 bg-secondary rounded-full"></span>
                 </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="material-symbols-outlined text-blue-600 text-2xl">schedule</span>
-                <div>
-                  <p class="font-medium text-gray-900">Expect a response within 24 hours</p>
-                  <p class="text-sm text-gray-600">We'll reach out via your preferred contact method</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="material-symbols-outlined text-purple-600 text-2xl">chat</span>
-                <div>
-                  <p class="font-medium text-gray-900">Schedule a consultation</p>
-                  <p class="text-sm text-gray-600">We'll discuss your project in detail and provide a custom quote</p>
-                </div>
-              </div>
-            </div>
+                <h3 class="font-bold text-on-surface">Under review</h3>
+                <p class="text-sm text-on-surface-variant mt-1">Our project managers are analyzing your requirements.</p>
+             </div>
+
+             <div class="relative cinematic-reveal" style="transition-delay: 400ms">
+                <div class="absolute -left-[35px] w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant/30 flex items-center justify-center"></div>
+                <h3 class="font-bold text-on-surface-variant">We'll reach out</h3>
+                <p class="text-sm text-on-surface-variant mt-1">Expect an email or call within 24 hours.</p>
+             </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              (click)="goHome()"
-              class="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined">home</span>
-              Back to Home
+          <div class="flex flex-col sm:flex-row gap-4 justify-center cinematic-reveal" style="transition-delay: 600ms">
+            <button (click)="goHome()" class="px-8 py-4 bg-surface-container-lowest border border-outline-variant/20 rounded-full font-bold text-on-surface hover:bg-surface-container transition-all active:scale-95 text-lg">
+              Return Home
             </button>
-            <button
-              (click)="viewTemplates()"
-              class="px-6 py-3 bg-white text-blue-600 font-medium rounded-lg border-2 border-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined">visibility</span>
-              Browse Templates
+            <button (click)="viewTemplates()" class="px-8 py-4 bg-secondary text-on-primary rounded-full font-bold hover:bg-secondary-container transition-all active:scale-95 text-lg shadow-lg shadow-secondary/20">
+              Browse More Templates
             </button>
           </div>
 
-          <!-- Social Links -->
-          <div class="mt-8 pt-6 border-t border-gray-200">
-            <p class="text-sm text-gray-600 mb-3">Follow us for updates and tips</p>
-            <div class="flex justify-center gap-4">
-              <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="material-symbols-outlined text-2xl">facebook</span>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="material-symbols-outlined text-2xl">alternate_email</span>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="material-symbols-outlined text-2xl">photo_camera</span>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                <span class="material-symbols-outlined text-2xl">work</span>
-              </a>
-            </div>
-          </div>
         </div>
-      </div>
+      </main>
     </div>
-  `
+  `,
+  styles: [`
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+  `]
 })
-export class ThankYouComponent implements OnInit {
+export class ThankYouComponent implements OnInit, AfterViewInit {
   contactName: string = '';
-  referenceNumber: string = '';
 
   constructor(
     private router: Router,
@@ -119,18 +90,22 @@ export class ThankYouComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadSubmissionData();
-    // Clear form data after successful submission
-    this.formStateService.resetForm();
-  }
-
-  private loadSubmissionData(): void {
     const submissions = this.storageService.getSubmissions();
     if (submissions.length > 0) {
       const lastSubmission = submissions[submissions.length - 1];
-      this.contactName = lastSubmission.contactInfo?.name || '';
-      this.referenceNumber = lastSubmission.metadata?.submissionId || '';
+      this.contactName = lastSubmission.contactInfo?.name?.split(' ')[0] || '';
     }
+    this.formStateService.resetForm();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const elements = document.querySelectorAll('.cinematic-reveal');
+      elements.forEach((el, index) => {
+        el.classList.add('opacity-100', 'translate-y-0');
+        el.classList.remove('opacity-0', 'translate-y-6');
+      });
+    }, 100);
   }
 
   goHome(): void {
@@ -138,6 +113,6 @@ export class ThankYouComponent implements OnInit {
   }
 
   viewTemplates(): void {
-    this.router.navigate(['/'], { fragment: 'templates' });
+    this.router.navigate(['/templates']);
   }
 }

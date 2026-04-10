@@ -1,358 +1,195 @@
-<!-- Top Navigation Shell -->
-<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl transition-all duration-500 px-8 py-4 border-b border-outline-variant/10">
-  <div class="flex justify-between items-center w-full max-w-screen-2xl mx-auto">
-    <div class="flex items-center gap-3 cursor-pointer" (click)="scrollToSection('home')">
-      <img src="assets/logo.png" 
-           (error)="$any($event.target).src='assets/logo-placeholder.svg'"
-           alt="Aries Ventures" 
-           class="h-10 w-10 object-contain">
-      <div class="text-xl font-bold text-on-surface tracking-tighter font-headline font-medium tracking-tight">
-        Aries Ventures
-      </div>
+<!-- ═══════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════ -->
+<app-nav 
+  [navItems]="navItems" 
+  [activeSection]="activeSection" 
+  (linkClick)="scrollToSection($event)">
+</app-nav>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════════ -->
+<main class="relative overflow-hidden bg-surface text-on-surface font-body">
+
+  <!-- ── HERO ── -->
+  <section id="home" class="scroll-section relative min-h-screen flex items-center pt-24 pb-16 grid-overlay overflow-hidden">
+
+    <!-- Ambient blobs -->
+    <div class="absolute inset-0 pointer-events-none z-0">
+      <div class="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full bg-secondary-fixed/25 blur-[140px]"></div>
+      <div class="absolute bottom-[5%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary-fixed/15 blur-[120px]"></div>
     </div>
 
-    <!-- Desktop Navigation -->
-    <div class="hidden md:flex items-center gap-10">
-      <a *ngFor="let item of navItems" 
-         (click)="scrollToSection(item.id)"
-         [class.text-secondary]="activeSection === item.id"
-         [class.font-bold]="activeSection === item.id"
-         [class.text-on-surface-variant]="activeSection !== item.id"
-         class="cursor-pointer font-medium hover:text-secondary transition-colors duration-300">
-        {{ item.label }}
-      </a>
-    </div>
-
-    <!-- Right Side Actions -->
-    <div class="flex items-center gap-4">
-      
-      <!-- Authenticated User Menu -->
-      <div *ngIf="isAuthenticated" class="hidden sm:flex items-center gap-3">
-        <button (click)="goToDashboard()" class="text-sm font-semibold text-on-surface-variant hover:text-on-surface flex items-center gap-1">
-          <span class="material-symbols-outlined text-lg">dashboard</span>
-          Dashboard
-        </button>
-        <button (click)="goToProfile()" class="text-sm font-semibold text-on-surface-variant hover:text-on-surface flex items-center gap-1">
-          <span class="material-symbols-outlined text-lg">person</span>
-          Profile
-        </button>
-        <button (click)="logout()" class="text-sm font-semibold text-on-surface-variant hover:text-on-surface flex items-center gap-1">
-          <span class="material-symbols-outlined text-lg">logout</span>
-          Logout
-        </button>
-      </div>
-
-      <!-- Guest User Menu -->
-      <div *ngIf="!isAuthenticated" class="hidden sm:flex items-center gap-4">
-        <button (click)="goToLogin()" class="px-6 py-2.5 text-sm font-semibold text-on-surface-variant hover:text-on-surface">Login</button>
-        <button (click)="goToRegister()" class="px-6 py-2.5 bg-gradient-to-r from-secondary to-secondary-container text-white rounded-full text-sm font-bold shadow-lg shadow-secondary/20 active:scale-95 transition-transform">Register</button>
-      </div>
-
-      <!-- Mobile Menu Button -->
-      <button (click)="toggleMobileMenu()" class="md:hidden p-2 text-on-surface-variant hover:text-secondary transition-colors">
-        <span *ngIf="!mobileMenuOpen" class="material-symbols-outlined">menu</span>
-        <span *ngIf="mobileMenuOpen" class="material-symbols-outlined">close</span>
-      </button>
-
-    </div>
-  </div>
-</nav>
-
-<!-- Mobile Menu -->
-<div *ngIf="mobileMenuOpen" class="md:hidden fixed top-[72px] left-0 w-full bg-surface-container-low border-b border-outline-variant/10 z-40 shadow-xl">
-  <div class="px-8 py-6 space-y-4">
-    <button *ngFor="let item of navItems"
-            (click)="scrollToSection(item.id); toggleMobileMenu()"
-            [class.text-secondary]="activeSection === item.id"
-            [class.font-bold]="activeSection === item.id"
-            [class.text-on-surface]="activeSection !== item.id"
-            class="block w-full text-left text-lg py-2 hover:text-secondary transition-colors">
-      {{ item.label }}
-    </button>
-    
-    <div class="border-t border-outline-variant/20 pt-4 mt-4 space-y-4">
-      <div *ngIf="isAuthenticated" class="space-y-4">
-        <button (click)="goToDashboard(); toggleMobileMenu()" class="block w-full text-left text-on-surface-variant hover:text-secondary flex items-center gap-2 text-lg py-2">
-          <span class="material-symbols-outlined text-xl">dashboard</span> Dashboard
-        </button>
-        <button (click)="goToProfile(); toggleMobileMenu()" class="block w-full text-left text-on-surface-variant hover:text-secondary flex items-center gap-2 text-lg py-2">
-          <span class="material-symbols-outlined text-xl">person</span> Profile
-        </button>
-        <button (click)="logout(); toggleMobileMenu()" class="block w-full text-left text-on-surface-variant hover:text-secondary flex items-center gap-2 text-lg py-2">
-          <span class="material-symbols-outlined text-xl">logout</span> Logout
-        </button>
-      </div>
-      <div *ngIf="!isAuthenticated" class="space-y-4 grid grid-cols-2 gap-4">
-        <button (click)="goToLogin(); toggleMobileMenu()" class="w-full text-center px-4 py-3 bg-surface border border-outline-variant/20 rounded-xl font-bold text-on-surface">Login</button>
-        <button (click)="goToRegister(); toggleMobileMenu()" class="w-full text-center px-4 py-3 bg-secondary text-white rounded-xl font-bold">Sign Up</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<main class="relative overflow-hidden bg-surface text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed font-body">
-  
-  <!-- Hero Section -->
-  <section id="home" class="scroll-section relative min-h-screen flex items-center pt-20 grid-overlay">
-    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-secondary-fixed/30 blur-[120px]"></div>
-      <div class="absolute bottom-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary-fixed/20 blur-[120px]"></div>
-    </div>
-    
     <div class="relative z-10 max-w-7xl mx-auto px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <div class="cinematic-reveal" style="animation-delay: 0.1s;">
-        <div class="inline-flex items-center gap-2 bg-surface-container-highest px-4 py-2 rounded-full border border-outline-variant/20 mb-6 drop-shadow-sm">
+
+      <!-- Left: Copy -->
+      <div class="cinematic-reveal" style="animation-delay:0.05s">
+
+        <!-- Live badge -->
+        <div class="inline-flex items-center gap-2 bg-surface-container-highest/80 backdrop-blur px-4 py-2 rounded-full border border-outline-variant/20 mb-8">
           <span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
           <span class="text-on-surface-variant text-xs font-bold uppercase tracking-widest font-label">Now Booking for Q4</span>
         </div>
-        
-        <h1 class="text-6xl md:text-8xl font-extrabold leading-[1.05] tracking-tighter font-headline text-on-surface mb-8">
-          Websites that grow <br> <span class="text-secondary">local businesses.</span>
+
+        <h1 class="text-6xl md:text-7xl xl:text-8xl font-extrabold leading-[1.04] tracking-tighter font-headline text-on-surface mb-8">
+          Websites that<br>
+          grow <span class="text-secondary">local<br>businesses.</span>
         </h1>
-        
+
         <p class="text-xl text-on-surface-variant max-w-lg mb-12 leading-relaxed">
-          High-performance websites tailored to your budget. Flexible payment plans designed to scale with your business growth. Get online in under a week.
+          High-performance websites tailored to your budget. Flexible payment plans designed to scale with your business. Online in under a week.
         </p>
-        
-        <div class="flex flex-wrap gap-6">
-          <button (click)="goToContactForm()" class="px-10 py-5 bg-gradient-to-r from-secondary to-secondary-container text-white rounded-xl text-lg font-bold shadow-2xl shadow-secondary/30 hover:scale-105 active:scale-95 transition-all">
+
+        <div class="flex flex-wrap gap-4">
+          <button (click)="goToContactForm()"
+                  class="px-10 py-5 bg-primary-container text-on-primary rounded-full text-base font-bold shadow-xl hover:bg-primary active:scale-95 transition-all">
             Get Your Website
           </button>
-          <button (click)="scrollToSection('templates')" class="px-10 py-5 bg-transparent border-2 border-outline-variant/20 hover:border-secondary/50 text-on-surface rounded-xl text-lg font-bold transition-all">
+          <button (click)="scrollToSection('templates')"
+                  class="px-10 py-5 bg-transparent border-2 border-outline-variant/30 hover:border-secondary/60 text-on-surface rounded-full text-base font-bold transition-all">
             View Templates
           </button>
         </div>
-      </div>
-      
-      <div class="relative h-[600px] hidden lg:block cinematic-reveal" style="animation-delay: 0.3s;">
-        <div class="absolute top-0 right-0 w-[400px] h-[500px] rounded-xl overflow-hidden shadow-2xl rotate-3 translate-x-12 hover:rotate-0 transition-all duration-700">
-          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCehMVLpch9afBnKMZwC4xkGWalQlRueenGvVY8zSJad93xl43yll-crG109SkGeTrzKVHwzIIM9GfNAnTMVl7G7-oQwzVNwEf2YqgmFlnZ6_3jl1Kkt6xY8PQeF0aNV8JK8zWJmWvQeboCdsZezZtGdD5r37Vufziyl_CWT1ess_Y_WXEgxv1_afd9euhFWFv_i3UNTsWInWDg179J1AC9i5V3kgsQv8smKaDXItlVvMRvzfEvK4Yh1LHvF51IwnoCZMEJ2gDvc8s" alt="Aries Ventures Dashboard" class="w-full h-full object-cover">
+
+        <!-- Social proof strip -->
+        <div class="flex items-center gap-6 mt-12 pt-8 border-t border-outline-variant/15">
+          <div class="flex -space-x-3">
+            <div *ngFor="let i of [1,2,3,4]" class="w-9 h-9 rounded-full bg-secondary-fixed border-2 border-surface flex items-center justify-center text-xs font-bold text-on-secondary-fixed">
+              {{ ['TH','PN','MW','AK'][i-1] }}
+            </div>
+          </div>
+          <div>
+            <div class="flex gap-0.5 mb-1">
+              <span *ngFor="let s of [1,2,3,4,5]" class="material-symbols-outlined text-sm text-secondary">star</span>
+            </div>
+            <p class="text-xs text-on-surface-variant font-medium">Trusted by <strong class="text-on-surface">50+ local businesses</strong></p>
+          </div>
         </div>
-        <div class="absolute bottom-10 left-0 w-[350px] h-[450px] rounded-xl overflow-hidden shadow-2xl -rotate-6 -translate-x-12 hover:rotate-0 transition-all duration-700 z-20 border-4 border-surface-container-lowest">
-          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfYDLCdbgg3vgODgKMREH2xrdigaDH2cX0QQgcqD7fDKD9-8aOWshCDqSici0Xg7HvBjv343JarysaHg3dxYL2sgHurkdWuEy0IMnAIti7gyEixbs9FALtXRP_iCEALuN49qqt8EdtGt8yZm9GEPAbwszn9nk7FultlYcvZWeQyxwcEnGTQkToaW-GD5qqJPm6u54m7LRa2Ify33EC6wyCm3mLiUhK7PrEFy_l8rTw7BZE7HdRv9yUpURb1GT7SDDSgT6b5QCD70E" alt="Aries Ventures App Mockup" class="w-full h-full object-cover">
+      </div>
+
+      <!-- Right: Floating mockups -->
+      <div class="relative h-[580px] hidden lg:block cinematic-reveal" style="animation-delay:0.2s">
+        <div class="absolute top-0 right-0 w-[400px] h-[490px] rounded-3xl overflow-hidden shadow-2xl rotate-2 translate-x-8 hover:rotate-0 transition-all duration-700 border border-outline-variant/10">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCehMVLpch9afBnKMZwC4xkGWalQlRueenGvVY8zSJad93xl43yll-crG109SkGeTrzKVHwzIIM9GfNAnTMVl7G7-oQwzVNwEf2YqgmFlnZ6_3jl1Kkt6xY8PQeF0aNV8JK8zWJmWvQeboCdsZezZtGdD5r37Vufziyl_CWT1ess_Y_WXEgxv1_afd9euhFWFv_i3UNTsWInWDg179J1AC9i5V3kgsQv8smKaDXItlVvMRvzfEvK4Yh1LHvF51IwnoCZMEJ2gDvc8s"
+               alt="Website preview" class="w-full h-full object-cover">
+        </div>
+        <div class="absolute bottom-8 left-0 w-[340px] h-[430px] rounded-3xl overflow-hidden shadow-2xl -rotate-3 -translate-x-8 hover:rotate-0 transition-all duration-700 z-20 border-4 border-surface-container-lowest">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfYDLCdbgg3vgODgKMREH2xrdigaDH2cX0QQgcqD7fDKD9-8aOWshCDqSici0Xg7HvBjv343JarysaHg3dxYL2sgHurkdWuEy0IMnAIti7gyEixbs9FALtXRP_iCEALuN49qqt8EdtGt8yZm9GEPAbwszn9nk7FultlYcvZWeQyxwcEnGTQkToaW-GD5qqJPm6u54m7LRa2Ify33EC6wyCm3mLiUhK7PrEFy_l8rTw7BZE7HdRv9yUpURb1GT7SDDSgT6b5QCD70E"
+               alt="App mockup" class="w-full h-full object-cover">
+        </div>
+        <!-- Floating stat card -->
+        <div class="absolute top-12 left-8 z-30 bg-surface-container-lowest/90 backdrop-blur-xl rounded-2xl px-5 py-4 shadow-xl border border-outline-variant/10">
+          <div class="text-2xl font-extrabold font-headline text-on-surface">3–5 days</div>
+          <div class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mt-0.5">Average delivery</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- External Stats Counter App Component -->
-  <app-stats-counter class="block border-y border-outline-variant/10 bg-surface-container-low py-4"></app-stats-counter>
+  <!-- Stats bar -->
+  <app-stats-counter class="block border-y border-outline-variant/10"></app-stats-counter>
 
-  <!-- How It Works / Journey Section -->
+  <!-- ── HOW IT WORKS ── -->
   <section id="how-it-works" class="scroll-section py-32 bg-surface">
     <div class="max-w-7xl mx-auto px-8">
       <div class="text-center mb-24">
         <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">The Blueprint</span>
-        <h2 class="text-5xl font-headline font-bold mt-4">Your Journey to Success</h2>
-        <p class="text-on-surface-variant text-lg mt-6 max-w-2xl mx-auto">Transparent, fast, and professional. Here's how we get your business online in under a week with zero hassle.</p>
+        <h2 class="text-5xl font-headline font-bold mt-4 text-on-surface">Your Journey to Success</h2>
+        <p class="text-on-surface-variant text-lg mt-6 max-w-2xl mx-auto">Transparent, fast, and professional. Here's how we get your business online in under a week.</p>
       </div>
 
-      <div class="relative flex flex-col lg:flex-row justify-between items-start gap-12">
-        <div class="hidden lg:block absolute top-[50px] left-0 w-full h-[2px] bg-outline-variant/20 z-0"></div>
-        
-        <!-- Step 1 -->
-        <div class="relative z-10 flex-1 group">
-          <div class="w-24 h-24 rounded-full bg-surface flex items-center justify-center mb-8 border-4 border-outline-variant/20 shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500 group-hover:border-secondary">
-            <span class="material-symbols-outlined text-4xl">event</span>
+      <div class="relative grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <!-- Connector line (desktop) -->
+        <div class="hidden lg:block absolute top-[44px] left-[12.5%] right-[12.5%] h-px bg-outline-variant/20 z-0"></div>
+
+        <div *ngFor="let step of processSteps; let i = index" class="relative z-10 group">
+          <div class="w-22 h-22 w-[88px] h-[88px] rounded-full bg-surface flex items-center justify-center mb-8 border-2 border-outline-variant/20 shadow-lg group-hover:bg-primary-container group-hover:border-primary-container transition-all duration-500">
+            <span class="material-symbols-outlined text-3xl text-on-surface group-hover:text-on-primary transition-colors duration-500">{{ step.icon }}</span>
           </div>
-          <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold w-fit mb-4 block">STEP 1 - 15 MINS</span>
-          <h3 class="text-2xl font-headline font-bold mb-4">Book Consultation</h3>
-          <p class="text-on-surface-variant leading-relaxed">Schedule a free discovery call to discuss your business goals and specific needs.</p>
-        </div>
-        
-        <!-- Step 2 -->
-        <div class="relative z-10 flex-1 group">
-          <div class="w-24 h-24 rounded-full bg-surface flex items-center justify-center mb-8 border-4 border-outline-variant/20 shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500 group-hover:border-secondary">
-            <span class="material-symbols-outlined text-4xl">computer</span>
-          </div>
-          <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold w-fit mb-4 block">STEP 2 - 3-5 DAYS</span>
-          <h3 class="text-2xl font-headline font-bold mb-4">We Build</h3>
-          <p class="text-on-surface-variant leading-relaxed">Our expert team designs and develops your high-performance custom website from scratch.</p>
-        </div>
-        
-        <!-- Step 3 -->
-        <div class="relative z-10 flex-1 group">
-          <div class="w-24 h-24 rounded-full bg-surface flex items-center justify-center mb-8 border-4 border-outline-variant/20 shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500 group-hover:border-secondary">
-            <span class="material-symbols-outlined text-4xl">rocket_launch</span>
-          </div>
-          <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold w-fit mb-4 block">STEP 3</span>
-          <h3 class="text-2xl font-headline font-bold mb-4">Review & Launch</h3>
-          <p class="text-on-surface-variant leading-relaxed">Go through the final build, request tweaks, and once you're happy, we hit the launch button.</p>
-        </div>
-        
-        <!-- Step 4 -->
-        <div class="relative z-10 flex-1 group">
-          <div class="w-24 h-24 rounded-full bg-surface flex items-center justify-center mb-8 border-4 border-outline-variant/20 shadow-xl group-hover:bg-secondary group-hover:text-white transition-all duration-500 group-hover:border-secondary">
-            <span class="material-symbols-outlined text-4xl">settings</span>
-          </div>
-          <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold w-fit mb-4 block">STEP 4 - ONGOING</span>
-          <h3 class="text-2xl font-headline font-bold mb-4">Maintenance</h3>
-          <p class="text-on-surface-variant leading-relaxed">We manage hosting, security, and updates. Our flexible monthly plans keep your site fresh.</p>
+          <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold font-label block w-fit mb-4">{{ step.badge }}</span>
+          <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">{{ step.title }}</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed">{{ step.description }}</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Industries/Ideally Clients Section -->
+  <!-- ── IDEAL CLIENTS ── -->
   <section id="ideal-clients" class="scroll-section py-32 bg-surface-container-low">
     <div class="max-w-7xl mx-auto px-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-        <div class="max-w-2xl">
-          <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">Specializations</span>
-          <h2 class="text-5xl font-headline font-bold mt-4">Perfect for Local Businesses</h2>
-        </div>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let industry of industries" class="bg-surface-container-lowest p-10 rounded-xl shadow-md hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-secondary/20">
-          <span class="material-symbols-outlined text-secondary text-4xl mb-6">{{ industry.icon }}</span>
-          <h3 class="text-2xl font-headline font-bold mb-4">{{ industry.name }}</h3>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services / Pricing Section (Custom Mapped Layout) -->
-  <section id="services" class="scroll-section py-32 bg-surface">
-    <div class="max-w-7xl mx-auto px-8">
-      <div class="text-center mb-16">
-        <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">Flexibility</span>
-        <h2 class="text-5xl font-headline font-bold mt-4">Pricing Built For Scale</h2>
-        <p class="text-on-surface-variant text-lg mt-6 max-w-2xl mx-auto">Simple pricing tiers to suit your current stage.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div *ngFor="let plan of pricingPlans" 
-             class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl border border-outline-variant/10 hover:shadow-secondary/20 transition-all hover:-translate-y-2 flex flex-col">
-          
-          <div class="h-48 bg-cover bg-center relative" [style.background-image]="'url(' + plan.image + ')'">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-            <div class="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-black uppercase text-on-secondary shadow-lg shadow-black/20"
-                 [ngClass]="{
-                   'bg-error': plan.color === 'primary',
-                   'bg-secondary': plan.color === 'blue',
-                   'bg-[#068f5c]': plan.color === 'green'
-                 }">
-              {{ plan.badge }}
-            </div>
-            <div class="absolute bottom-4 left-6 flex items-center justify-between w-[calc(100%-3rem)]">
-               <h3 class="text-2xl font-headline font-bold text-white">{{ plan.name }}</h3>
-               <span class="text-3xl text-white drop-shadow-md">{{ plan.icon }}</span>
-            </div>
-          </div>
-          
-          <div class="p-8 flex flex-col flex-1">
-            <p class="text-4xl font-headline font-black mb-1"
-               [ngClass]="{
-                 'text-error': plan.color === 'primary',
-                 'text-secondary': plan.color === 'blue',
-                 'text-[#068f5c]': plan.color === 'green'
-               }">
-              {{ plan.price }}
-              <span class="text-sm font-body font-normal text-on-surface-variant tracking-normal">{{ plan.priceLabel }}</span>
-            </p>
-            
-            <p class="text-on-surface-variant text-sm font-medium leading-relaxed mb-6 h-12">
-              {{ plan.description }}
-            </p>
-            
-            <div class="mb-6 flex-1">
-              <h4 class="text-xs font-bold text-on-surface-variant mb-4 uppercase tracking-wider font-label">What's Included</h4>
-              <ul class="space-y-3">
-                <li *ngFor="let feature of plan.features" class="flex items-start gap-3 text-sm text-on-surface">
-                  <span class="material-symbols-outlined text-[#068f5c] text-[20px]">check_circle</span>
-                  <span class="leading-snug">{{ feature }}</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div class="mb-8 p-4 bg-surface-container rounded-lg border border-outline-variant/20">
-              <p class="text-xs text-on-surface-variant font-medium leading-relaxed">
-                {{ plan.contractInfo }}
-              </p>
-            </div>
-            
-            <button (click)="selectPlan(plan)"
-                    class="w-full py-4 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-md mt-auto text-white"
-                    [ngClass]="{
-                      'bg-error hover:bg-error/90': plan.color === 'primary',
-                      'bg-secondary hover:bg-secondary/90': plan.color === 'blue',
-                      'bg-[#068f5c] hover:bg-[#068f5c]/90': plan.color === 'green'
-                    }">
-              Select Plan
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Template Gallery Section -->
-  <section id="templates" class="scroll-section py-32 bg-surface-container-low">
-    <div class="max-w-7xl mx-auto px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
         <div>
-          <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">The Collection</span>
-          <h2 class="text-6xl font-headline font-bold mt-4 leading-tight">Masterpieces <br/> in every pixel.</h2>
-          <p class="text-xl text-on-surface-variant mt-8 max-w-lg">Our templates are not off-the-shelf. They are bespoke foundations designed to be extended and evolved.</p>
+          <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">Specializations</span>
+          <h2 class="text-5xl font-headline font-bold mt-4 text-on-surface">Perfect for Local Businesses</h2>
         </div>
+        <p class="text-on-surface-variant max-w-sm leading-relaxed">We know your industry inside out. Every template and feature is built with your customers in mind.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        <div *ngFor="let template of templates" 
-             (click)="viewTemplate(template)"
-             class="relative group rounded-xl overflow-hidden h-[450px] shadow-2xl cursor-pointer">
-          <img [src]="template.image" [alt]="template.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
-          
-          <div class="absolute top-4 right-4 z-10 flex gap-2" *ngIf="template.badge">
-             <span class="bg-secondary text-white px-4 py-1 rounded-full text-xs font-bold w-fit shadow-lg shadow-black/20"
-                   [ngClass]="template.badge === 'Popular' ? 'bg-error' : 'bg-secondary'">
-                {{ template.badge | uppercase }}
-             </span>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div *ngFor="let industry of industries"
+             class="bg-surface-container-lowest p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 group border border-transparent hover:border-secondary/15 hover:-translate-y-1 cursor-default">
+          <div class="w-14 h-14 rounded-2xl bg-secondary-fixed/40 flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:scale-110 transition-all duration-500">
+            <span class="material-symbols-outlined text-secondary text-2xl group-hover:text-white transition-colors duration-500">{{ industry.icon }}</span>
           </div>
-
-          <div class="absolute inset-0 bg-gradient-to-t from-tertiary/90 via-tertiary/20 to-transparent p-10 flex flex-col justify-end">
-            <p class="text-primary-fixed-dim text-sm font-semibold mb-2 tracking-widest uppercase font-label">{{ template.industry }}</p>
-            <h3 class="text-white text-3xl font-headline font-bold">{{ template.name }}</h3>
-          </div>
+          <h3 class="text-lg font-headline font-bold text-on-surface">{{ industry.name }}</h3>
         </div>
-      </div>
-
-      <div class="text-center mt-20">
-        <button *ngIf="showLoadMoreButton"
-                (click)="loadMoreTemplates()"
-                class="px-10 py-5 bg-transparent border-2 border-outline-variant/30 hover:border-secondary text-on-surface rounded-xl text-lg font-bold transition-all shadow-sm">
-          View All Templates
-        </button>
       </div>
     </div>
   </section>
 
-  <!-- Team Section -->
+  <!-- ── PRICING ── -->
+  <app-pricing-cards 
+    [pricingPlans]="pricingPlans" 
+    (planSelect)="selectPlan($event)">
+  </app-pricing-cards>
+
+  <!-- ── TEMPLATES ── -->
+  <app-templates-gallery 
+    [templates]="templates" 
+    [showLoadMore]="showLoadMoreButton" 
+    (loadMore)="loadMoreTemplates()" 
+    (useTemplate)="useTemplate($event)" 
+    (viewLiveDemo)="viewLiveDemo($event)">
+  </app-templates-gallery>
+
+
+  <!-- ── TEAM ── -->
   <section id="team" class="scroll-section py-32 bg-surface">
     <div class="max-w-7xl mx-auto px-8">
-      <div class="text-center mb-24">
+      <div class="text-center mb-20">
         <span class="text-secondary font-bold font-label tracking-widest text-sm uppercase">The Architects</span>
-        <h2 class="text-5xl font-headline font-bold mt-4">Meet the Team</h2>
+        <h2 class="text-5xl font-headline font-bold mt-4 text-on-surface">Meet the Team</h2>
+        <p class="text-on-surface-variant text-lg mt-6 max-w-xl mx-auto">Three specialists. One shared mission — to make local businesses thrive online.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        <div *ngFor="let member of teamMembers" class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl hover:-translate-y-4 transition-all duration-500 border border-outline-variant/10">
-          <div class="h-80 overflow-hidden">
-            <img [src]="member.image" [alt]="member.name" class="w-full h-full object-cover">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div *ngFor="let member of teamMembers"
+             class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-lg hover:-translate-y-3 transition-all duration-500 border border-outline-variant/10 group">
+          <div class="h-72 overflow-hidden bg-surface-container relative">
+            <img [src]="member.image" [alt]="member.name"
+                 class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                 (error)="onTeamImgError($event, member.name)">
+            <!-- Fallback avatar shown when image fails -->
+            <div class="team-fallback absolute inset-0 hidden items-center justify-center bg-primary-container">
+              <span class="text-6xl font-extrabold font-headline text-on-primary opacity-60">
+                {{ member.name.charAt(0) }}
+              </span>
+            </div>
           </div>
           <div class="p-8">
-            <h3 class="text-2xl font-headline font-bold mb-1">{{ member.name }}</h3>
-            <p class="text-secondary font-semibold font-label uppercase tracking-wider text-xs mb-4">{{ member.role }}</p>
-            <p class="text-on-surface-variant text-sm font-medium leading-relaxed mb-8">{{ member.bio }}</p>
-            
+            <h3 class="text-xl font-headline font-bold mb-1 text-on-surface">{{ member.name }}</h3>
+            <p class="text-secondary font-bold font-label uppercase tracking-wider text-xs mb-4">{{ member.role }}</p>
+            <p class="text-on-surface-variant text-sm leading-relaxed mb-8">{{ member.bio }}</p>
             <div class="flex gap-3">
-              <a [href]="member.linkedin" target="_blank" rel="noopener noreferrer" class="flex flex-1 items-center justify-center gap-2 h-12 bg-surface border border-outline-variant/20 rounded-lg text-on-surface hover:text-secondary hover:border-secondary/50 transition-colors font-semibold text-sm">
-                 <span class="material-symbols-outlined text-[20px]">link</span> LinkedIn
+              <a [href]="member.linkedin" target="_blank" rel="noopener noreferrer"
+                 class="flex flex-1 items-center justify-center gap-2 h-11 bg-surface-container rounded-full text-on-surface hover:text-secondary transition-colors font-semibold text-sm">
+                <span class="material-symbols-outlined text-[18px]">link</span> LinkedIn
               </a>
-              <button (click)="openEmail(member.email)" class="flex flex-1 items-center justify-center gap-2 h-12 bg-secondary text-white rounded-lg shadow-md hover:bg-secondary/90 transition-colors font-semibold text-sm">
-                 <span class="material-symbols-outlined text-[20px]">mail</span> Email
+              <button (click)="openEmail(member.email)"
+                      class="flex flex-1 items-center justify-center gap-2 h-11 bg-primary-container text-on-primary rounded-full font-semibold text-sm hover:bg-primary transition-all">
+                <span class="material-symbols-outlined text-[18px]">mail</span> Email
               </button>
             </div>
           </div>
@@ -361,87 +198,19 @@
     </div>
   </section>
 
-  <!-- Angular Components for Testimonials / Trust / FAQ -->
-  <app-testimonials class="block border-y border-outline-variant/10 bg-surface-container-low"></app-testimonials>
+  <!-- Testimonials & FAQ -->
+  <app-testimonials class="block"></app-testimonials>
   <app-faq class="block"></app-faq>
 
-  <!-- Contact CTA Banner Section -->
-  <section id="contact" class="scroll-section py-32 bg-surface grid-overlay border-t border-outline-variant/10">
-    <div class="max-w-5xl mx-auto px-8">
-      <div class="bg-surface-container-lowest rounded-xl shadow-2xl p-12 lg:p-20 relative overflow-hidden border border-outline-variant/20 border-t-secondary border-t-4">
-        <div class="absolute -top-48 -right-48 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="relative z-10 text-center">
-          <h2 class="text-5xl font-headline font-bold mb-6 tracking-tighter">Ready to Scale?</h2>
-          <p class="text-on-surface-variant text-lg max-w-2xl mx-auto mb-12">Drop your details in our fast project inquiry form, and we'll reply within 24 hours with a custom roadmap for your digital growth.</p>
-          
-          <button (click)="goToContactForm()" class="inline-flex items-center gap-3 bg-gradient-to-r from-secondary to-secondary-container text-white py-5 px-10 rounded-xl text-xl font-bold shadow-2xl shadow-secondary/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
-             Start Your Project Inquiry <span class="material-symbols-outlined">arrow_forward</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
+  <app-contact-cta (ctaClick)="goToContactForm()"></app-contact-cta>
 </main>
 
-<!-- Template Preview Modal -->
-<div *ngIf="showTemplateModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-scrim/80 bg-black/60 backdrop-blur-md p-4" (click)="closeTemplateModal()">
-  <div class="bg-surface-container-lowest rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-outline-variant/20" (click)="$event.stopPropagation()">
-    <div class="sticky top-0 bg-surface-container-lowest/90 backdrop-blur border-b border-outline-variant/20 p-6 flex items-center justify-between z-10">
-      <div>
-        <h3 class="text-2xl font-headline font-bold text-on-surface">{{ selectedTemplate?.name }}</h3>
-        <p class="text-secondary font-label uppercase tracking-widest text-xs mt-1">{{ selectedTemplate?.industry }}</p>
-      </div>
-      <button (click)="closeTemplateModal()" class="p-2 rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
-        <span class="material-symbols-outlined text-2xl">close</span>
-      </button>
-    </div>
+<!-- Modal extracted to shared component -->
 
-    <div class="p-8">
-      <div class="aspect-video bg-cover bg-center rounded-xl mb-8 shadow-inner border border-outline-variant/10" [style.background-image]="'url(' + selectedTemplate?.image + ')'"></div>
-      
-      <p class="text-on-surface-variant leading-relaxed text-lg mb-10">{{ selectedTemplate?.description }}</p>
+<!-- Trust badges -->
+<app-trust-badges class="block"></app-trust-badges>
 
-      <div class="flex flex-col sm:flex-row gap-4">
-        <button (click)="useTemplate(selectedTemplate)" class="flex-1 bg-secondary text-white py-4 rounded-xl font-bold hover:bg-secondary/90 transition-colors shadow-lg shadow-secondary/20">
-          Use This Template
-        </button>
-        <button (click)="viewLiveDemo(selectedTemplate)" class="flex-1 bg-surface border-2 border-outline-variant/20 text-on-surface py-4 rounded-xl font-bold hover:border-secondary transition-colors">
-          View Live Demo
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<app-trust-badges class="block border-t border-outline-variant/10"></app-trust-badges>
-
-<!-- Footer Shell -->
-<footer class="bg-surface-container-lowest border-t border-outline-variant/20 full-width py-16 px-8">
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-7xl mx-auto font-body text-sm">
-    <div class="col-span-2">
-      <div class="flex items-center gap-3 mb-6 cursor-pointer" (click)="scrollToSection('home')">
-         <img src="assets/logo.png" (error)="$any($event.target).src='assets/logo-placeholder.svg'" alt="Aries Ventures" class="h-8 w-8 object-contain backdrop-invert dark:invert-0">
-         <div class="text-xl font-headline font-bold text-on-surface tracking-tighter">Aries Ventures</div>
-      </div>
-      <p class="text-on-surface-variant max-w-sm mb-8 leading-relaxed font-medium">
-          A cinematic approach to local business websites. High performance. Editorial design. Revenue driven.
-      </p>
-      <div class="text-outline">© 2024 Aries Ventures. All rights reserved.</div>
-    </div>
-    
-    <div class="flex flex-col gap-4">
-      <h4 class="font-headline font-bold text-on-surface text-base mb-2">Platform</h4>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" (click)="scrollToSection('home')">Home</a>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" (click)="scrollToSection('services')">Pricing & Services</a>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" (click)="scrollToSection('templates')">Templates</a>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" (click)="scrollToSection('team')">Team</a>
-    </div>
-    
-    <div class="flex flex-col gap-4">
-      <h4 class="font-headline font-bold text-on-surface text-base mb-2">Support</h4>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" href="#">Privacy Policy</a>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" href="#">Terms of Service</a>
-      <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors cursor-pointer" (click)="goToContactForm()">Contact Support</a>
-    </div>
-  </div>
-</footer>
+<app-footer 
+  (linkClick)="scrollToSection($event)" 
+  (contactClick)="goToContactForm()">
+</app-footer>

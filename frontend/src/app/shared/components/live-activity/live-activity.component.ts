@@ -115,56 +115,56 @@ export class LiveActivityComponent implements OnInit, OnDestroy {
     {
       id: '1',
       type: 'project_started',
-      message: 'James from London just started a project with us',
-      location: 'London, UK',
-      timeAgo: '2 minutes ago',
-      icon: '🎉',
-      customerName: 'James'
+      message: 'Tariq from East London just submitted a barbershop project',
+      location: 'East London, UK',
+      timeAgo: '3 minutes ago',
+      icon: '✂️',
+      customerName: 'Tariq'
     },
     {
       id: '2',
       type: 'project_completed',
-      message: 'Sarah\'s website just went live - check it out!',
-      location: 'Manchester, UK',
-      timeAgo: '5 minutes ago',
-      icon: '✨',
-      customerName: 'Sarah'
+      message: 'Priya\'s restaurant website just went live',
+      location: 'Birmingham, UK',
+      timeAgo: '6 minutes ago',
+      icon: '🍽️',
+      customerName: 'Priya'
     },
     {
       id: '3',
       type: 'quote_requested',
-      message: 'Michael just requested a quote for an e-commerce site',
-      location: 'Birmingham, UK',
-      timeAgo: '8 minutes ago',
-      icon: '📝',
-      customerName: 'Michael'
+      message: 'Marcus requested a quote for a trades website',
+      location: 'Manchester, UK',
+      timeAgo: '11 minutes ago',
+      icon: '🔧',
+      customerName: 'Marcus'
     },
     {
       id: '4',
-      type: 'signup',
-      message: 'Emma signed up for our newsletter',
-      location: 'Edinburgh, UK',
-      timeAgo: '12 minutes ago',
-      icon: '📧',
-      customerName: 'Emma'
+      type: 'project_started',
+      message: 'Aisha chose the Fully Managed plan for her salon',
+      location: 'Leeds, UK',
+      timeAgo: '14 minutes ago',
+      icon: '💇',
+      customerName: 'Aisha'
     },
     {
       id: '5',
-      type: 'project_started',
-      message: 'David from Liverpool chose our premium package',
-      location: 'Liverpool, UK',
-      timeAgo: '15 minutes ago',
-      icon: '🚀',
-      customerName: 'David'
+      type: 'project_completed',
+      message: 'Raj\'s takeaway site is now taking online orders',
+      location: 'Leicester, UK',
+      timeAgo: '19 minutes ago',
+      icon: '🛵',
+      customerName: 'Raj'
     },
     {
       id: '6',
-      type: 'project_completed',
-      message: 'Lisa\'s restaurant website is now taking online orders',
-      location: 'Bristol, UK',
-      timeAgo: '18 minutes ago',
-      icon: '🍽️',
-      customerName: 'Lisa'
+      type: 'quote_requested',
+      message: 'Connor requested a quote for a landscaping site',
+      location: 'Glasgow, UK',
+      timeAgo: '24 minutes ago',
+      icon: '🌿',
+      customerName: 'Connor'
     }
   ];
 

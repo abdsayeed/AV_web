@@ -1,215 +1,164 @@
-<div class="min-h-screen bg-[#f8f9fa] flex" style="font-family: 'Inter', sans-serif;">
+<main class="min-h-screen flex flex-col md:flex-row bg-surface text-on-surface font-body overflow-hidden">
+  
+  <!-- Left Panel -->
+  <section class="md:w-[45%] bg-primary-container p-12 lg:p-20 flex flex-col justify-between relative overflow-hidden">
+    <!-- Ambient Blob -->
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-secondary/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
-  <!-- Left Panel — Branding -->
-  <div class="hidden lg:flex lg:w-1/2 bg-[#1a1c1e] flex-col justify-between p-12 relative overflow-hidden">
-    <!-- Background texture -->
-    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 25% 25%, #0058be 0%, transparent 50%), radial-gradient(circle at 75% 75%, #3b82f6 0%, transparent 50%);"></div>
-
-    <!-- Logo -->
-    <div class="relative z-10 flex items-center gap-3">
-      <img src="assets/logo.png" alt="Aries Ventures" class="w-10 h-10 object-contain">
-      <span class="text-white font-bold text-xl" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aries Ventures</span>
-    </div>
-
-    <!-- Center content -->
     <div class="relative z-10">
-      <div class="inline-flex items-center gap-2 bg-[#0058be]/20 text-[#adc6ff] text-sm font-medium px-4 py-2 rounded-full mb-8">
-        <span class="material-symbols-outlined text-base">rocket_launch</span>
-        Join 50+ businesses online
+      <!-- Logo -->
+      <div class="cursor-pointer inline-flex items-center gap-3" (click)="goToHome()">
+        <img src="assets/logo.png" alt="Aries Ventures" class="h-9 w-9 object-contain brightness-0 invert" style="image-rendering: crisp-edges;">
+        <span class="text-2xl font-headline font-bold text-on-primary tracking-tighter">Aries Ventures</span>
       </div>
-      <h2 class="text-5xl font-bold text-white leading-tight mb-6" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">
-        Your website,<br>
-        <span class="text-[#3b82f6]">fully managed.</span>
-      </h2>
-      <p class="text-[#c6c6c9] text-lg leading-relaxed">
-        Professional websites for local businesses. We build it, host it, and manage it — so you can focus on what you do best.
+
+      <!-- Tagline & Social Proof -->
+      <div class="mt-20 cinematic-reveal">
+        <h1 class="text-4xl lg:text-5xl font-headline font-bold text-on-primary mb-12">Your business, live in days.</h1>
+        <ul class="space-y-4">
+          <li class="flex items-center gap-3 text-on-primary/80 font-medium text-lg">
+            <span class="material-symbols-outlined text-secondary">check_circle</span>
+            50+ businesses launched
+          </li>
+          <li class="flex items-center gap-3 text-on-primary/80 font-medium text-lg">
+            <span class="material-symbols-outlined text-secondary">check_circle</span>
+            Avg. 4.9★ satisfaction
+          </li>
+          <li class="flex items-center gap-3 text-on-primary/80 font-medium text-lg">
+            <span class="material-symbols-outlined text-secondary">check_circle</span>
+            3–5 day delivery
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer of Panel -->
+    <div class="relative z-10 mt-20">
+      <p class="text-on-primary/60 font-medium">
+        Already have an account? 
+        <button (click)="goToLogin()" class="text-secondary hover:text-secondary-fixed transition-colors">Sign in &rarr;</button>
       </p>
+    </div>
+  </section>
 
-      <!-- Stats -->
-      <div class="grid grid-cols-3 gap-6 mt-12">
-        <div>
-          <div class="text-3xl font-bold text-white" style="font-family: 'Plus Jakarta Sans', sans-serif;">50+</div>
-          <div class="text-[#75777a] text-sm mt-1">Businesses</div>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-white" style="font-family: 'Plus Jakarta Sans', sans-serif;">£59</div>
-          <div class="text-[#75777a] text-sm mt-1">Starting/mo</div>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-white" style="font-family: 'Plus Jakarta Sans', sans-serif;">24/7</div>
-          <div class="text-[#75777a] text-sm mt-1">Support</div>
-        </div>
-      </div>
+  <!-- Right Panel -->
+  <section class="flex-1 bg-surface-container-lowest p-8 lg:p-20 flex items-center justify-center relative">
+    
+    <!-- Step Indicator display -->
+    <div class="absolute top-12 left-12 flex gap-2">
+      <div class="w-2.5 h-2.5 rounded-full transition-colors duration-300" [ngClass]="currentStep === 1 || currentStep === 2 ? 'bg-secondary' : 'bg-surface-container-high'"></div>
+      <div class="w-2.5 h-2.5 rounded-full transition-colors duration-300" [ngClass]="currentStep === 2 ? 'bg-secondary' : 'bg-surface-container-high'"></div>
     </div>
 
-    <!-- Testimonial -->
-    <div class="relative z-10 bg-white/5 rounded-3xl p-6">
-      <p class="text-[#c6c6c9] text-sm leading-relaxed mb-4">"Aries Ventures built our barbershop website in days. We've seen a 40% increase in bookings since launch."</p>
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-[#0058be] rounded-full flex items-center justify-center text-white text-xs font-bold">JM</div>
-        <div>
-          <div class="text-white text-sm font-medium">James Mitchell</div>
-          <div class="text-[#75777a] text-xs">The Modern Groomer</div>
+    <div class="max-w-md w-full cinematic-reveal" style="transition-delay: 100ms">
+      <h2 class="text-3xl font-headline font-bold text-on-surface mb-8">
+        @if (currentStep === 1) { Create your account }
+        @else { Almost there. }
+      </h2>
+
+      @if (errorMessage) {
+        <div class="bg-error/10 text-error rounded-xl px-4 py-3 mb-6 flex items-start gap-3">
+          <span class="material-symbols-outlined text-xl shrink-0 mt-0.5">error</span>
+          <span class="text-sm font-medium">{{ errorMessage }}</span>
         </div>
-      </div>
-    </div>
-  </div>
+      }
 
-  <!-- Right Panel — Form -->
-  <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
-    <div class="w-full max-w-md">
-
-      <!-- Mobile logo -->
-      <div class="lg:hidden flex items-center gap-3 mb-8">
-        <img src="assets/logo.png" alt="Aries Ventures" class="w-8 h-8 object-contain">
-        <span class="font-bold text-[#1a1c1e]" style="font-family: 'Plus Jakarta Sans', sans-serif;">Aries Ventures</span>
-      </div>
-
-      <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-[#1a1c1e] mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em;">Create your account</h1>
-        <p class="text-[#44474a]">Already have an account? <button (click)="goToLogin()" class="text-[#0058be] font-semibold hover:underline">Sign in</button></p>
-      </div>
-
-      <!-- Step indicator -->
-      <div class="flex items-center gap-3 mb-8">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
-               [class]="currentStep >= 1 ? 'bg-[#1a1c1e] text-white' : 'bg-[#e1e3e4] text-[#44474a]'">1</div>
-          <span class="text-sm font-medium" [class]="currentStep >= 1 ? 'text-[#1a1c1e]' : 'text-[#75777a]'">Your info</span>
-        </div>
-        <div class="flex-1 h-px" [class]="currentStep >= 2 ? 'bg-[#1a1c1e]' : 'bg-[#e1e3e4]'"></div>
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
-               [class]="currentStep >= 2 ? 'bg-[#1a1c1e] text-white' : 'bg-[#e1e3e4] text-[#44474a]'">2</div>
-          <span class="text-sm font-medium" [class]="currentStep >= 2 ? 'text-[#1a1c1e]' : 'text-[#75777a]'">Password</span>
-        </div>
-      </div>
-
-      <!-- Error message -->
-      <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-50 rounded-2xl flex items-start gap-3">
-        <span class="material-symbols-outlined text-red-500 text-lg mt-0.5">error</span>
-        <p class="text-red-700 text-sm">{{ errorMessage }}</p>
-      </div>
-
-      <form (ngSubmit)="onSubmit()">
-
-        <!-- Step 1 -->
-        <div *ngIf="currentStep === 1" class="space-y-5">
-
+      <!-- Step 1: Personal Info -->
+      @if (currentStep === 1) {
+        <form (ngSubmit)="nextStep()" class="space-y-5">
+          <!-- Full Name -->
           <div>
-            <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Full name</label>
-            <input type="text"
-                   [(ngModel)]="registerData.fullName"
+            <label class="block text-sm font-semibold text-on-surface mb-2 pointer-events-none">Full Name</label>
+            <input type="text" 
                    name="fullName"
-                   placeholder="John Doe"
-                   class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
-                   style="box-shadow: 0 0 0 1.5px #e1e3e4; focus:box-shadow: 0 0 0 2px #0058be;">
+                   [(ngModel)]="registerData.fullName"
+                   required
+                   class="w-full px-5 py-4 rounded-xl bg-surface-container border border-outline-variant/15 text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                   placeholder="Your name">
           </div>
 
+          <!-- Email -->
           <div>
-            <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Email address</label>
-            <input type="email"
-                   [(ngModel)]="registerData.email"
+            <label class="block text-sm font-semibold text-on-surface mb-2 pointer-events-none">Email Address</label>
+            <input type="email" 
                    name="email"
-                   placeholder="you@example.com"
-                   class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
-                   style="box-shadow: 0 0 0 1.5px #e1e3e4;">
+                   [(ngModel)]="registerData.email"
+                   required
+                   class="w-full px-5 py-4 rounded-xl bg-surface-container border border-outline-variant/15 text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                   placeholder="name@business.com">
           </div>
 
-          <div>
-            <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Business name <span class="text-[#75777a] font-normal">(optional)</span></label>
-            <input type="text"
-                   [(ngModel)]="registerData.businessName"
-                   name="businessName"
-                   placeholder="Your Business"
-                   class="w-full px-4 py-3.5 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
-                   style="box-shadow: 0 0 0 1.5px #e1e3e4;">
-          </div>
-
-          <button type="button"
-                  (click)="nextStep()"
-                  class="w-full bg-[#1a1c1e] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#000101] transition-all mt-2">
-            Continue
+          <button type="submit" 
+                  class="w-full py-4 mt-4 rounded-full bg-secondary text-on-primary font-bold text-lg hover:bg-secondary-container transition-all active:scale-95">
+            Continue &rarr;
           </button>
+        </form>
+      }
 
-        </div>
-
-        <!-- Step 2 -->
-        <div *ngIf="currentStep === 2" class="space-y-5">
-
+      <!-- Step 2: Set Password -->
+      @if (currentStep === 2) {
+        <form (ngSubmit)="onSubmit()" class="space-y-5">
           <div>
-            <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Password</label>
-            <div class="relative">
-              <input [type]="showPassword ? 'text' : 'password'"
-                     [(ngModel)]="registerData.password"
+            <label class="block text-sm font-semibold text-on-surface mb-2 pointer-events-none">Password</label>
+            <div class="relative w-full">
+              <input [type]="showPassword ? 'text' : 'password'" 
                      name="password"
-                     placeholder="Min. 8 characters"
-                     class="w-full px-4 py-3.5 pr-12 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
-                     style="box-shadow: 0 0 0 1.5px #e1e3e4;">
-              <button type="button" (click)="togglePassword()"
-                      class="absolute right-4 top-1/2 -translate-y-1/2 text-[#75777a] hover:text-[#1a1c1e] transition-colors">
-                <span class="material-symbols-outlined text-lg">{{ showPassword ? 'visibility' : 'visibility_off' }}</span>
+                     [(ngModel)]="registerData.password"
+                     (input)="checkPasswordStrength()"
+                     required
+                     class="w-full px-5 py-4 pr-12 rounded-xl bg-surface-container border border-outline-variant/15 text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                     placeholder="Create a password">
+              <button type="button" (click)="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
               </button>
             </div>
-            <p class="text-xs text-[#75777a] mt-2">Must contain uppercase, lowercase, and a number</p>
+
+            <!-- Password Strength Bar -->
+            <div class="mt-3 flex gap-1 h-1.5 w-full rounded-full overflow-hidden bg-surface-container">
+              <div class="h-full transition-all duration-300" [ngClass]="strengthColors[0]"></div>
+              <div class="h-full transition-all duration-300" [ngClass]="strengthColors[1]"></div>
+              <div class="h-full transition-all duration-300" [ngClass]="strengthColors[2]"></div>
+              <div class="h-full transition-all duration-300" [ngClass]="strengthColors[3]"></div>
+            </div>
+
+            <!-- Password Checklist -->
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-medium transition-colors" [ngClass]="passwordReqs.length ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-surface-container text-on-surface-variant'">8+ chars</span>
+              <span class="px-3 py-1 rounded-full text-xs font-medium transition-colors" [ngClass]="passwordReqs.uppercase ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-surface-container text-on-surface-variant'">Uppercase</span>
+              <span class="px-3 py-1 rounded-full text-xs font-medium transition-colors" [ngClass]="passwordReqs.lowercase ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-surface-container text-on-surface-variant'">Lowercase</span>
+              <span class="px-3 py-1 rounded-full text-xs font-medium transition-colors" [ngClass]="passwordReqs.number ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-surface-container text-on-surface-variant'">Number</span>
+            </div>
           </div>
 
           <div>
-            <label class="block text-sm font-semibold text-[#1a1c1e] mb-2">Confirm password</label>
-            <div class="relative">
-              <input [type]="showConfirmPassword ? 'text' : 'password'"
-                     [(ngModel)]="registerData.confirmPassword"
+            <label class="block text-sm font-semibold text-on-surface mb-2 pointer-events-none">Confirm Password</label>
+            <div class="relative w-full">
+              <input [type]="showConfirmPassword ? 'text' : 'password'" 
                      name="confirmPassword"
-                     placeholder="Repeat your password"
-                     class="w-full px-4 py-3.5 pr-12 bg-white rounded-2xl text-[#1a1c1e] placeholder-[#75777a] outline-none transition-all text-sm"
-                     style="box-shadow: 0 0 0 1.5px #e1e3e4;">
-              <button type="button" (click)="toggleConfirmPassword()"
-                      class="absolute right-4 top-1/2 -translate-y-1/2 text-[#75777a] hover:text-[#1a1c1e] transition-colors">
-                <span class="material-symbols-outlined text-lg">{{ showConfirmPassword ? 'visibility' : 'visibility_off' }}</span>
+                     [(ngModel)]="registerData.confirmPassword"
+                     required
+                     class="w-full px-5 py-4 pr-12 rounded-xl bg-surface-container border border-outline-variant/15 text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                     placeholder="Confirm your password">
+              <button type="button" (click)="toggleConfirmPassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
               </button>
             </div>
           </div>
 
-          <label class="flex items-start gap-3 cursor-pointer">
-            <input type="checkbox"
-                   [(ngModel)]="registerData.agreeToTerms"
-                   name="agreeToTerms"
-                   class="mt-0.5 w-4 h-4 rounded accent-[#0058be]">
-            <span class="text-sm text-[#44474a]">
-              I agree to the <a href="#" class="text-[#0058be] font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-[#0058be] font-semibold hover:underline">Privacy Policy</a>
-            </span>
-          </label>
-
-          <div class="flex gap-3 mt-2">
-            <button type="button" (click)="prevStep()"
-                    class="flex-1 bg-[#f3f4f5] text-[#1a1c1e] py-4 rounded-full font-semibold text-sm hover:bg-[#e7e8e9] transition-all">
-              Back
-            </button>
-            <button type="submit"
-                    [disabled]="isLoading"
-                    class="flex-2 flex-grow bg-[#0058be] text-white py-4 rounded-full font-semibold text-sm hover:bg-[#004395] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-              <span *ngIf="!isLoading">Create account</span>
-              <span *ngIf="isLoading" class="flex items-center gap-2">
-                <span class="material-symbols-outlined animate-spin text-base">refresh</span>
-                Creating...
-              </span>
+          <div class="flex gap-3 pt-2">
+            <button type="button" (click)="prevStep()" class="py-4 px-6 rounded-full font-semibold border-2 border-outline-variant/20 hover:border-secondary transition-colors">Back</button>
+            <button type="submit" 
+                    [disabled]="isLoading || !isPasswordValid()"
+                    class="flex-1 py-4 rounded-full bg-secondary text-on-primary font-bold text-lg hover:bg-secondary-container transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center">
+              @if (isLoading) {
+                <span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              } @else {
+                Create account
+              }
             </button>
           </div>
-
-        </div>
-
-      </form>
-
-      <!-- Back to home -->
-      <div class="mt-8 text-center">
-        <button (click)="goToHome()" class="text-sm text-[#75777a] hover:text-[#1a1c1e] transition-colors flex items-center gap-1 mx-auto">
-          <span class="material-symbols-outlined text-base">arrow_back</span>
-          Back to home
-        </button>
-      </div>
-
+        </form>
+      }
     </div>
-  </div>
-
-</div>
+  </section>
+</main>

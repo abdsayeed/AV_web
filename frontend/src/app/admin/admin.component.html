@@ -1,8 +1,11 @@
 <!-- SideNavBar -->
 <aside class="bg-slate-50 dark:bg-slate-950 h-screen w-64 border-r border-slate-200/20 fixed left-0 top-0 z-40 hidden md:flex flex-col p-4 gap-2">
-  <div class="px-2 py-4 mb-6 cursor-pointer" hover="opacity-80" (click)="goToHome()">
-    <h1 class="text-lg font-black text-slate-900 dark:text-white font-headline">Aries Ventures</h1>
-    <p class="text-xs font-mono uppercase tracking-widest text-slate-500">Client Portal</p>
+  <div class="px-2 py-4 mb-6 cursor-pointer" (click)="goToHome()">
+    <div class="flex items-center gap-3 mb-1">
+      <img src="assets/logo.png" alt="Aries Ventures" class="w-8 h-8 object-contain" style="image-rendering: crisp-edges;">
+      <h1 class="text-lg font-black text-slate-900 dark:text-white font-headline">Aries Ventures</h1>
+    </div>
+    <p class="text-xs font-mono uppercase tracking-widest text-slate-500 pl-11">Client Portal</p>
   </div>
   
   <nav class="flex-1 space-y-1">
@@ -49,7 +52,10 @@
 
 <!-- Mobile header overlay -->
 <div class="md:hidden flex justify-between items-center p-4 border-b border-surface-container bg-surface-container-lowest sticky top-0 z-30">
-  <h1 class="text-lg font-black text-slate-900 font-headline">Aries Ventures <span class="text-xs text-secondary ml-1">Admin</span></h1>
+  <div class="flex items-center gap-3">
+    <img src="assets/logo.png" alt="Aries Ventures" class="w-7 h-7 object-contain" style="image-rendering: crisp-edges;">
+    <h1 class="text-lg font-black text-slate-900 font-headline">Aries Ventures <span class="text-xs text-secondary ml-1">Admin</span></h1>
+  </div>
   <button (click)="toggleMobileMenu()" class="p-2 hover:bg-surface-container rounded-lg">
     <span class="material-symbols-outlined">menu</span>
   </button>

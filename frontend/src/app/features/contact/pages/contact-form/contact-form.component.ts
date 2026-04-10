@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, AfterViewInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormStateService } from '../../../../core/services/form-state.service';
@@ -21,10 +21,9 @@ import { ContactFormData } from '../../../../core/models/contact-form.model';
     StepThreeComponent,
     StepFourComponent
   ],
-  templateUrl: './contact-form.component.html',
-  styleUrls: ['./contact-form.component.css']
+  templateUrl: './contact-form.component.html'
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent implements OnInit, AfterViewInit {
   currentStep = this.formStateService.currentStep$;
   contextBanner = signal<string | null>(null);
   showContextBanner = signal(false);
@@ -49,6 +48,16 @@ export class ContactFormComponent implements OnInit {
   ngOnInit(): void {
     this.loadContext();
     this.checkForSavedProgress();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const elements = document.querySelectorAll('.cinematic-reveal');
+      elements.forEach(el => {
+        el.classList.add('opacity-100', 'translate-y-0');
+        el.classList.remove('opacity-0', 'translate-y-6');
+      });
+    }, 100);
   }
 
   private loadContext(): void {
@@ -120,9 +129,9 @@ export class ContactFormComponent implements OnInit {
 
   private getStepKey(step: number): keyof ContactFormData {
     const keys: Record<number, keyof ContactFormData> = {
-      1: 'context',
-      2: 'businessInfo',
-      3: 'projectRequirements',
+      1: 'businessInfo',
+      2: 'budgetInfo',
+      3: 'servicesInfo',
       4: 'contactInfo'
     };
     return keys[step];

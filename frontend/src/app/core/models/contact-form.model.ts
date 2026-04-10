@@ -8,21 +8,21 @@ export interface ContactFormData {
     primaryGoal: 'new_website' | 'redesign' | 'add_features' | 'consultation' | 'other';
   };
 
-  // Step 2: Business Information
-  businessInfo: {
-    name: string;
+  // Step 1: Business Information
+  businessInfo?: {
+    businessName: string;
     industry: string;
-    currentWebsite?: string;
-    websiteType: WebsiteType;
+    websiteType: string;
   };
 
-  // Step 3: Project Requirements
-  projectRequirements: {
-    servicesNeeded: string[];
-    budgetRange: 'basic' | 'pro' | 'custom';
-    timeline: 'urgent' | 'flexible' | 'specific';
-    targetDate?: Date;
-    additionalRequirements?: string;
+  // Step 2: Budget
+  budgetInfo?: {
+    budgetTier: string;
+  };
+
+  // Step 3: Project Requirements / Services
+  servicesInfo?: {
+    services: string[];
   };
 
   // Step 4: Contact Details

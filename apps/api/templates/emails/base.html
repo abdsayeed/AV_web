@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { margin: 0; padding: 0; background: #f3f4f5; font-family: Inter, -apple-system, sans-serif; color: #191c1d; }
+  .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 24px; overflow: hidden; }
+  .header { background: #1a1c1e; padding: 32px 40px; }
+  .header h1 { margin: 0; color: #ffffff; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .body { padding: 40px; }
+  .body h2 { font-size: 24px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .body p { font-size: 15px; line-height: 1.6; color: #44474a; margin: 0 0 16px; }
+  .btn { display: inline-block; background: #0058be; color: #ffffff !important; text-decoration: none; padding: 14px 28px; border-radius: 9999px; font-weight: 700; font-size: 15px; margin: 8px 0 24px; }
+  .ref-box { background: #f3f4f5; border-radius: 16px; padding: 20px 24px; margin: 24px 0; }
+  .ref-box .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #75777a; margin-bottom: 4px; }
+  .ref-box .value { font-size: 22px; font-weight: 800; color: #0058be; font-family: 'JetBrains Mono', monospace; }
+  .footer { padding: 24px 40px; border-top: 1px solid #e7e8e9; }
+  .footer p { font-size: 12px; color: #75777a; margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <h1>Aries Ventures</h1>
+  </div>
+  <div class="body">
+    {% block content %}{% endblock %}
+  </div>
+  <div class="footer">
+    <p>© 2026 Aries Ventures · <a href="https://aris-ventures.com" style="color:#0058be;">aris-ventures.com</a></p>
+    <p style="margin-top:8px;">You're receiving this because you interacted with Aries Ventures.</p>
+  </div>
+</div>
+</body>
+</html>

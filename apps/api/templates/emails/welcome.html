@@ -1,0 +1,7 @@
+{% extends "emails/base.html" %}
+{% block content %}
+<h2>Welcome, {{ name }}!</h2>
+<p>Your Aries Ventures account is ready. Before you get started, please verify your email address.</p>
+<a href="{{ verify_url }}" class="btn">Verify Email Address</a>
+<p>This link expires in 24 hours. If you didn't create an account, you can safely ignore this email.</p>
+{% endblock %}

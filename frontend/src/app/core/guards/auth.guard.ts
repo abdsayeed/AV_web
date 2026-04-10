@@ -1,101 +1,38 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { map, take } from 'rxjs/operators';
-import { ApiService } from '../services/api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate {
-  constructor(
-    private apiService: ApiService,
-    private router: Router
-  ) {}
+export const AuthGuard: CanActivateFn = (route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  return auth.authState$.pipe(
+    take(1),
+    map(s => {
+      if (s.isAuthenticated) return true;
+      localStorage.setItem('redirectUrl', state.url);
+      return router.createUrlTree(['/login']);
+    }),
+  );
+};
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    
-    return this.apiService.currentUser$.pipe(
-      take(1),
-      map(user => {
-        const isAuthenticated = !!user && this.apiService.isAuthenticated();
-        
-        if (!isAuthenticated) {
-          // Store the attempted URL for redirecting after login
-          localStorage.setItem('redirectUrl', state.url);
-          this.router.navigate(['/login']);
-          return false;
-        }
-        
-        return true;
-      })
-    );
-  }
-}
+export const GuestGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  return auth.authState$.pipe(
+    take(1),
+    map(s => s.isAuthenticated ? router.createUrlTree(['/dashboard']) : true),
+  );
+};
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AdminGuard implements CanActivate {
-  constructor(
-    private apiService: ApiService,
-    private router: Router
-  ) {}
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    
-    return this.apiService.currentUser$.pipe(
-      take(1),
-      map(user => {
-        const isAuthenticated = !!user && this.apiService.isAuthenticated();
-        const isAdmin = user?.role === 'admin';
-        
-        if (!isAuthenticated) {
-          localStorage.setItem('redirectUrl', state.url);
-          this.router.navigate(['/login']);
-          return false;
-        }
-        
-        if (!isAdmin) {
-          this.router.navigate(['/']);
-          return false;
-        }
-        
-        return true;
-      })
-    );
-  }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class GuestGuard implements CanActivate {
-  constructor(
-    private apiService: ApiService,
-    private router: Router
-  ) {}
-
-  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.apiService.currentUser$.pipe(
-      take(1),
-      map(user => {
-        const isAuthenticated = !!user && this.apiService.isAuthenticated();
-        
-        if (isAuthenticated) {
-          // User is already logged in, redirect to home
-          this.router.navigate(['/']);
-          return false;
-        }
-        
-        return true;
-      })
-    );
-  }
-}
+export const AdminGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  return auth.authState$.pipe(
+    take(1),
+    map(s => {
+      if (s.isAuthenticated && (s.user as any)?.role === 'admin') return true;
+      return router.createUrlTree(['/']);
+    }),
+  );
+};

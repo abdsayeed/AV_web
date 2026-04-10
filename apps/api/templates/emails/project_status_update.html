@@ -1,0 +1,11 @@
+{% extends "emails/base.html" %}
+{% block content %}
+<h2>Your project has been updated</h2>
+<p>Hi {{ name }}, your project <strong>{{ project_name }}</strong> has moved to a new stage:</p>
+<div class="ref-box">
+  <div class="label">New Status</div>
+  <div class="value" style="font-size:18px;color:#0058be;">{{ new_status }}</div>
+</div>
+{% if note %}<p>Note from our team: {{ note }}</p>{% endif %}
+<a href="https://aris-ventures.com/dashboard/projects/{{ project_id }}" class="btn">View Project</a>
+{% endblock %}

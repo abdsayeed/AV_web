@@ -1,24 +1,24 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { AuthGuard, GuestGuard } from './core/guards/auth.guard';
+import { AuthGuard, GuestGuard, AdminGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     loadComponent: () => import('./app.component').then(m => m.AppComponent)
   },
   {
     path: 'templates',
     loadComponent: () => import('./features/templates/templates.component').then(m => m.TemplatesComponent)
   },
-  { 
-    path: 'login', 
+  {
+    path: 'login',
     component: LoginComponent,
     canActivate: [GuestGuard]
   },
-  { 
-    path: 'register', 
+  {
+    path: 'register',
     component: RegisterComponent,
     canActivate: [GuestGuard]
   },
@@ -58,7 +58,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, AdminGuard]
   },
   { path: '**', redirectTo: '' }
 ];

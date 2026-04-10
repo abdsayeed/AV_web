@@ -1,312 +1,248 @@
-Aries Ventures — All Pages Design Prompt
-Context
-You are a senior frontend engineer embedded in the Aries Ventures design system. Every page you build must conform strictly to the "Structured Fluidity" design language. No custom colours. No new fonts. No sharp corners. No 1px borders. Every surface shift is tonal. Every button is rounded-full. Every reveal is cinematic.
-Stack: Angular 17 standalone components · Tailwind CSS (MD3 tokens) · IntersectionObserver animations · No third-party animation libraries
+Prompt for Advanced Aries Ventures Platform (Angular + Django Upgrade)
+Objective
+Upgrade the Aries Ventures platform to a production-grade, fully functional full-stack web application. Every feature, button, and flow must work end-to-end. The current MVP has placeholder UI elements, non-functional OAuth, missing email integration, and incomplete features. This upgrade delivers a complete, optimised, and scalable product while retaining the Angular 17 frontend and Django backend, upgrading both to their latest stable versions, adding a normalised relational database schema, real-time capabilities, and automated infrastructure.
+
+Structure
+Frontend: Angular 18 (latest stable, standalone components, signals-based reactivity)
+
+Styling: Tailwind CSS v4 with the existing "Structured Fluidity" MD3 design tokens faithfully preserved
+Fonts: Plus Jakarta Sans (headlines) · Inter (body) · JetBrains Mono (data/labels) via Google Fonts
+Icons: Lucide Angular
+Animation: Angular Animations + GSAP for scroll-triggered reveals, page transitions, and count-up stats
+Forms: Angular Reactive Forms + Zod-equivalent validation via class-validator on both client and server
+State: NgRx Signals Store for global auth/cart state; Angular Query (TanStack Query for Angular) for all server-state and API caching
+Component library: Angular Material v18 as the base, extended with custom MD3-aligned variants matching the existing design system
+
+Backend: Django 5.x + Django REST Framework (same stack, major upgrade)
+
+Auth: Django REST Framework SimpleJWT upgraded to full rotating refresh tokens + Google OAuth via social-auth-app-django — fully wired, replaces the current broken OAuth stub
+Email: Resend SDK (Python) — transactional emails for registration, password reset, lead confirmation, and invoice delivery
+File uploads: django-storages + Uploadthing (or S3-compatible) — client asset uploads (logos, brand photos)
+Background jobs: Trigger.dev (HTTP-based task triggering from Django views) — async tasks (email queuing, analytics aggregation, notification dispatch)
+Rate limiting: Upstash Redis via upstash-redis Python SDK on all auth and form submission endpoints
+WebSockets: Django Channels (ASGI) for real-time notifications and project message threads
+API layer: Django REST Framework with tRPC-style type safety enforced via Pydantic v2 serializers shared between frontend (via generated TypeScript interfaces using openapi-typescript) and backend
+
+Database: PostgreSQL 16 (upgrade from PostgreSQL 12) + Django ORM
+
+Fully normalised schema (3NF minimum) — see Task 1 for full table list
+Django migrations for all schema changes; zero raw SQL
+Row-level security policies enforced at the Django ORM layer via queryset filtering
+
+
+Monorepo Layout (Turborepo + pnpm workspaces — new structure)
+aries-ventures/
+├── apps/
+│   ├── web/                        # Angular 18 app
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── core/           # Auth, interceptors, guards, services
+│   │   │   │   ├── shared/         # UI components, pipes, directives
+│   │   │   │   ├── features/       # Feature modules (home, dashboard, contact, admin)
+│   │   │   │   └── layout/         # Nav, footer, sidebar shell
+│   │   │   ├── environments/
+│   │   │   └── styles/
+│   │   ├── angular.json
+│   │   └── package.json
+│   └── api/                        # Django 5.x backend
+│       ├── config/                 # Django settings (base, dev, prod)
+│       ├── apps/
+│       │   ├── authentication/     # JWT, OAuth, registration, password reset
+│       │   ├── businesses/         # Business profiles
+│       │   ├── contact/            # Contact form submissions
+│       │   ├── projects/           # Project management
+│       │   ├── notifications/      # WebSocket notifications
+│       │   ├── analytics/          # Event tracking
+│       │   └── admin_panel/        # Admin-specific endpoints
+│       ├── core/                   # Shared base models, permissions, mixins
+│       ├── requirements/           # base.txt, dev.txt, prod.txt
+│       └── manage.py
+├── packages/
+│   ├── types/                      # Shared TypeScript interfaces generated from Django OpenAPI schema
+│   ├── validators/                 # Shared validation rules (Python + TS mirrored)
+│   └── config/                     # ESLint, Tailwind, TypeScript configs
+├── .github/workflows/
+├── turbo.json                      # Turborepo build pipeline
+└── pnpm-workspace.yaml
+
+Tasks
+Task 1 — Database Schema (Django ORM, PostgreSQL 16 upgrade)
+Design and implement a fully normalised schema. All primary keys are UUIDs (uuid_generate_v4()). All timestamps use timestamptz. Enforce foreign key constraints and add db_index=True on every FK and common filter column. Upgrade the existing PostgreSQL 12 database to PostgreSQL 16 with a documented migration path.
+Core models (one Django app per domain):
+authentication app:
+
+User — id (UUID), email (unique), name, hashed_password (nullable for OAuth users), avatar_url, role (enum: customer | staff | admin), is_verified, created_at, updated_at — extends AbstractBaseUser
+OAuthAccount — id, user (FK → User), provider (enum: google), provider_account_id, access_token, refresh_token, expires_at — allows one user to have multiple OAuth providers
+PasswordResetToken — id, user (FK → User), token_hash, expires_at, used_at
+EmailVerificationToken — id, user (FK → User), token_hash, expires_at, used_at
+
+businesses app:
+
+Industry — id, slug (unique), label, icon_name — lookup table for the 6 industry types (barbershop | restaurant | salon | retail | trades | other); no hardcoding in application code
+Business — id, user (FK → User, OneToOne), name, industry (FK → Industry), phone, address_line1, address_line2, city, postcode, country, website_url, logo_url, description, created_at, updated_at
+
+templates app:
+
+Template — id, slug (unique), name, industry (FK → Industry), description, preview_image_url, demo_url, badge (nullable enum: popular | high_conversion | new), is_featured, is_active, sort_order, created_at, updated_at
+TemplateFeature — id, template (FK → Template), feature_text, sort_order
+
+pricing app:
+
+PricingPlan — id, slug (unique), name, tier (enum: basic | pro | custom), price_pence (integer — avoids float), billing_period (enum: monthly | one_time), is_popular, is_active, sort_order, created_at, updated_at
+PlanFeature — id, plan (FK → PricingPlan), feature_text, is_highlighted, sort_order
+
+contact app:
+
+ContactSubmission — id, user (FK → User, nullable — guests can submit), reference_number (unique, generated: AV-YYYY-NNNN), business_name, industry (FK → Industry), website_type (enum: new | redesign | landing_page | e_commerce), budget_tier (FK → PricingPlan), contact_name, email, phone, message, status (enum: new | reviewing | in_progress | completed | archived), assigned_to (FK → User, nullable — staff assignment), created_at, updated_at
+SubmissionService — id, submission (FK → ContactSubmission), service (enum: seo | design | maintenance | content)
+
+projects app:
+
+Project — id, submission (FK → ContactSubmission, OneToOne), user (FK → User), template (FK → Template, nullable), name, status (enum: brief | design | build | review | live), live_url (nullable), staging_url (nullable), started_at, launched_at, created_at, updated_at
+ProjectStatusHistory — id, project (FK → Project), status, changed_by (FK → User), note, created_at — full audit trail
+ProjectFile — id, project (FK → Project), uploaded_by (FK → User), file_name, file_url, file_size_bytes, mime_type, category (enum: asset | content | deliverable | other), created_at
+Message — id, project (FK → Project), sender (FK → User), body, is_read, read_at, created_at
 
-Design System (Apply to Every Page — No Exceptions)
-Colours
-TokenHexprimary#000101primary-container#1a1c1eon-primary#ffffffsecondary#0058besecondary-container#2170e4secondary-fixed#d8e2ffon-secondary-fixed#001a42surface#f8f9fasurface-container-lowest#ffffffsurface-container-low#f3f4f5surface-container#edeeefsurface-container-high#e7e8e9surface-container-highest#e1e3e4on-surface#191c1don-surface-variant#44474aoutline-variant#c5c6caerror#ba1a1a
-Typography
-RoleFontHeadlinesPlus Jakarta SansBody / UIInterData / Labels / MonoJetBrains Mono
-Radius
+notifications app:
 
-Buttons → rounded-full (always, no exceptions)
-Cards, modals, large containers → rounded-3xl
-Inner card elements → rounded-2xl
-Inputs, pills, small elements → rounded-xl
+Notification — id, user (FK → User), type (enum: project_update | message | system), title, body, action_url (nullable), is_read, read_at, created_at
 
-Rules
+analytics app:
 
-No 1px borders — use tonal surface shifts to define section boundaries
-Ghost borders only — border-outline-variant/10 to border-outline-variant/20 max
-Glassmorphism navbar — backdrop-blur-xl bg-surface/80
-Ambient shadows — blur-[120px] gradient orbs at 15–30% opacity, never hard drop-shadows
-Cinematic reveals — .cinematic-reveal class: opacity-0 translate-y-6 → opacity-100 translate-y-0, transition-all duration-700 ease-out, triggered via IntersectionObserver in ngAfterViewInit
-Card hover — scale-[1.02] transition-transform duration-300 ease-out
-Dark sections — bg-primary-container text-on-primary only, never raw #000
-All animations — pure CSS + TypeScript IntersectionObserver. No GSAP, no Angular animations module.
-
+AnalyticsEvent — id, user (FK → User, nullable), session_id (varchar, anonymous), event_type (enum: page_view | cta_click | form_start | form_complete | template_view | demo_click), page_url, referrer, metadata (JSONField), created_at — append-only
+AuditLog — id, actor (FK → User, nullable), action, entity_type, entity_id, before_state (JSONField, nullable), after_state (JSONField, nullable), ip_address, created_at — admin actions only, append-only
 
-Pages to Build
+Write all models in their respective apps/<domain>/models.py. Generate and run the initial migration (python manage.py makemigrations && python manage.py migrate). Write a management command (python manage.py seed_db) that populates Industries, all 7 Templates with features, and all 3 PricingPlans.
 
-PAGE 1 — /contact — Multi-Step Lead Form
-Goal: Capture leads from SMB owners (barbershops, restaurants, salons). Feel premium — like booking a consultation at an agency, not filling a government form.
-Layout:
-
-Split screen: left panel (40%) dark bg-primary-container with brand messaging, ambient secondary blue blob, rotating testimonial quote, trust badges. Right panel (60%) light bg-surface-container-lowest with the form.
-Left panel stays fixed while the right panel scrolls through steps.
-
-4-Step Form:
-Step 1 — Business Info
+Task 2 — Authentication (Django JWT upgraded, fully wired)
+Upgrade the existing broken JWT system to a complete, production-grade auth implementation:
 
-Business name (text input)
-Industry (pill selector — not a dropdown): Barber · Restaurant · Salon · Gym · Clinic · Retail · Other. Selected pill → bg-secondary text-on-primary rounded-full. Unselected → bg-surface-container border-outline-variant/15 rounded-full
-Website type (3 cards): Template-based · Custom Design · Not Sure. Cards → rounded-3xl, selected state gets ring-2 ring-secondary
+JWT upgrade: Replace the current SimpleJWT configuration with rotating refresh tokens — access token TTL 15 minutes, refresh token TTL 7 days, stored in HttpOnly cookies (not localStorage). Implement token rotation: every refresh call issues a new refresh token and blacklists the old one via SimpleJWT's token blacklist app.
+Google OAuth: Fully wire social-auth-app-django — on first OAuth sign-in, create a User row and an OAuthAccount row; on subsequent sign-ins, look up by provider_account_id and return existing user. Link accounts if the same email exists from credentials sign-up.
+Registration: POST /api/auth/register/ — validate with DRF serializer + class-validator equivalents (name, email, password min 8 chars with complexity), hash with bcrypt (cost 12), insert user, send welcome email via Resend, return access + refresh tokens.
+Email verification: On register, send a verification email with an HMAC-SHA256 signed token (24h expiry). GET /api/auth/verify-email/?token= sets is_verified = True.
+Password reset: POST /api/auth/forgot-password/ — generate a signed reset token stored in PasswordResetToken, email the link via Resend. POST /api/auth/reset-password/ — validate token, update hashed password, mark token used, blacklist all existing refresh tokens for that user.
+Change password: Authenticated endpoint — verify current password, update hash, optionally invalidate other sessions.
+Angular auth integration: Replace the current broken AuthService with a complete implementation using Angular's HttpClient + interceptors. JwtInterceptor attaches the access token to every request. TokenRefreshInterceptor catches 401 responses, calls the refresh endpoint once (with queuing for concurrent requests), and retries the original request. AuthGuard protects all /dashboard, /onboarding, /profile routes. GuestGuard redirects /login and /register to /dashboard if a valid token exists.
+Rate limiting: Upstash Redis sliding window via Django middleware — 5 login attempts per 15 minutes per IP, 3 password reset requests per hour per IP.
 
-Step 2 — Budget
-
-4 budget tier cards in a 2×2 grid: £0–£500 · £500–£1,500 · £1,500–£5,000 · £5,000+
-Each card → rounded-3xl bg-surface-container-lowest, selected → ring-2 ring-secondary bg-secondary-fixed
-Small descriptive line under each (e.g. "Great for template plans", "Custom design territory")
-Pre-selects if user arrived from /pricing with ?plan= query param
 
-Step 3 — Services
+Task 3 — Public Homepage (fully functional, animated)
+Rebuild every homepage section as a proper Angular component, replacing all placeholder/non-functional elements:
 
-Multi-select pill grid: Website Design · SEO · Monthly Maintenance · Content Writing · Branding · Photography
-Selected → bg-secondary-fixed text-on-secondary-fixed rounded-full
-Unselected → bg-surface-container rounded-full border-outline-variant/15
+Nav: Sticky glassmorphism bar with scroll-based background opacity transition (GSAP ScrollTrigger). Auth-aware via AuthService signal — renders correct state with no flash of wrong content. Mobile: animated slide-down menu with staggered link entrance (Angular Animations). Active section highlighting via IntersectionObserver.
+Hero: Full-viewport with ambient CSS gradient blobs, dot-grid SVG background, animated headline with word-by-word entrance (Angular Animations), two CTAs, social proof strip. Floating cards use CSS transform with will-change: transform; hover transitions are pure CSS.
+Stats counter: IntersectionObserver triggers count-up only when in viewport. Stats sourced from a Django API endpoint backed by real DB aggregations — not hardcoded.
+How It Works: 4-step grid. Desktop connector line drawn with SVG stroke-dasharray animation on scroll.
+Ideal Clients: 6 industry cards sourced from /api/industries/ endpoint. Hover transitions pure CSS.
+Pricing: Fetched from /api/pricing/plans/ endpoint (PricingPlan + PlanFeature). "Get Started" buttons fully wired — authenticated users are redirected to /contact?plan=<slug>; guests go to /register?plan=<slug> with plan saved in sessionStorage for post-auth redirect.
+Templates gallery: Fetched from /api/templates/ endpoint. "View All" toggle shows/hides the 7th card with Angular Animations layout animation. Detail modal opens and updates the URL to /templates/<slug> via Angular Router so it is shareable/bookmarkable. "Use This Template" passes context to the contact form via query params.
+Testimonials, FAQ, Trust Badges, Footer: Rebuilt as proper Angular components with real data from the API. FAQ accordion uses Angular Animations max-height transition.
+Live activity toasts: NgRx Signals store, 6 rotating entries every 4 seconds, entrance/exit Angular Animations, respects prefers-reduced-motion.
+Sticky CTA bar: Shown only after user scrolls past hero; hidden on /contact, /login, /register.
 
-Step 4 — Contact Details
+All images use NgOptimizedImage with correct width, height, sizes, and priority on above-the-fold images.
 
-Full name · Email · Phone (optional) · Message (textarea)
-All inputs → rounded-xl bg-surface-container border-outline-variant/15 focus:ring-2 focus:ring-secondary
-Submit CTA → bg-secondary text-on-primary rounded-full w-full py-4 font-semibold
+Task 4 — Contact Form (multi-step, fully wired)
+Rebuild the 4-step contact form as an Angular component with NgRx Signals for step state and Angular Reactive Forms + class-validator per step:
 
-Progress Bar:
+Step 1: Business name (required, 2–100 chars), industry (select from /api/industries/, loaded once at mount via Angular Query), website type (radio: new | redesign | landing_page | e_commerce)
+Step 2: Budget tier (radio cards fetched from /api/pricing/plans/ — shows price + key features inline). Pre-selected if user arrived via ?plan=<slug>.
+Step 3: Services multi-select (seo | design | maintenance | content) as toggle chips. Pre-selected if user arrived via template modal.
+Step 4: Full name (auto-filled from auth service if logged in), email (auto-filled), phone (E.164 validation), message (min 20 chars, max 1000)
+Progress bar: Angular Animations width transition. Step indicator dots with completed/active/pending states.
+Form persistence: Saves form state to sessionStorage on each step change. Restored on component init.
+Submission: POST /api/contact/submit/ — validates with DRF serializer, inserts ContactSubmission + SubmissionService rows in a DB transaction, generates AV-YYYY-NNNN reference, triggers Trigger.dev background job that sends confirmation email to client and internal alert to team, returns { reference_number }.
+Thank-you page: Reference number displayed, animated checkmark, vertical timeline of next steps. "Track your enquiry" button for authenticated users links to /dashboard/projects.
+Rate limited: 3 submissions per IP per hour via Upstash Redis.
 
-Thin bar at top of right panel using bg-secondary, animated width transition
-Step labels below: "Business · Budget · Services · Contact"
-Current step label bold, others text-on-surface-variant
 
-Context awareness:
+Task 5 — Client Dashboard (fully functional)
+Implement a full dashboard at /dashboard using a persistent sidebar shell layout in Angular:
 
-If ?plan=pay-as-you-go → pre-select £0–£500 budget tier + Template-based website type
-If ?plan=managed → pre-select £500–£1,500 + Custom Design
-If ?template=<slug> → show a small "Using: [Template Name]" pill at top of form in bg-secondary-fixed text-on-secondary-fixed
+Sidebar: Auth-aware via AuthService signal. Logo, nav links with active state (routerLinkActive), user avatar + name + plan badge, sign-out button.
+Overview tab: Stat cards (active projects, open messages, current plan) — all from real API calls via Angular Query. Quick actions: "Start a project" → /onboarding, "Browse templates" → /templates. Recent activity feed from ProjectStatusHistory and Notification endpoints.
+Projects tab: Lists all projects from /api/projects/ for this user. Each card shows project name, current status as a step progress bar (brief → design → build → review → live), template used, live URL when available, last updated timestamp. Clicking opens /dashboard/projects/:id — full project detail with status timeline (from ProjectStatusHistory), file list (from ProjectFile), and message thread.
+Messages tab: Project-scoped threads. Unread count badge on sidebar. Mark-as-read on view via PATCH /api/messages/:id/read/. Reply box submits to POST /api/messages/, triggers Notification for recipient. Real-time updates via Django Channels WebSocket — new messages appear without page refresh.
+Notifications: Bell icon in header with unread count from /api/notifications/. Dropdown list; clicking marks as read and navigates to action_url. Real-time delivery via Django Channels WebSocket.
+Profile settings (/profile): Edits User + Business rows via PATCH /api/profile/. Business logo upload via Uploadthing → stores URL in Business.logo_url. Password change. "Delete account" with confirmation modal — soft-delete (deleted_at) and data anonymisation.
 
-Form state: Persist all values to localStorage key av_contact_form. Restore on page load.
-API: POST /api/contact/submit/ with JWT header if logged in. On success → navigate to /contact/thank-you.
 
-PAGE 2 — /contact/thank-you — Submission Confirmation
-Goal: Delight the user. Make them feel they made the right call.
-Layout: Full-screen centred, bg-surface. Single card rounded-3xl bg-surface-container-lowest max-width 560px.
-Content:
+Task 6 — Email System (Resend, fully wired)
+Create HTML email templates for every transactional email using Django's template engine. All emails use the Aries Ventures brand (logo, MD3 colours, Inter font). Send via Resend Python SDK from Trigger.dev background jobs — never from the request path directly.
+Emails to implement:
 
-Large animated checkmark SVG (draws itself with stroke-dashoffset CSS animation on page load, stroke: secondary)
-Headline: "You're in. We'll be in touch."
-Sub-line: "Your reference number" → display in font-mono bg-surface-container rounded-xl px-4 py-2 with a copy-to-clipboard icon button
-Timeline strip: 3 steps — "We review your brief (24hrs)" · "Discovery call booked" · "Build begins". Each step → numbered pill in bg-secondary-fixed text-on-secondary-fixed, connected by a dashed line in border-outline-variant/30
-Two CTAs: "Browse our templates →" (bg-secondary text-on-primary rounded-full) · "Back to home" (ghost border-outline-variant/20 text-on-surface rounded-full)
-Below cards: 3 micro-trust badges — "Avg. delivery 3–5 days" · "No lock-in on first month" · "Dedicated account manager"
-Auto-clear av_contact_form from localStorage on this page load
+Welcome email (on register) — includes verify email link
+Email verification — signed link, expires 24h
+Password reset — signed link, expires 1h
+Contact form confirmation — sent to client with reference number and next steps timeline
+Internal lead alert — sent to team with full submission detail and link to admin panel
+Project status update — sent to client when project status changes
+New message notification — sent to recipient when a message is sent in their project thread
+Subscription/plan confirmation — sent when a user selects a plan via the contact form
 
+All email sending is enqueued as a Trigger.dev job from Django using an HTTP trigger. The Django view fires the trigger and returns immediately; the job handles retries, logging, and error reporting.
 
-PAGE 3 — /login — User Login
-Goal: Fast, trustworthy. A logged-in returning client should feel welcomed back.
-Layout: Split — left 45% dark bg-primary-container, right 55% bg-surface-container-lowest.
-Left panel:
+Task 7 — Onboarding Wizards
 
-Aries Ventures wordmark (Plus Jakarta Sans, bold, text-on-primary)
-Tagline: "Your business, live in days."
-3 social proof lines with checkmark icons: "109 businesses launched" · "Avg. 4.9★ satisfaction" · "3–5 day delivery"
-Ambient secondary blue blob blur-[100px] opacity-20 in the bottom-left corner
-Footer of panel: "New here? [Create an account →]" in text-on-primary/60 with text-secondary link
+Quick onboarding (/onboarding): 4-step Angular wizard using Reactive Forms + Angular CDK Stepper. Step 1 industry selection reads from /api/industries/. Step 4 budget selection reads from /api/pricing/plans/. On finish, if user has no plan recorded, redirect to /contact?plan=<slug>; otherwise redirect to /contact with context pre-filled via query params.
+Guided onboarding (/onboarding/guided): 5-step wizard with live preview sidebar. The preview sidebar renders a mock browser chrome containing an <iframe> pointed at the selected template's demo_url — the real demo loads. Brand colour picker (6 swatches) applies a CSS custom property to the iframe via postMessage if the template supports it. On submit, creates a draft ContactSubmission row with status = 'new' and redirects to /contact/thank-you with the reference number.
 
-Right panel:
 
-"Welcome back" headline (Plus Jakarta Sans, text-on-surface)
-Email input + Password input → rounded-xl bg-surface-container border-outline-variant/15 focus:ring-2 focus:ring-secondary
-"Forgot password?" link → text-secondary text-sm aligned right above the input
-Login CTA → bg-secondary text-on-primary rounded-full w-full py-4 font-semibold
-Divider: — or — in text-on-surface-variant
-Google OAuth button → bg-surface-container-lowest border border-outline-variant/20 rounded-full with Google logo SVG inline
-Error state: bg-error/10 text-error rounded-xl px-4 py-3 notification block above the form
+Task 8 — Admin Panel (/admin)
+Access restricted to users with role = 'admin' via Django permission classes + Angular AdminGuard.
 
-API: POST /api/auth/login/ → store JWT in localStorage → trigger welcome toast via NotificationService → navigate to /dashboard
+Submissions: Angular AG Grid (or TanStack Table Angular) of all ContactSubmission records. Columns: reference, business name, industry, plan, status, assigned to, created at. Inline status update dropdown — updates DB + inserts AuditLog row. Assign to staff member dropdown. Bulk actions: mark reviewed, archive.
+Projects: List of all projects with status. Click to open project detail; admin can move status forward/back, add internal notes, upload deliverable files.
+Users: Searchable list of all users. Columns: name, email, role, plan, verified, joined. Role change (admin action — logged to AuditLog). Impersonate user functionality.
+Templates: Full CRUD for Template and TemplateFeature. Image upload via Uploadthing. Drag-to-reorder sort_order. Toggle is_featured and is_active.
+Pricing: Edit PricingPlan and PlanFeature records via admin API endpoints.
+Analytics dashboard: Aggregated queries from AnalyticsEvent — page views over time (line chart via Chart.js Angular wrapper), top pages, CTA click-through rates, form funnel (start vs complete), template popularity. Date range picker. All queries via /api/admin/analytics/ endpoints with Angular Query caching.
 
-PAGE 4 — /register — User Registration
-Goal: Low friction. Two steps so it doesn't feel overwhelming.
-Layout: Same split as login — left panel identical branding, right panel is the 2-step form.
-Left panel: Same as login. Change footer link to "Already have an account? [Sign in →]"
-Right panel — Step 1: Personal Info
 
-"Create your account" headline
-Full name · Email
-Both → rounded-xl bg-surface-container border-outline-variant/15 focus:ring-2 focus:ring-secondary
-"Continue →" CTA → bg-secondary text-on-primary rounded-full w-full py-4
-Step indicator: 2 dots — filled bg-secondary for current, bg-surface-container-high for upcoming
+Task 9 — Real-Time Features (Django Channels)
+Implement Django Channels (ASGI) for all real-time functionality:
 
-Right panel — Step 2: Set Password
+WebSocket endpoint: ws://api/ws/notifications/ — authenticated via JWT token passed as query param on connection. Each user joins a personal channel group (user_<uuid>).
+Notification dispatch: When a Notification row is created (via signal or Trigger.dev job), broadcast it to the user's channel group. Angular WebSocketService receives and pushes to an NgRx Signals store slice.
+Message threads: ws://api/ws/projects/<id>/messages/ — project-scoped channel group. New messages broadcast to all project participants in real time.
+Project status updates: When Project.status changes, broadcast to all project participants.
+Connection management: Heartbeat ping every 30 seconds. Angular service auto-reconnects with exponential backoff on disconnect.
 
-"Almost there." headline
-Password field with show/hide toggle (eye icon button inside input, text-on-surface-variant)
-Confirm password field
-Password strength bar: 4 segments, animated fill left-to-right as user types. Colours: bg-error (weak) → bg-yellow-500 (fair) → bg-secondary (strong). Rules displayed as pill checklist: "8+ chars" · "Uppercase" · "Lowercase" · "Number". Each pill → bg-surface-container rounded-full text-xs. Met → bg-secondary-fixed text-on-secondary-fixed
-"Create account" CTA → bg-secondary text-on-primary rounded-full w-full py-4
 
-API: POST /api/auth/register/ → store JWT → welcome toast → navigate to /onboarding
+Task 10 — Performance, SEO & Observability
 
-PAGE 5 — /dashboard — Client Dashboard
-Goal: Give returning clients an instant overview of their project status. Feel like a premium agency client portal.
-Layout: Fixed sidebar (left 240px) + scrollable main content area.
-Sidebar:
+SEO: Angular Universal SSR (or Angular 18 built-in SSR) for all public pages — proper <title>, <meta>, canonical URLs, and OG tags set per route via Angular's Meta and Title services. sitemap.xml generated by a Django management command at deploy time.
+Structured data: JSON-LD LocalBusiness schema on homepage. Product schema on pricing page. FAQPage schema for FAQ section — injected via Angular DOCUMENT token.
+Performance: Django REST Framework response caching via django-cache-machine or Redis cache backend for infrequently changing data (industries, templates, pricing). Cache TTL 1 hour. Dashboard and admin endpoints are uncached.
+Bundle analysis: Angular's ng build --stats-json + webpack-bundle-analyzer. Target: < 100kB initial bundle for the homepage route.
+Error tracking: Sentry SDK on both Angular (@sentry/angular) and Django (sentry-sdk[django]) — captures all unhandled errors with source maps. Custom beforeSend strips PII (email, phone) from error payloads.
+Analytics: AnalyticsEvent table for internal analytics. Angular service fires POST /api/analytics/event/ on page view, CTA click, form start/complete, template view.
+Health check: GET /api/health/ — returns { status: 'ok', db: 'ok', uptime: N } by running a SELECT 1 via Django ORM and reporting process uptime.
+Logging: Structured JSON logging in Django via python-json-logger, shipped to Axiom or a compatible log aggregator.
 
-Aries Ventures logo mark (just the "AV" monogram, font-headline font-bold text-xl)
-Nav items: Overview · Projects · Messages · Settings. Active item → bg-secondary-fixed text-on-secondary-fixed rounded-xl px-4 py-2. Inactive → text-on-surface-variant hover:bg-surface-container-high rounded-xl
-Bottom of sidebar: User avatar initials circle (bg-secondary-fixed text-on-secondary-fixed rounded-full) + name + "Logout" button (ghost text-on-surface-variant)
-Sidebar bg → bg-surface-container-lowest border-r border-outline-variant/10
 
-Main — Overview Tab:
-Stats row (4 cards, rounded-3xl bg-surface-container-lowest):
+Output Requirements
 
-Active Projects · Messages Unread · Days to Next Delivery · Subscription Plan
+Complete, runnable monorepo — pnpm install && pnpm dev starts both the Angular dev server and the Django dev server concurrently via Turborepo
+All environment variables documented in a root .env.example with every required key listed and described
+python manage.py seed_db populates all lookup tables, templates, and pricing plans so the app is functional immediately after running
+Django migrations checked into apps/api/ — python manage.py migrate applies them against any target database
+GitHub Actions workflows: ci.yml (lint, type-check, Python tests, Angular tests on PR) and deploy.yml (deploy frontend to Vercel, backend to Railway/Render on merge to main)
+README covering: local setup, environment variables, database setup (including PostgreSQL 12 → 16 upgrade path), running tests, deployment, and architecture decision log
+Playwright E2E test suite covering: homepage renders correctly → user registers → email verified → completes contact form → receives confirmation → logs in → views dashboard → admin views submission
+No hardcoded data anywhere in application code — all content (industries, templates, pricing, testimonials) lives in the database and is seeded via seed_db
 
-Below stats — 2-column grid:
-Left: "Your Projects" card (rounded-3xl bg-surface-container-lowest)
 
-If no projects → empty state: illustration (simple SVG of a browser window with a plus sign, stroke-secondary), "No projects yet", "Get started →" CTA bg-secondary text-on-primary rounded-full
-If projects exist → list of project rows: favicon/template thumbnail + project name + status pill (bg-secondary-fixed text-on-secondary-fixed rounded-full for Active, bg-surface-container-high text-on-surface-variant for Pending) + "View →" ghost button
+Constraints & Notes
 
-Right: "Recent Activity" feed (rounded-3xl bg-surface-container-lowest)
-
-Timeline of events: e.g. "Design draft uploaded" · "Contract signed" · "Payment received"
-Each entry: small dot in bg-secondary rounded-full + timestamp in font-mono text-xs text-on-surface-variant + description
-Vertical dashed connector between entries border-outline-variant/30
-
-Quick Actions strip (below the 2-col grid): 3 ghost pill buttons: "Request a change" · "Download invoice" · "Contact your manager" → all border-outline-variant/15 text-on-surface rounded-full hover:bg-surface-container-high
-Main — Projects Tab: Full list of project cards. Each card rounded-3xl with: template screenshot thumbnail on left, project name + industry + status on right, progress bar in bg-secondary, and "View details" CTA.
-Main — Messages Tab: Simple thread list. Each thread row → sender avatar + preview text + timestamp. Selected thread → bg-secondary-fixed/30 highlight. Unread → font-semibold. Read → text-on-surface-variant.
-
-PAGE 6 — /profile — User Profile
-Goal: Clean, low-clutter. Users edit their info and move on.
-Layout: Centred single-column, max-width 680px, bg-surface.
-Top card (rounded-3xl bg-surface-container-lowest):
-
-Avatar initials circle (large, 80px, bg-secondary-fixed text-on-secondary-fixed text-3xl font-bold rounded-full) centred at top
-Name + email + role badge (bg-surface-container-high text-on-surface-variant rounded-full text-xs font-mono px-3 py-1) below avatar
-Edit profile button → bg-secondary text-on-primary rounded-full
-
-Edit Form card (rounded-3xl bg-surface-container-lowest below):
-
-Fields: Full name · Email · Business name · Phone
-All inputs → rounded-xl bg-surface-container border-outline-variant/15 focus:ring-2 focus:ring-secondary
-Save button → bg-secondary text-on-primary rounded-full
-Success: NotificationService success toast. No inline flash messages.
-
-Change Password card (rounded-3xl bg-surface-container-lowest):
-
-Current password · New password · Confirm new password
-Same input style. Password strength bar (same as Register page).
-Update button → bg-secondary text-on-primary rounded-full
-API: POST /api/auth/change-password/
-
-Danger Zone card (rounded-3xl bg-surface-container-lowest border border-error/20):
-
-"Logout from all devices" → ghost border-error/30 text-error rounded-full button
-POST /api/auth/logout/ → clear localStorage → navigate to /
-
-
-PAGE 7 — /onboarding — Quick Onboarding Wizard
-Goal: After registration, guide new users to their first project enquiry in under 2 minutes. High energy. Celebratory.
-Layout: Full screen bg-surface. Centred card rounded-3xl bg-surface-container-lowest max-width 640px. Large step progress dots at top.
-Step 1 — Business Type
-
-Headline: "What kind of business are you?"
-6 large icon cards in a 3×2 grid: Barber · Restaurant · Salon · Gym · Clinic · Other
-Each card rounded-3xl bg-surface-container-low hover:bg-surface-container-high, selected → ring-2 ring-secondary bg-secondary-fixed
-Icon above label. Large, generous padding.
-
-Step 2 — Primary Goal
-
-Headline: "What's your main goal right now?"
-3 cards (full width, stacked): "Get online fast" · "Replace an old website" · "Launch a new brand"
-Each card rounded-3xl bg-surface-container-low, selected → ring-2 ring-secondary
-Short descriptor under each label in text-on-surface-variant text-sm
-
-Step 3 — Features Needed
-
-Headline: "What do you need?"
-Multi-select pill grid (same style as contact form step 3): Online Booking · Gallery · Menu · Contact Form · SEO · Blog
-
-Step 4 — Budget
-
-Headline: "What's your rough budget?"
-Same 4 budget tier cards as contact form step 2.
-
-Final Step — Launch
-
-Headline: "You're ready. Let's build."
-Summary card showing their answers (business type, goal, features, budget) in a clean rounded-3xl bg-surface-container-low list
-CTA: "Start your project →" bg-secondary text-on-primary rounded-full w-full py-4 font-semibold → navigates to /contact with all onboarding values pre-filled as query params
-
-
-PAGE 8 — /onboarding/guided — Guided Onboarding with Live Preview
-Goal: More immersive onboarding. User builds their brief while seeing a live preview sidebar update in real time.
-Layout: 2-column split. Left 55% is the form steps. Right 45% is a sticky live preview panel.
-Left — 5 Steps:
-Step 1 — Business Details
-
-Business name · Industry (pill selector) · Location (city/town text input)
-Live preview updates: shows business name in a mock browser tab on the right
-
-Step 2 — Template Selection
-
-Headline: "Pick a starting point."
-7 template thumbnails in a 2-column grid (real templates from the showcase):
-
-Aries Grooming · AVT Restaurant · Aries Ventures Barber · AVT Restaurant 2 · AVT Restaurant 3 · AVT Restaurant 4 · AV Saloon
-
-
-Selected template → ring-2 ring-secondary scale-[1.02]
-Live preview updates: shows the selected template's demo in a mock mobile frame on the right
-
-Step 3 — Pages Needed
-
-Multi-select: Home · About · Gallery · Menu/Services · Booking · Contact · Blog
-Selected pills → bg-secondary-fixed text-on-secondary-fixed rounded-full
-Live preview: shows a simplified sitemap diagram of selected pages
-
-Step 4 — Contact Preferences
-
-Preferred contact method: Email · Phone · WhatsApp (pill selector)
-Best time to reach: Morning · Afternoon · Evening (pill selector)
-Phone / email input appears based on selection
-
-Step 5 — Review & Submit
-
-Full summary of all answers in a rounded-3xl bg-surface-container-low card
-"Submit brief →" → POST /api/contact/submit/ → /contact/thank-you
-
-Right — Live Preview Panel (sticky, bg-surface-container-low rounded-3xl):
-
-Mock browser chrome at top (3 dots + URL bar showing aries-ventures.com)
-Content updates per step:
-
-Step 1: Business name in mock hero headline
-Step 2: Template thumbnail fills the mock browser viewport
-Step 3: Sitemap node diagram of selected pages
-Step 4: Contact preference confirmation card
-Step 5: Full brief summary
-
-
-
-
-PAGE 9 — /help — Help & Support Form
-Goal: Quick, low-friction support submission.
-Layout: Centred single-column, max-width 600px, bg-surface.
-Top: Short hero — "How can we help?" headline + "We typically reply within 4 hours." sub-line. No image, no blob. Pure typography.
-Category selector (full-width pill row): Billing · Technical Issue · Website Change · New Feature · General Enquiry
-
-Selected → bg-secondary text-on-primary rounded-full. Unselected → bg-surface-container border-outline-variant/15 rounded-full
-
-Form card (rounded-3xl bg-surface-container-lowest):
-
-Subject (text input)
-Message (textarea, min 4 rows)
-File attachment (ghost button: "Attach a file" border-outline-variant/20 rounded-full, shows filename pill on attach)
-Submit CTA → bg-secondary text-on-primary rounded-full w-full py-4
-
-Below form: 3 alternative support options as ghost pill links: "Email us directly" · "WhatsApp us" · "Browse FAQ →" (links to homepage #faq anchor)
-API: POST /api/contact/submit/ with category field. Success → success toast via NotificationService, form resets.
-
-Shared Rules Across All Pages
-Navbar — present on all pages. Glassmorphism backdrop-blur-xl bg-surface/80. Auth-aware: guest → Login + "Get Started" CTA. Logged in → Avatar initials circle + "Dashboard" link + dropdown with Profile / Logout. Morphs to border-outline-variant/20 on scroll.
-Footer — present on public pages (/contact, /contact/thank-you, /help). bg-primary-container rounded-t-3xl. 3-column grid. "System Operational" status dot (pulsing green) + font-mono text-xs label.
-Toasts — all form submissions, auth events, and errors use NotificationService. Never inline alerts except password strength and field validation errors. Toast stack: top-right, auto-dismiss 4s, manual close button.
-Loading states — every API call shows a global spinner overlay via the existing loading interceptor. CTA buttons go to opacity-50 pointer-events-none while loading. Never duplicate loading indicators.
-Mobile — every page collapses its split layout to a single column at md: breakpoint. Sidebar on Dashboard becomes a bottom tab bar. Left panels on Auth pages become a condensed header strip.
-Angular conventions — standalone components (standalone: true). @if / @for control flow. OnPush change detection. No *ngIf / *ngFor. No Angular animations module — CSS transitions only.
-
-Execution Directive
-
-Build every page as if it were designed in Google Stitch and hand-coded by a senior engineer who has lived inside Structured Fluidity for months. Every surface shift is intentional. Every button is rounded-full. Every dark section is bg-primary-container. No custom colours. No new fonts. No exceptions.
+Preserve the exact "Structured Fluidity" design system — all MD3 tokens, rounded-full buttons, rounded-3xl cards, glassmorphism nav, ambient blob hero, and the #0058be secondary accent colour must be faithfully reproduced in Tailwind v4
+The three team members (Abdullah Al Sayeed, MD Nasif, AR Fahad), all 7 templates with their exact GitHub Pages demo URLs, all 3 pricing tiers at their current prices, and the three testimonials must be present and seeded from manage.py seed_db — not hardcoded in components
+Google OAuth credentials must be documented as required environment variables; the OAuth callback URL for local dev (http://localhost:8000/auth/complete/google-oauth2/) and production must both be registered in the Google Cloud Console
+The RESEND_API_KEY must actually be set and emails must send in development — use Resend's sandbox mode (onboarding@resend.dev sender) for local dev
+All monetary values stored as integer pence (£59/mo = 5900, £249/mo = 24900) — never floats
+Django models must use TextChoices for all enum columns — not plain CharField with a check constraint
+All API endpoints that mutate data must insert a row into AuditLog for admin-initiated actions
+prefers-reduced-motion media query must disable all GSAP and Angular Animations globally — set via a root Angular service that reads the media query and disables AnimationPlayer where applicable
+PostgreSQL 12 → 16 upgrade: Document the pg_upgrade or dump-and-restore path in the README; the Django schema must be forward-compatible with both versions during the transition window
+Django Channels requires ASGI deployment — document the switch from WSGI (gunicorn) to ASGI (daphne or uvicorn) in the README and deploy.yml

@@ -1,0 +1,15 @@
+{% extends "emails/base.html" %}
+{% block content %}
+<h2>We've received your enquiry</h2>
+<p>Hi {{ name }}, thanks for reaching out. Here's your reference number:</p>
+<div class="ref-box">
+  <div class="label">Reference Number</div>
+  <div class="value">{{ reference }}</div>
+</div>
+<p>Our team will review your enquiry for <strong>{{ business_name }}</strong> and get back to you within 24 hours.</p>
+<h3 style="font-size:16px;margin:24px 0 12px;">What happens next?</h3>
+<p>1. We review your requirements (within 24 hours)</p>
+<p>2. Our team starts building your website (3–5 days)</p>
+<p>3. You review and approve before we go live</p>
+<a href="https://aris-ventures.com/dashboard" class="btn">Track Your Enquiry</a>
+{% endblock %}

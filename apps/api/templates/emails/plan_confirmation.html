@@ -1,0 +1,10 @@
+{% extends "emails/base.html" %}
+{% block content %}
+<h2>Plan confirmed</h2>
+<p>Hi {{ name }}, you've selected the <strong>{{ plan_name }}</strong> plan. Our team will be in touch shortly to get started.</p>
+<div class="ref-box">
+  <div class="label">Plan</div>
+  <div class="value" style="font-size:18px;">{{ plan_name }}</div>
+</div>
+<a href="https://aris-ventures.com/dashboard" class="btn">Go to Dashboard</a>
+{% endblock %}

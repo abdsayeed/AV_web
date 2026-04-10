@@ -1,0 +1,15 @@
+{% extends "emails/base.html" %}
+{% block content %}
+<h2>New Lead: {{ submission.reference_number }}</h2>
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
+  <tr><td style="padding:8px 0;color:#75777a;width:140px;">Business</td><td style="padding:8px 0;font-weight:600;">{{ submission.business_name }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;">Industry</td><td style="padding:8px 0;">{{ submission.industry_label }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;">Plan</td><td style="padding:8px 0;">{{ submission.plan_name }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;">Contact</td><td style="padding:8px 0;">{{ submission.contact_name }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;">Email</td><td style="padding:8px 0;">{{ submission.email }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;">Phone</td><td style="padding:8px 0;">{{ submission.phone }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;">Website type</td><td style="padding:8px 0;">{{ submission.website_type }}</td></tr>
+  <tr><td style="padding:8px 0;color:#75777a;vertical-align:top;">Message</td><td style="padding:8px 0;">{{ submission.message }}</td></tr>
+</table>
+<a href="https://api.aris-ventures.com{{ admin_url }}" class="btn">View in Admin</a>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "emails/base.html" %}
+{% block content %}
+<h2>New message on your project</h2>
+<p>Hi {{ name }}, <strong>{{ sender_name }}</strong> sent a message on <strong>{{ project_name }}</strong>:</p>
+<div class="ref-box" style="font-style:italic;">"{{ message_body }}"</div>
+<a href="https://aris-ventures.com/dashboard/projects/{{ project_id }}" class="btn">Reply</a>
+{% endblock %}

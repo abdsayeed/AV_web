@@ -4,9 +4,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # Auth
-    path("api/auth/register/", include("apps.authentication.urls")),
-    path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # Auth — all auth endpoints under /api/auth/
+    path("api/auth/", include("apps.authentication.urls")),
     # Google OAuth
     path("auth/", include("social_django.urls", namespace="social")),
     # Features

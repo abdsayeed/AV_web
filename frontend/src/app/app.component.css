@@ -60,3 +60,46 @@ html { scroll-behavior: smooth; }
 
 /* Performance */
 .cinematic-reveal { will-change: transform, opacity; }
+
+/* ── HERO MOCKUP ANIMATIONS ── */
+
+/* Gentle float — pure CSS, GPU-composited (transform only, no layout reflow) */
+@keyframes heroFloat {
+  0%, 100% { transform: rotate(-3deg) translateX(-2rem) translateY(0px); }
+  50%       { transform: rotate(-3deg) translateX(-2rem) translateY(-12px); }
+}
+
+.hero-float {
+  animation: heroFloat 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Scanning bar inside the browser chrome */
+@keyframes heroScan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+.hero-scan {
+  width: 30%;
+  animation: heroScan 2.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Pulsing data bars at the bottom of the card */
+@keyframes heroPulseBar {
+  0%, 100% { opacity: 0.3; transform: scaleX(1); }
+  50%       { opacity: 0.7; transform: scaleX(1.04); }
+}
+
+.hero-pulse-bar {
+  animation: heroPulseBar 2s ease-in-out infinite;
+  transform-origin: left;
+  will-change: opacity, transform;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-float, .hero-scan, .hero-pulse-bar { animation: none; }
+  .hero-float { transform: rotate(-3deg) translateX(-2rem); }
+}

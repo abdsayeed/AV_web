@@ -7,8 +7,16 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-nav',
   standalone: true,
   imports: [CommonModule, RouterModule],
+  styles: [`
+    nav {
+      background: rgba(248, 249, 250, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+  `],
   template: `
-    <nav class="fixed top-0 w-full z-50 glass-nav border-b border-outline-variant/10 transition-all duration-500">
+    <nav class="fixed top-0 w-full z-50 border-b border-outline-variant/10 transition-all duration-500 shadow-sm"
+         style="background: rgba(248,249,250,0.82); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
       <div class="flex justify-between items-center w-full max-w-7xl mx-auto px-8 py-4">
 
         <!-- Logo -->

@@ -2,7 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
+import { tap, catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 export interface User {
@@ -60,12 +60,26 @@ export class AuthService {
   }
 
   loginWithCustom(email: string, password: string): Observable<{ success: boolean; message?: string }> {
-    return this.http.post<{ access: string; refresh: string; user: User }>(
+    return this.http.post<{ access: string; refresh: string }>(
       `${environment.apiUrl}/auth/login/`, { email, password }
     ).pipe(
-      tap(res => this._storeSession(res.access, res.refresh, res.user)),
+      tap(res => {
+        localStorage.setItem('accessToken', res.access);
+        localStorage.setItem('refreshToken', res.refresh);
+      }),
+      // After storing tokens, fetch the user profile
+      switchMap(() =>
+        this.http.get<User>(`${environment.apiUrl}/auth/profile/`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+        })
+      ),
+      tap(user => {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this._setState({ isAuthenticated: true, user, isLoading: false });
+      }),
       map(() => ({ success: true })),
       catchError(err => {
+        this._clearStorage();
         const msg = err.error?.detail || err.error?.non_field_errors?.[0] || 'Login failed';
         return throwError(() => ({ message: msg }));
       }),
